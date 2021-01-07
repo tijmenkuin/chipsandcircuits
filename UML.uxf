@@ -1,0 +1,40 @@
+<diagram program="umletino" version="14.4.0-SNAPSHOT"><zoom_level>10</zoom_level><help_text>Wire
+--
+-id
+-chip
+</help_text><element><id>UMLClass</id><coordinates><x>178</x><y>330</y><w>330</w><h>320</h></coordinates><panel_attributes>CPU
+--
+-id: Long
+-width: Int
+-height: Int
+-layers: 7
+-grid: { layer (Int) : list( [GridPoint, GridPoint, ...], [...], ... ) }
+-cost: Float
+-netlist: [Net, Net, Net, ...]
+-wires: {Net : Wire}
+
+--
+__init__(self, NetList):
+void
+initializeGrid(self):
+void
+initializeGridRelatives(self):
+void
+getPointAtCoordinate(self, x , y , z):
+return GridPoint</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>548</x><y>330</y><w>430</w><h>150</h></coordinates><panel_attributes>GridPoint
+--
+-id: Long
+-x: Int
+-y: Int
+-layer: Int
+-gate: Boolean
+-relatives: [GridPoint, GridPoint, GridPoint, GridPoint, ...]
+-grid_segments: [GridSegment, GridSegment, GridSegment, GridSegment, ...]</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>498</x><y>330</y><w>70</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;50;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>408</x><y>120</y><w>210</w><h>90</h></coordinates><panel_attributes>Wire
+--
+wire_path: [ (x0,y0,z0),(x1,y1,z1),... ]
+connected: Boolean</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>658</x><y>120</y><w>240</w><h>90</h></coordinates><panel_attributes>GridSegments
+--
+-connection: set(GridPoint1, GridPoint2)
+-used: Boolean</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>758</x><y>200</y><w>30</w><h>150</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;130;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>350</x><y>200</y><w>180</w><h>150</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;130;160;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>180</x><y>120</y><w>200</w><h>60</h></coordinates><panel_attributes>Net
+--
+target: set(GridPoint1, GridPoint2)</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>260</x><y>170</y><w>90</w><h>180</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>70;160;10;10</additional_attributes></element></diagram>
