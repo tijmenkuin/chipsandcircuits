@@ -5,6 +5,7 @@ class GridPoint():
         self.z = z
         self.gate = False
         self.gate_id = None
+        self.state = 0
         self.relatives = {}
         self.grid_segments = {}
 
