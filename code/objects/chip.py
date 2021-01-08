@@ -1,19 +1,8 @@
-#git branch
-
-#nieuwe branch
-#git branch tim
-
-#ga naar branch
-#git checkout tim
-
-#git pull
-
-#git push main
-#git push origin tijmen:main
-
 from .gridpoint import GridPoint
 from .gridsegment import GridSegment
 from .net import Net
+from .wire import Wire
+
 import csv
 
 
@@ -24,10 +13,11 @@ class Chip():
         self.depth = 7
         self.cost = 0
         self.grid = {}
-        self.wires = {}
+        self.wires = self.createWires()
         self.netlist = []
         self.gates = []
         self.initializeGrid()
+        self.outputdict = {}
     
     def initializeGrid(self):
         #Initialize GridPoints
@@ -78,17 +68,43 @@ class Chip():
             next(inp)
             for line in inp:
                 location = list(map(int,line.rstrip("\n").split(",")))
-                print(location)
-                
-                # grid = self.getGridPoint(location[1], location[2], 0)
-                # grid.gate = True
-                # grid.id = location[0]
 
-
-    def initializeNetList(self, chip, netlist):
+    def initializeNetlist(self, chip, netlist):
         with open(f"data/realdata/gates_netlists/chip_{chip}/netlist_{netlist}.csv", "r") as inp:
             next(inp)
             for line in inp:
                 gate_ids = list(map(int,line.rstrip("\n").split(",")))
                 net = Net(gate_ids[0], gate_ids[1])
                 self.netlist.append(net)
+            
+
+
+    def giveResults(self):
+        with open("testfile.csv", "w", newline="") as f:
+            thewriter = csv.writer(f)
+            thewriter.writerow(['net', 'wire'])
+
+            for key in self.outputdict:
+                thewriter.writerow([str(key), str(self.outputdict[key])])
+            return thewriter
+    
+    def createWires(self):
+        """
+        For time being hard coded
+        """
+        wire1 = Wire([[1,5,0],[2,5,0],[3,5,0],[4,5,0],[5,5,0],[6,5,0]])
+        wire2 = Wire([[1,5,0],[1,4,0],[2,4,0],[3,4,0],[4,4,0]])
+        wire3 = Wire([[4,4,0],[4,3,0],[3,3,0],[2,3,0],[1,3,0],[0,3,0],[0,2,0],[0,1,0],[0,0,0],[1,0,0],[2,0,0],[3,0,0],[3,1,0]])
+        wire4 = Wire([[6,2,0],[5,2,0],[5,3,0],[5,4,0],[6,4,0],[6,5,0]])
+        wire5 = Wire([[3,1,0],[4,1,0],[5,1,0],[6,1,0],[7,1,0],[7,2,0],[6,2,0]])
+
+        return [wire1, wire2, wire3, wire4, wire5]
+
+    def makeDict(self):
+        wires = self.createWires()
+        if len(wires) == len(self.netlist):
+            iterations = len(wires)
+            for i in range(iterations):
+                self.outputdict[self.netlist[i]] = wires[i].wire_path
+    
+
