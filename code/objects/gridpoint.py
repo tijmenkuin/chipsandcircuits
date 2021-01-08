@@ -4,9 +4,12 @@ class GridPoint():
         self.y = y
         self.z = z
         self.gate = False
+        self.gate_id = None
         self.relatives = {}
         self.grid_segments = {}
 
-
     def __repr__(self):
+        return f"({self.x},{self.y},{self.z})"
+    
+    def __str__(self):
         return f"({self.x},{self.y},{self.z})"

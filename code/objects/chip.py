@@ -13,6 +13,7 @@
 
 from gridpoint import GridPoint
 from gridsegment import GridSegment
+import csv
 
 class Chip():
     def __init__(self, width, height):
@@ -66,3 +67,16 @@ class Chip():
             return self.grid[z][y][x]
         except:
             return None
+        return self.grid[z][y][x]
+
+    
+    def initializeGates(self, chip):
+        with open(f"data/realdata/gates_netlists/chip_{chip}/print_{chip}.csv", "r") as inp:
+            next(inp)
+            for line in inp:
+                location = list(map(int,line.rstrip("\n").split(",")))
+                print(location)
+                
+                # grid = self.getGridPoint(location[1], location[2], 0)
+                # grid.gate = True
+                # grid.id = location[0]
