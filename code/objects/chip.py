@@ -1,21 +1,7 @@
-#git branch
-
-#nieuwe branch
-#git branch tim
-
-#ga naar branch
-#git checkout tim
-
-#git pull
-
-#git push main
-#git push origin tijmen:main
-
 from .gridpoint import GridPoint
 from .gridsegment import GridSegment
 from .net import Net
 import csv
-
 
 class Chip():
     def __init__(self, width, height):
@@ -70,7 +56,6 @@ class Chip():
             return self.grid[z][y][x]
         except:
             return None
-        return self.grid[z][y][x]
 
     
     def initializeGates(self, chip):
@@ -78,11 +63,10 @@ class Chip():
             next(inp)
             for line in inp:
                 location = list(map(int,line.rstrip("\n").split(",")))
-                print(location)
-                
-                # grid = self.getGridPoint(location[1], location[2], 0)
-                # grid.gate = True
-                # grid.id = location[0]
+                print((location[1], location[2], 0))
+                gate = self.getGridPoint(location[1], location[2], 0)
+                gate.gate_id = location[0]
+                self.gates.append(gate)
 
 
     def initializeNetList(self, chip, netlist):

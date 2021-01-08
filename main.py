@@ -1,9 +1,11 @@
 from code.objects.chip import Chip
+from code.visualisation import tim
 
 if __name__ == "__main__":
-    chip = Chip(4,5)
-    chip.initializeGrid()
-    chip.initializeGates(1)
+    chip = Chip(10,10)
+    chip.initializeGates(0)
     chip.initializeNetList(0,1)
-    print(chip.netlist)
+    tim.visualise(chip, 0)
+
+    
 
