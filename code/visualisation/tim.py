@@ -20,8 +20,8 @@ def visualise(chip, z):
     symbol = "░"
     left = " "
     right = " "
-    up = " "
-    down = " "
+    forwards = " "
+    backwards = " "
 
     for y in range(chip.height):
         print(print_up)
@@ -46,17 +46,19 @@ def visualise(chip, z):
                 right = "-"
             if gridpoint.checkMoveUsed('left'):
                 left = "-"
-            if gridpoint.checkMoveUsed('up'):
-                up = "|"
-            if gridpoint.checkMoveUsed('down'):
-                down = "|"
+            if gridpoint.checkMoveUsed('forwards'):
+                forwards = "|"
+            if gridpoint.checkMoveUsed('backwards'):
+                backwards = "|"
 
-            print_up = print_up + ' ' + (decimals*up) + ' '
+            print_up = print_up + ' ' + (decimals*forwards) + ' '
             print_middle = print_middle +  left + (decimals*symbol) + right
-            print_down = print_down + ' ' + (decimals*down) + ' ' 
+            print_down = print_down + ' ' + (decimals*backwards) + ' ' 
 
             symbol = "░"
             left = " "
             right = " "
-            up = " "
-            down = " "
+            forwards = " "
+            backwards = " "
+
+    print(f"Z: {z}")

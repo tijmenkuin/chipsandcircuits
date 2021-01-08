@@ -35,8 +35,8 @@ class Chip():
                     current_gridpoint = self.getGridPoint(x,y,z)
                     self.addGridSegment(current_gridpoint, self.getGridPoint(x - 1, y, z), 'left', 'right')
                     self.addGridSegment(current_gridpoint, self.getGridPoint(x + 1, y, z), 'right', 'left')
-                    self.addGridSegment(current_gridpoint, self.getGridPoint(x, y - 1, z), 'backwards', 'forwards')
-                    self.addGridSegment(current_gridpoint, self.getGridPoint(x, y + 1, z), 'forwards', 'backwards')
+                    self.addGridSegment(current_gridpoint, self.getGridPoint(x, y - 1, z), 'forwards', 'backwards')
+                    self.addGridSegment(current_gridpoint, self.getGridPoint(x, y + 1, z), 'backwards', 'forwards')
                     self.addGridSegment(current_gridpoint, self.getGridPoint(x, y, z - 1), 'down', 'up')
                     self.addGridSegment(current_gridpoint, self.getGridPoint(x, y, z + 1), 'up', 'down')
 
@@ -63,7 +63,6 @@ class Chip():
             next(inp)
             for line in inp:
                 location = list(map(int,line.rstrip("\n").split(",")))
-                print((location[1], location[2], 0))
                 gate = self.getGridPoint(location[1], location[2], 0)
                 gate.gate_id = location[0]
                 self.gates.append(gate)
