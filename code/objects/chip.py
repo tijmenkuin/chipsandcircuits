@@ -7,3 +7,6 @@ class Chip():
         self.grid = {}
         self.netlist = []
         self.wires = {}
+    
+    def initializeGrid(self):
+        pass
