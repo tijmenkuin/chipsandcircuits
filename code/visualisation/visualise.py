@@ -27,3 +27,4 @@ def visualise(chip, z):
         
         plt.grid(True)
         plt.savefig('bar.png')
+

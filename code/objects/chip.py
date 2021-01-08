@@ -1,29 +1,18 @@
-#git branch
-
-#nieuwe branch
-#git branch tim
-
-#ga naar branch
-#git checkout tim
-
-#git pull
-
-#git push main
-#git push origin tijmen:main
-
-from gridpoint import GridPoint
-from gridsegment import GridSegment
+from .gridpoint import GridPoint
+from .gridsegment import GridSegment
+from .net import Net
 import csv
 
 class Chip():
     def __init__(self, width, height):
         self.width = width
         self.height = height
-        self.depth = 7
+        self.depth = 8
         self.cost = 0
         self.grid = {}
-        self.netlist = []
         self.wires = {}
+        self.netlist = []
+        self.gates = []
         self.initializeGrid()
     
     def initializeGrid(self):
@@ -67,7 +56,6 @@ class Chip():
             return self.grid[z][y][x]
         except:
             return None
-        return self.grid[z][y][x]
 
     
     def initializeGates(self, chip):
@@ -75,8 +63,16 @@ class Chip():
             next(inp)
             for line in inp:
                 location = list(map(int,line.rstrip("\n").split(",")))
-                print(location)
-                
-                # grid = self.getGridPoint(location[1], location[2], 0)
-                # grid.gate = True
-                # grid.id = location[0]
+                print((location[1], location[2], 0))
+                gate = self.getGridPoint(location[1], location[2], 0)
+                gate.gate_id = location[0]
+                self.gates.append(gate)
+
+
+    def initializeNetList(self, chip, netlist):
+        with open(f"data/realdata/gates_netlists/chip_{chip}/netlist_{netlist}.csv", "r") as inp:
+            next(inp)
+            for line in inp:
+                gate_ids = list(map(int,line.rstrip("\n").split(",")))
+                net = Net(gate_ids[0], gate_ids[1])
+                self.netlist.append(net)
