@@ -1,3 +1,3 @@
 class Net():
-    def __init__(self):
-        pass
+    def __init__(self, target):
+        self.target = target
