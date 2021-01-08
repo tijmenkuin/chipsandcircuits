@@ -1,15 +1,29 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-t = np.arange(0.0, 2.0, 0.01)
-s = np.sin(2 * np.pi * t)
+def visualise(chip, z):
+    X = []
+    Y = []
+    Id = []
 
-fig, ax = plt.subplots()
-ax.plot(t, s)
+    for y in range(chip.height):
+        for x in range(chip.width):
+            if chip.getGridPoint(x,y,z).gate_id is not None:
+                Y.append(y)
+                X.append(x)
+                Id.append(chip.getGridPoint(x,y,z).gate_id)
 
-ax.grid(True, linestyle='-.')
-ax.tick_params(labelcolor='r', labelsize='medium', width=3)
+        plt.xlim( -1, chip.width + 1)
+        plt.ylim(-1, chip.height + 1)
 
-plt.savefig('foo.png')
+        # np.arange(0, chip.width-1, 1)
+        # np.arange(0, chip.height-1, 1)
+        # plt.text(X, Y, "chip.getGridPoint(X, Y, 0).gate_id")
+        
+        plt.scatter(X,Y, marker="s",color='r', lw=9)
 
-
+        for i, txt in enumerate(Id):
+            plt.annotate(txt, (X[i - 1], Y[i - 1]))
+        
+        plt.grid(True)
+        plt.savefig('bar.png')
