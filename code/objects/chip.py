@@ -1,17 +1,5 @@
-#git branch
-
-#nieuwe branch
-#git branch tim
-
-#ga naar branch
-#git checkout tim
-
-#git pull
-
-#git push main
-#git push origin tijmen:main
-
-from gridpoint import GridPoint
+from .gridpoint import GridPoint
+import csv
 
 class Chip():
     def __init__(self, width, height):
@@ -37,3 +25,15 @@ class Chip():
 
     def getGridPoint(self, x, y, z):
         return self.grid[z][y][x]
+
+    
+    def initializeGates(self, chip):
+        with open(f"data/realdata/gates_netlists/chip_{chip}/print_{chip}.csv", "r") as inp:
+            next(inp)
+            for line in inp:
+                location = list(map(int,line.rstrip("\n").split(",")))
+                print(location)
+                
+                # grid = self.getGridPoint(location[1], location[2], 0)
+                # grid.gate = True
+                # grid.id = location[0]
