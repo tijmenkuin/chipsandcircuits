@@ -3,3 +3,5 @@ class GridSegment():
         self.connections = [gridpoint1, gridpoint2]
         self.used = False
 
+    def isUsed(self):
+        return self.used
