@@ -82,3 +82,4 @@ def checkPoint(moves, gate, direction,currentPoint, point):
         y_1 = point.y
         distance = abs(x_1-gate.x) + abs(y_1-gate.y)
         moves.append((distance, direction))
+

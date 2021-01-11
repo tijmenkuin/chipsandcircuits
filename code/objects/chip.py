@@ -12,9 +12,9 @@ class Chip():
         self.depth = 8
         self.cost = 0
         self.grid = {}
-        self.wires = self.createWires()
+        # self.wires = self.createWires()
         self.netlist = []
-        self.gates = []
+        self.gates = {}
         self.initializeGrid()
         self.outputdict = {}
     
@@ -36,21 +36,21 @@ class Chip():
             for y in range(self.height):
                 for x in range(self.width):
                     current_gridpoint = self.getGridPoint(x,y,z)
-                    self.addGridSegment(current_gridpoint, self.getGridPoint(x - 1, y, z), 'left', 'right')
-                    self.addGridSegment(current_gridpoint, self.getGridPoint(x + 1, y, z), 'right', 'left')
-                    self.addGridSegment(current_gridpoint, self.getGridPoint(x, y - 1, z), 'forwards', 'backwards')
-                    self.addGridSegment(current_gridpoint, self.getGridPoint(x, y + 1, z), 'backwards', 'forwards')
-                    self.addGridSegment(current_gridpoint, self.getGridPoint(x, y, z - 1), 'down', 'up')
-                    self.addGridSegment(current_gridpoint, self.getGridPoint(x, y, z + 1), 'up', 'down')
+                    self.addGridSegmentAndRelatives(current_gridpoint, self.getGridPoint(x - 1, y, z), 'left', 'right')
+                    self.addGridSegmentAndRelatives(current_gridpoint, self.getGridPoint(x + 1, y, z), 'right', 'left')
+                    self.addGridSegmentAndRelatives(current_gridpoint, self.getGridPoint(x, y - 1, z), 'forwards', 'backwards')
+                    self.addGridSegmentAndRelatives(current_gridpoint, self.getGridPoint(x, y + 1, z), 'backwards', 'forwards')
+                    self.addGridSegmentAndRelatives(current_gridpoint, self.getGridPoint(x, y, z - 1), 'down', 'up')
+                    self.addGridSegmentAndRelatives(current_gridpoint, self.getGridPoint(x, y, z + 1), 'up', 'down')
 
 
-    def addGridSegment(self, gridpoint1, gridpoint2, direction1, direction2):
+    def addGridSegmentAndRelatives(self, gridpoint1, gridpoint2, direction1, direction2):
         if gridpoint2 is not None:
             if direction2 not in gridpoint2.grid_segments:
                 gridsegment = GridSegment(gridpoint1, gridpoint2)
                 gridpoint1.grid_segments[direction1] = gridsegment
                 gridpoint2.grid_segments[direction2] = gridsegment
-
+                gridpoint1.relatives[direction1] = gridpoint2
 
 
     def getGridPoint(self, x, y, z):
@@ -70,7 +70,8 @@ class Chip():
 
                 gate = self.getGridPoint(location[1], location[2], 0)
                 gate.gate_id = location[0]
-                self.gates.append(gate)
+                self.gates[gate.gate_id] = gate
+
 
 
     def initializeNetlist(self, chip, netlist):
@@ -78,7 +79,7 @@ class Chip():
             next(inp)
             for line in inp:
                 gate_ids = list(map(int,line.rstrip("\n").split(",")))
-                net = Net(gate_ids[0], gate_ids[1])
+                net = Net(self.gates[gate_ids[0]], self.gates[gate_ids[1]])
                 self.netlist.append(net)
             
 
@@ -112,3 +113,4 @@ class Chip():
                 self.outputdict[self.netlist[i]] = wires[i].wire_path
     
 
+    # def getGateById(gate_id):

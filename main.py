@@ -11,3 +11,4 @@ if __name__ == "__main__":
     algorithm1.StartersAlgoritme(chip)
     tim.visualise(chip, 0)
     tim.visualise(chip, 1)
+
