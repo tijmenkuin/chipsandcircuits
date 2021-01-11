@@ -4,7 +4,7 @@ from code.visualisation import tim
 from code.algorithms import algorithm1
 
 if __name__ == "__main__":
-    chip = Chip(22,22)
+    chip = Chip(10,10)
     chip.initializeGates(0)
     chip.initializeNetlist(0,3)
     tim.visualise(chip, 0)

@@ -7,9 +7,9 @@ def StartersAlgoritme(chip):
     print(netlist)
 
     netid = 0
-    currentPoint = chip.gates[(netlist[0].target[0] - 1)]
+    currentPoint = chip.gates[netlist[0].target[0].gate_id]
     previousMove = None
-    toGate = chip.gates[(netlist[0].target[1] - 1)]
+    toGate = chip.gates[netlist[0].target[0].gate_id]
 
     while currentPoint:
         x = currentPoint.x
@@ -23,9 +23,9 @@ def StartersAlgoritme(chip):
         backwards = chip.getGridPoint(x, y + 1, z)
         
         checkPoint(moves, toGate, 'left', currentPoint,left)
-        checkPoint(moves, toGate, 'right',currentPoint, right)
-        checkPoint(moves, toGate, 'forwards',currentPoint, forwards)
-        checkPoint(moves, toGate, 'backwards',currentPoint, backwards)
+        checkPoint(moves, toGate, 'right', currentPoint, right)
+        checkPoint(moves, toGate, 'forwards', currentPoint, forwards)
+        checkPoint(moves, toGate, 'backwards', currentPoint, backwards)
         
         moves.sort()
         print(moves)
@@ -41,12 +41,10 @@ def StartersAlgoritme(chip):
                     break
                 previousMove = None
                 currentPoint.moveTo(moves[0][1])
-                if (len(netlist) > (netid+1)):
+                if len(netlist) > netid + 1:
                     netid = netid + 1
-                    currentPoint = chip.gates[(netlist[netid].target[0] - 1)]
-                    toGate = chip.gates[(netlist[netid].target[1] - 1)]
-                    print(netlist[netid].target[0])
-                    print(netlist[netid].target[1])
+                    currentPoint = chip.gates[netlist[netid].target[0].gate_id]
+                    toGate = chip.gates[netlist[netid].target[1].gate_id]
                     continue
         if len(moves) > 1:
             if (moves[0][0] == moves[1][0]):
@@ -76,8 +74,8 @@ def StartersAlgoritme(chip):
 
 
 
-def checkPoint(moves, gate, direction,currentPoint, point):
-    if (currentPoint.checkMoveUsed(direction) ==False):
+def checkPoint(moves, gate, direction, currentPoint, point):
+    if currentPoint.checkMoveUsed(direction) == False:
         x_1 = point.x
         y_1 = point.y
         distance = abs(x_1-gate.x) + abs(y_1-gate.y)

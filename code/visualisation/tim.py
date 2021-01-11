@@ -12,7 +12,7 @@
 #git push origin tijmen:main
 
 def visualise(chip, z):
-    decimals = len(str(max([gate.gate_id for gate in chip.gates])))
+    decimals = len(str(max([key for key in chip.gates.keys()])))
 
     print_up = ""
     print_middle =""

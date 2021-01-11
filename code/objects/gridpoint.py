@@ -27,14 +27,14 @@ class GridPoint():
         if direction not in self.grid_segments:
             return False
         if  self.grid_segments[direction] is not None:
-            return self.grid_segments[direction].isUsed()
+            return self.grid_segments[direction].used
         return False
 
     def checkMoveUsed(self, direction):
         if direction not in self.grid_segments:
             return None
         if  self.grid_segments[direction] is not None:
-            return self.grid_segments[direction].isUsed()
+            return self.grid_segments[direction].used
         return None
 
     def moveTo(self, direction):
