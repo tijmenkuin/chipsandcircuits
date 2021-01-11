@@ -5,12 +5,11 @@ from .wire import Wire
 
 import csv
 
-
 class Chip():
     def __init__(self, width, height):
         self.width = width
         self.height = height
-        self.depth = 7
+        self.depth = 8
         self.cost = 0
         self.grid = {}
         self.wires = self.createWires()
@@ -39,8 +38,8 @@ class Chip():
                     current_gridpoint = self.getGridPoint(x,y,z)
                     self.addGridSegment(current_gridpoint, self.getGridPoint(x - 1, y, z), 'left', 'right')
                     self.addGridSegment(current_gridpoint, self.getGridPoint(x + 1, y, z), 'right', 'left')
-                    self.addGridSegment(current_gridpoint, self.getGridPoint(x, y - 1, z), 'backwards', 'forwards')
-                    self.addGridSegment(current_gridpoint, self.getGridPoint(x, y + 1, z), 'forwards', 'backwards')
+                    self.addGridSegment(current_gridpoint, self.getGridPoint(x, y - 1, z), 'forwards', 'backwards')
+                    self.addGridSegment(current_gridpoint, self.getGridPoint(x, y + 1, z), 'backwards', 'forwards')
                     self.addGridSegment(current_gridpoint, self.getGridPoint(x, y, z - 1), 'down', 'up')
                     self.addGridSegment(current_gridpoint, self.getGridPoint(x, y, z + 1), 'up', 'down')
 
@@ -60,7 +59,6 @@ class Chip():
             return self.grid[z][y][x]
         except:
             return None
-        return self.grid[z][y][x]
 
     
     def initializeGates(self, chip):
@@ -68,6 +66,11 @@ class Chip():
             next(inp)
             for line in inp:
                 location = list(map(int,line.rstrip("\n").split(",")))
+
+                gate = self.getGridPoint(location[1], location[2], 0)
+                gate.gate_id = location[0]
+                self.gates.append(gate)
+
 
     def initializeNetlist(self, chip, netlist):
         with open(f"data/realdata/gates_netlists/chip_{chip}/netlist_{netlist}.csv", "r") as inp:
