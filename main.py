@@ -4,6 +4,9 @@ from code.visualisation import tim
 
 if __name__ == "__main__":
     chip = Chip(10,10)
+    chip.initializeNetlist(0,1)
+    chip.makeDict()
+    chip.giveResults()
     chip.initializeGates(0)
     chip.initializeNetList(0,1)
     chip.gates[2].moveTo('backwards').moveTo('backwards').moveTo('right').moveTo('right').moveTo('right').moveTo('forwards').moveTo('forwards').moveTo('forwards').moveTo('forwards').moveTo('left')
