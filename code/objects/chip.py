@@ -52,6 +52,7 @@ class Chip():
                 gridpoint2.grid_segments[direction2] = gridsegment
 
 
+
     def getGridPoint(self, x, y, z):
         if x < 0 or y < 0 or z < 0:
             return None
