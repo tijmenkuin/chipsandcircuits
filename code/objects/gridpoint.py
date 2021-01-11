@@ -12,6 +12,10 @@ class GridPoint():
     
     def __str__(self):
         return f"({self.x},{self.y},{self.z})"
+    
+    @property
+    def getCoordinates(self):
+        return [self.x, self.y, self.z]
 
     def isGate(self):
         return self.gate_id is not None
@@ -61,4 +65,12 @@ class GridPoint():
             return 'down'
             
         return None
-        
+    
+    def distanceToTarget(self, target_point):
+        return self.distanceBetweenCoordinates(self.getCoordinates, target_point.getCoordinates)
+
+    def distanceBetweenCoordinates(self, coordinate1, coordinate2):
+        distance = 0
+        for i in range(3):
+            distance += abs(coordinate1[i] - coordinate2[i])
+        return distance
