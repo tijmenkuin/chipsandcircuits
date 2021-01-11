@@ -1,6 +1,6 @@
 class Wire():
-    def __init__(self):
-        self.wire_path = None #[move]
+    def __init__(self, start):
+        self.wire_path = [start] #[move]
 
         self.connected = False
 

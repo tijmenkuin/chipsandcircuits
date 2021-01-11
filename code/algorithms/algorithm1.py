@@ -3,9 +3,6 @@ import math
 
 def StartersAlgoritme(chip):
     netlist = chip.netlist
-
-    print(netlist)
-
     netid = 0
     currentPoint = chip.gates[netlist[0].target[0].gate_id]
     previousMove = None
