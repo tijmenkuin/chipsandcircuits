@@ -52,7 +52,11 @@ def visualise(chip, z):
                 backwards = "|"
 
             print_up = print_up + ' ' + (decimals*forwards) + ' '
-            print_middle = print_middle +  left + (decimals*symbol) + right
+            if symbol.isnumeric():
+                d = (decimals - len(symbol))
+                print_middle = print_middle + left + d*"░" + symbol + right         
+            else:
+                print_middle = print_middle +  left + (decimals*symbol) + right
             print_down = print_down + ' ' + (decimals*backwards) + ' ' 
 
             symbol = "░"
