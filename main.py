@@ -1,6 +1,7 @@
 from code.objects.chip import Chip
 from code.visualisation.visualise import visualise
 from code.visualisation import tim
+from code.algorithms import algorithm1
 
 if __name__ == "__main__":
     chip = Chip(10,10)
@@ -12,3 +13,4 @@ if __name__ == "__main__":
     visualise(chip, 0)
     print(chip.netlist)
     # tim.visualise(chip, 0)
+    algorithm1.StartersAlgoritme(chip)
