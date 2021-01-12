@@ -6,6 +6,7 @@ class GridPoint():
         self.gate_id = None
         self.relatives = {}
         self.grid_segments = {}
+        self.intersected = 0
 
     def __repr__(self):
         return f"({self.x},{self.y},{self.z})"
@@ -16,6 +17,9 @@ class GridPoint():
     @property
     def getCoordinates(self):
         return [self.x, self.y, self.z]
+
+    def intersect(self):
+        self.intersected += 1
 
     def isGate(self):
         return self.gate_id is not None
@@ -74,3 +78,10 @@ class GridPoint():
         for i in range(3):
             distance += abs(coordinate1[i] - coordinate2[i])
         return distance
+    
+    def movePossible(self, move, end_gate):
+        if self.grid_segments[move] != None:
+            return not self.grid_segments[move].used
+        
+        if self.relatives[move].isGate():
+            return self.relatives[move] == end_gate

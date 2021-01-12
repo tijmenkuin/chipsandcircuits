@@ -12,11 +12,12 @@ class Chip():
         self.depth = 8
         self.cost = 0
         self.grid = {}
-        # self.wires = self.createWires()
+        self.wires = self.createWires()
         self.netlist = []
         self.gates = {}
         self.initializeGrid()
         self.outputdict = {}
+        self.amount_intersections = 0
     
     def initializeGrid(self):
         #Initialize GridPoints
@@ -46,12 +47,12 @@ class Chip():
 
     def addGridSegmentAndRelatives(self, gridpoint1, gridpoint2, direction1, direction2):
         if gridpoint2 is not None:
+            gridpoint1.relatives[direction1] = gridpoint2
+
             if direction2 not in gridpoint2.grid_segments:
                 gridsegment = GridSegment(gridpoint1, gridpoint2)
                 gridpoint1.grid_segments[direction1] = gridsegment
                 gridpoint2.grid_segments[direction2] = gridsegment
-                gridpoint1.relatives[direction1] = gridpoint2
-
 
     def getGridPoint(self, x, y, z):
         if x < 0 or y < 0 or z < 0:
@@ -106,11 +107,12 @@ class Chip():
         return [wire1, wire2, wire3, wire4, wire5]
 
     def makeDict(self):
+        self.outputdict = {}
         wires = self.createWires()
         if len(wires) == len(self.netlist):
             iterations = len(wires)
             for i in range(iterations):
                 self.outputdict[self.netlist[i]] = wires[i].wire_path
     
-
-    # def getGateById(gate_id):
+    def addIntersection(self):
+        self.amount_intersections += 1
