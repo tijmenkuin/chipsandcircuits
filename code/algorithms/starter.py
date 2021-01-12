@@ -4,7 +4,7 @@ from ..objects.wire import Wire
 import random
 import numpy as np
 
-def asearchalg(chip):
+def starter(chip):
     total_nets = len(chip.netlist)
     net = chip.netlist[0]
     
@@ -25,17 +25,12 @@ def asearchalg(chip):
                 chip.addIntersection()
             
             current_point.intersect()
-            compare = []
-            
-            for move, option in current_point.relatives.items():
-                if current_point.movePossible(move, end_point):
-                    score = heuristic(option, end_point)
-                    compare.append([score, move])
-                    
+            compare = valued_options(current_point, end_point)
+
             if compare == []:
-                print("Vastgelopen: er pasten", i, "nets in, van de ", total_nets, "nets")
-                print(chip.outputdict)
-                return 0
+                # print("Vastgelopen: er pasten", i, "nets in, van de ", total_nets, "nets")
+                # print(chip.outputdict)
+                return i / total_nets
 
             move = selectMove(compare)
             current_point.grid_segments[move].used = True
@@ -45,25 +40,50 @@ def asearchalg(chip):
 
             if current_point == end_point:
                 wire.connected = True
-        
-        
+
         chip.outputdict[net] = wire
         
-        
-    chip.giveResults()
+    return 1
     
 def heuristic(point, endpoint):
-    return abs(point.x - endpoint.x) + abs(point.y - endpoint.y) + abs(point.z - endpoint.z) #+ 300 * point.intersected
+    amount_options = len(options(point, endpoint))
+    heuristic_value = manhatten_distance(point, endpoint)
+
+    return heuristic_value / (amount_options * 100)
 
 def selectMove(comparation):
+    """
+    Decide move, for given data
+    """
     scores = [score[0] for score in comparation]
     minval = min(scores)
     indeces = [i for i, v in enumerate(scores) if v == minval]
     pick = random.choice(indeces)
+
     return comparation[pick][1]
 
-def options():
+def valued_options(current_point, end_point):
     """
     Gives list of move options and their heuristic value
     """
-    pass
+    compare = []
+    for move, option in current_point.relatives.items():
+        if current_point.movePossible(move, end_point):
+            score = heuristic(option, end_point)
+            compare.append([score, move])
+
+    return compare
+
+def options(current_point, end_point):
+    """
+    Gives list of move options
+    """
+    options = []
+    for move, option in current_point.relatives.items():
+        if current_point.movePossible(move, end_point):
+            options.append(move)
+
+    return options
+
+def manhatten_distance(point1, point2):
+    return abs(point1.x - point2.x) + abs(point1.y - point2.y) + abs(point1.z - point2.z)
