@@ -11,4 +11,4 @@ if __name__ == "__main__":
     chip.getGridPoint(0,3,0).gate_id = 3
     visualise(chip, 0)
     print(chip.netlist)
-    tim.visualise(chip, 0)
+    # tim.visualise(chip, 0)
