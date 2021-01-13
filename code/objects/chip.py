@@ -51,6 +51,7 @@ class Chip():
                 gridpoint1.grid_segments[direction1] = gridsegment
                 gridpoint2.grid_segments[direction2] = gridsegment
                 gridpoint1.relatives[direction1] = gridpoint2
+                gridpoint2.relatives[direction2] = gridpoint1
 
 
     def getGridPoint(self, x, y, z):
