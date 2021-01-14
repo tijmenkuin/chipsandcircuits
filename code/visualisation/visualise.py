@@ -31,8 +31,9 @@ def visualise(chip, z):
     
     ax.scatter3D(X, Y, Z, c=Z, cmap='hsv')
     # plt.scatter(X,Y, )
-
-    plt.annotate(txt, (X[i], Y[i]))
+        
+    for i, txt in enumerate(Id):
+        plt.annotate(txt, (X[i], Y[i]))
     
     # plt.grid(True)
     # plt.savefig('baz.png')
