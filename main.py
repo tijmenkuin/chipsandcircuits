@@ -1,7 +1,10 @@
 from code.objects.chip import Chip
 from code.visualisation.visualise import visualise
 from code.visualisation import tim
+from code.algorithms.greedy_ext import greedy_ext
+from code.costfunction import costfunction
 from code.algorithms import algorithmTim
+
 import sys
 
 def main(args):
@@ -17,3 +20,4 @@ def main(args):
 
 if __name__ == "__main__":
    main(sys.argv[1:])
+
