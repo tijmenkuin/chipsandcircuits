@@ -39,4 +39,4 @@ def visualise(chip, z):
     # plt.savefig('baz.png')
 
     # Show the plot
-    plt.show()
+    plt.save()
