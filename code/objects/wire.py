@@ -5,9 +5,3 @@ class Wire():
 
     def __repr__(self):
         return f"{self.wire_path}"
-
-    def addMove(self, move):
-        self.wire_path.append(move)
-
-    def removeMove(self, move):
-        self.wire_path.remove(move)
