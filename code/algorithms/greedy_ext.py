@@ -15,7 +15,7 @@ def greedy_ext(chip):
         i += 1
         
         while not wire.connected:
-            if current_point.intersected >= 1:
+            if current_point.intersected >= 1 and not current_point.isGate():
                 chip.addIntersection()
             
             current_point.intersect()

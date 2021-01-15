@@ -6,6 +6,9 @@ from code.costfunction import costfunction
 from code.algorithms import algorithmTim
 from code.utils.checker import Checker
 from code.utils.size_determinator import SizeDeterminator
+from code.utils.csv_writer import CSVWriter
+from code.utils.costfunction import CostFunction
+
 
 import sys
 
@@ -36,11 +39,16 @@ if __name__ == "__main__":
     #         print("Gevonden resultaat voor chip", i, "en netlist", netlist, "is:")
     #         print(gem / LOOP_AMOUNT * 100)
 
-    size = SizeDeterminator(1)
+    size = SizeDeterminator(0)
     
-    print("Height:", size.getHeight())
-    print("Width:", size.getWidth())
+    chip = Chip(size.getWidth(), size.getHeight())
+    chip.initializeGates(0)
+    chip.initializeNetlist(0, 1)
     
+    greedy_ext(chip)
+    score = costfunction(chip)
 
+    # print(chip.solution)
+    # costs = CostFunction(chip.solution)
     
-
+    write = CSVWriter(chip.solution, "greedy_ext", 0, 1, score)

@@ -17,6 +17,7 @@ class Chip():
         self.initializeGrid()
         self.solution = {}
         self.amount_intersections = 0
+        self.outputdict = {}
     
     def initializeGrid(self):
         #Initialize GridPoints
@@ -78,8 +79,8 @@ class Chip():
                 net = Net(self.gates[gate_ids[0]], self.gates[gate_ids[1]])
                 self.netlist.append(net)
 
-    def giveResults(self):
-        with open("testfile.csv", "w", newline="") as f:
+    def giveResults(self,folder,chip,netlist,score):
+        with open(f"scores/{folder}/score_{score}_chip_{chip}_netlist_{netlist}.csv", "w", newline="") as f:
             thewriter = csv.writer(f)
             thewriter.writerow(['net', 'wire'])
 
