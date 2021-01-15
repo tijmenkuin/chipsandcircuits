@@ -4,7 +4,8 @@ from code.visualisation import tim
 from code.algorithms.greedy_ext import greedy_ext
 from code.costfunction import costfunction
 from code.algorithms import algorithmTim
-from code.controls.checker import Checker
+from code.utils.checker import Checker
+from code.utils.size_determinator import SizeDeterminator
 
 import sys
 
@@ -35,18 +36,11 @@ if __name__ == "__main__":
     #         print("Gevonden resultaat voor chip", i, "en netlist", netlist, "is:")
     #         print(gem / LOOP_AMOUNT * 100)
 
-    chip = Chip(22,22)
-    chip.initializeGrid()
-    chip.initializeGates(0)
-    chip.initializeNetlist(0,1)
-
-    greedy_ext(chip)
-
-    # print(chip.solution)
-
-    check = Checker(chip.solution, 0, 1, 22, 22)
+    size = SizeDeterminator(1)
     
-    check.giveResults()
+    print("Height:", size.getHeight())
+    print("Width:", size.getWidth())
+    
 
     
 
