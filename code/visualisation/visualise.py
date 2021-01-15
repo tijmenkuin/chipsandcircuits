@@ -31,7 +31,7 @@ def visualise(chip, z):
     
     ax.scatter3D(X, Y, Z, c=Z, cmap='hsv')
     # plt.scatter(X,Y, )
-
+        
     for i, txt in enumerate(Id):
         plt.annotate(txt, (X[i], Y[i]))
     
