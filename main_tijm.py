@@ -7,6 +7,8 @@ from code.algorithms import algorithmTim
 from code.utils.checker import Checker
 from code.utils.size_determinator import SizeDeterminator
 from code.utils.csv_writer import CSVWriter
+from code.utils.costfunction import CostFunction
+
 
 import sys
 
@@ -44,14 +46,9 @@ if __name__ == "__main__":
     chip.initializeNetlist(0, 1)
     
     greedy_ext(chip)
+    score = costfunction(chip)
 
-
+    # print(chip.solution)
+    # costs = CostFunction(chip.solution)
     
-    write = CSVWriter(chip.solution, "greedy_ext", 0, 1, 5)
-    
-    print(chip.solution)
-    
-    
-
-    
-
+    write = CSVWriter(chip.solution, "greedy_ext", 0, 1, score)
