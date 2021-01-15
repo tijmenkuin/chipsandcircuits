@@ -28,12 +28,12 @@ def greedy_ext(chip):
             current_point.grid_segments[move].used = True
             current_point = current_point.relatives[move] 
 
-            wire.wire_path.append(current_point)
+            wire.path.append(current_point)
 
             if current_point == end_point:
                 wire.connected = True
 
-        chip.outputdict[net] = wire
+        chip.solution[net] = wire
         
     return 1
     

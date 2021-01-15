@@ -12,12 +12,12 @@ class Chip():
         self.depth = 8
         self.cost = 0
         self.grid = {}
-        # self.wires = self.createWires()
         self.netlist = []
         self.gates = {}
         self.initializeGrid()
-        self.outputdict = {}
+        self.solution = {}
         self.amount_intersections = 0
+        self.outputdict = {}
     
     def initializeGrid(self):
         #Initialize GridPoints
@@ -44,7 +44,6 @@ class Chip():
                     self.addGridSegmentAndRelatives(current_gridpoint, self.getGridPoint(x, y, z - 1), 'down', 'up')
                     self.addGridSegmentAndRelatives(current_gridpoint, self.getGridPoint(x, y, z + 1), 'up', 'down')
 
-
     def addGridSegmentAndRelatives(self, gridpoint1, gridpoint2, direction1, direction2):
         if gridpoint2 is not None:
             gridpoint1.relatives[direction1] = gridpoint2
@@ -62,7 +61,6 @@ class Chip():
         except:
             return None
 
-    
     def initializeGates(self, chip):
         with open(f"data/realdata/gates_netlists/chip_{chip}/print_{chip}.csv", "r") as inp:
             next(inp)
@@ -73,8 +71,6 @@ class Chip():
                 gate.gate_id = location[0]
                 self.gates[gate.gate_id] = gate
 
-
-
     def initializeNetlist(self, chip, netlist):
         with open(f"data/realdata/gates_netlists/chip_{chip}/netlist_{netlist}.csv", "r") as inp:
             next(inp)
@@ -82,8 +78,6 @@ class Chip():
                 gate_ids = list(map(int,line.rstrip("\n").split(",")))
                 net = Net(self.gates[gate_ids[0]], self.gates[gate_ids[1]])
                 self.netlist.append(net)
-            
-
 
     def giveResults(self,folder,chip,netlist,score):
         with open(f"scores/{folder}/score_{score}_chip_{chip}_netlist_{netlist}.csv", "w", newline="") as f:
