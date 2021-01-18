@@ -19,7 +19,7 @@ class CSVWriter():
 
     def writeResults(self):
         with open(f"solutions/{self.algorithm}/chip_{self.chip}/netlist_{self.netlist}/{self.score}.csv", "w", newline="") as outfile:
-            thewriter = csv.writer(outfile, quotechar="'")
+            thewriter = csv.writer(outfile)
             thewriter.writerow(['net', 'wires'])
 
             for net, wire in self.solution.items():
