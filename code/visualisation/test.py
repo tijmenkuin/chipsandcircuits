@@ -42,11 +42,11 @@ def visualise(chip):
                         y=Y,
                         z=Z,
                         # x='Chip Width', y='Chip Height', z='Chip Depth',
-                        surfacecolor='orange', marker_symbol='square',
+                        marker=dict(size=10, color='red'),
+                        marker_symbol='square',
                         mode='markers',
                         text= Id,
                         name='gates')
-
         # x_lines.append(None)
         # y_lines.append(None)
         # z_lines.append(None)
@@ -63,7 +63,8 @@ def visualise(chip):
         y=y_lines1,
         z=z_lines1,
         mode='lines',
-        name='net_list1',surfacecolor='lightblue'
+        name='net_list1',marker=dict(color='darkblue'),
+
     )
 
     # fig = go.Figure(data=[go.Scatter3d(
