@@ -27,8 +27,13 @@ class GridPoint():
 
     def isIntersected(self):
         if self.gate_id is not None:
-            return False
-        return len([True for k in ('left', 'right', 'forwards', 'backwards', 'up','down') if self.isMovePossible(k)]) >= 4
+            return 0
+        used = len([True for k in ('left', 'right', 'forwards', 'backwards', 'up','down') if self.isMovePossible(k)])
+        if used == 4 or used == 3:
+            return 1
+        if used == 5 or used == 6:
+            return 2
+        return 0
 
     def getMoveScore(self):
         if self.gate_id is not None:
