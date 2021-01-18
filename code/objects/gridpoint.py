@@ -128,8 +128,10 @@ class GridPoint():
     #     return distance
     
     def movePossible(self, move, end_gate):
-        if self.grid_segments[move] != None:
-            return not self.grid_segments[move].used
+        if self.grid_segments[move].used:
+            return False
         
-        if self.relatives[move].isGate():
-            return self.relatives[move] == end_gate
+        if self.relatives[move].isGate() and self.relatives[move] != end_gate:
+            return False
+
+        return True
