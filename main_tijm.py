@@ -1,14 +1,10 @@
 from code.objects.chip import Chip
-from code.visualisation.visualise import visualise
-from code.visualisation import tim
 from code.algorithms.greedy_ext import greedy_ext
-from code.costfunction import costfunction
-from code.algorithms import algorithmTim
 from code.utils.checker import Checker
 from code.utils.size_determinator import SizeDeterminator
 from code.utils.csv_writer import CSVWriter
 from code.utils.costfunction import CostFunction
-from code.visualisation.test import visualise
+from code.visualisation.visualise import visualise
 
 import sys
 
@@ -38,14 +34,13 @@ if __name__ == "__main__":
     #             gem += greedy_ext(chip)
     #         print("Gevonden resultaat voor chip", i, "en netlist", netlist, "is:")
     #         print(gem / LOOP_AMOUNT * 100)
-
-    size = SizeDeterminator(0)
     
-    chip = Chip(size.getWidth(), size.getHeight())
-    chip.initializeGates(0)
-    chip.initializeNetlist(0, 1)
+    chip = Chip(0,2)
+    greedy_ext(chip)
 
-    visualise(chip)
+    print(chip.solution)
+
+    visualise(chip, chip.solution)
     
     # greedy_ext(chip)
     # score = costfunction(chip)

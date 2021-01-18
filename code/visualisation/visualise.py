@@ -4,7 +4,7 @@ import plotly
 
 import random
 
-def visualise(chip, wires):
+def visualise(chip, solution):
     X = []
     Y = []
     Z = []
@@ -14,7 +14,7 @@ def visualise(chip, wires):
     y_wires = []
     z_wires = []
 
-    for wire in wires:
+    for wire in solution.values():
         x_wire = []
         y_wire = []
         z_wire = []

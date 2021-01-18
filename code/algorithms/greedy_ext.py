@@ -11,9 +11,12 @@ def greedy_ext(chip):
     for net in chip.netlist:
         current_point = net.target[0]
         end_point = net.target[1]
-        wire = Wire(current_point)
+
+        wire = Wire()
+        wire.addPoint(current_point)
+
         i += 1
-        
+
         while not wire.connected:
             if current_point.intersected >= 1 and not current_point.isGate():
                 chip.addIntersection()
@@ -28,7 +31,7 @@ def greedy_ext(chip):
             current_point.grid_segments[move].used = True
             current_point = current_point.relatives[move] 
 
-            wire.path.append(current_point)
+            wire.addPoint(current_point)
 
             if current_point == end_point:
                 wire.connected = True
@@ -43,7 +46,7 @@ def heuristic(point, endpoint, look_ahead):
     if look_ahead == 1:
         amount_options = len(opts)
         distance_value = manhatten_distance(point, endpoint)
-        return distance_value / amount_options
+        return distance_value
     else:
         score = 0
         for new_state in opts:
