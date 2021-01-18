@@ -8,7 +8,7 @@ from code.utils.checker import Checker
 from code.utils.size_determinator import SizeDeterminator
 from code.utils.csv_writer import CSVWriter
 from code.utils.costfunction import CostFunction
-
+from code.visualisation.test import visualise
 
 import sys
 
@@ -44,11 +44,13 @@ if __name__ == "__main__":
     chip = Chip(size.getWidth(), size.getHeight())
     chip.initializeGates(0)
     chip.initializeNetlist(0, 1)
+
+    visualise(chip)
     
-    greedy_ext(chip)
-    score = costfunction(chip)
+    # greedy_ext(chip)
+    # score = costfunction(chip)
 
     # print(chip.solution)
     # costs = CostFunction(chip.solution)
     
-    write = CSVWriter(chip.solution, "greedy_ext", 0, 1, score)
+    # write = CSVWriter(chip.solution, "greedy_ext", 0, 1, score)
