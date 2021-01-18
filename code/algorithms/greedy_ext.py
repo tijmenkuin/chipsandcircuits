@@ -10,7 +10,7 @@ def greedy_ext(chip):
     total_nets = len(chip.netlist)
     i = -1 
 
-    netlistSortDistance(chip)
+    # netlistSortDistance(chip)
 
     for net in chip.netlist:
         current_point = net.target[0]
@@ -26,7 +26,7 @@ def greedy_ext(chip):
                 chip.addIntersection()
             
             current_point.intersect()
-            compare = valued_options(current_point, end_point, 1)
+            compare = valueOptions(current_point, end_point, 1)
 
             if compare == []:
                 return False
@@ -49,16 +49,16 @@ def heuristic(point, endpoint, look_ahead):
 
     if look_ahead == 1:
         amount_options = len(opts)
-        if amount_options == 0:
-            return 100000
+        # if amount_options == 0:
+        #     return 100000
 
         distance_value = manhattenDistance(point, endpoint)
         if point.intersected == 0:
-            intersection = 1
+            intersection = 0
         else:
-            intersection = 2
+            intersection = 1
 
-        return distance_value / amount_options
+        return distance_value / (amount_options + 1)
     else:
         score = 0
         for new_state in opts:
@@ -73,11 +73,12 @@ def selectMove(comparation):
     scores = [score[0] for score in comparation]
     minval = min(scores)
     indeces = [i for i, v in enumerate(scores) if v == minval]
+    
     pick = random.choice(indeces)
 
     return comparation[pick][1]
 
-def valued_options(current_point, end_point, look_ahead):
+def valueOptions(current_point, end_point, look_ahead):
     """
     Gives list of move options and their heuristic value
     """
@@ -111,13 +112,37 @@ def netlistSortDistance(chip):
     Sorts netlist in manhatten-distance, small to big
     """
     distances = list()
+    just_distances = set()
+
     for i, net in enumerate(chip.netlist):
-        distances.append((i, manhattenDistance(net.target[0], net.target[1])))
+        dist = manhattenDistance(net.target[0], net.target[1])
+        distances.append((i, dist))
+        just_distances.add(dist)
 
     distances.sort(key=itemgetter(1))
 
+    k = -1
+    bible = dict()
+
+    for dista in just_distances:
+        k += 1
+        newlist = []
+        for twiple in distances:
+            if twiple[1] == dista:
+                newlist.append(twiple)
+        
+        bible[k] = newlist
+    
+    for key, value in bible.items():
+        random.shuffle(value)
+        bible[key] = value
+
+    new_distances = []
+    for sub_list in bible.values():
+        new_distances.extend(sub_list)
+    
     new_netlist = []
-    for order in distances:
+    for order in new_distances:
         new_netlist.append(chip.netlist[order[0]])
 
     chip.netlist = new_netlist
