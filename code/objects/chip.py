@@ -1,23 +1,34 @@
 from .gridpoint import GridPoint
 from .gridsegment import GridSegment
+from ..utils.size_determinator import SizeDeterminator
 from .net import Net
 from .wire import Wire
 
 import csv
 
 class Chip():
-    def __init__(self, width, height):
-        self.width = width
-        self.height = height
+    def __init__(self, chip_id, netlist_id):
+
+        sd = SizeDeterminator(chip_id)
+
+        self.width = sd.getWidth()
+        self.height = sd.getHeight()
         self.depth = 8
+
         self.cost = 0
+
         self.grid = {}
+
         self.netlist = []
+
         self.gates = {}
+
         self.initializeGrid()
+        self.initializeGates(chip_id)
+        self.initializeNetlist(chip_id, netlist_id)
+
         self.solution = {}
-        self.amount_intersections = 0
-        self.outputdict = {}
+        #self.amount_intersections = 0
     
     def initializeGrid(self):
         #Initialize GridPoints
@@ -61,8 +72,8 @@ class Chip():
         except:
             return None
 
-    def initializeGates(self, chip):
-        with open(f"data/realdata/gates_netlists/chip_{chip}/print_{chip}.csv", "r") as inp:
+    def initializeGates(self, chip_id):
+        with open(f"data/realdata/gates_netlists/chip_{chip_id}/print_{chip_id}.csv", "r") as inp:
             next(inp)
             for line in inp:
                 location = list(map(int,line.rstrip("\n").split(",")))
@@ -71,22 +82,13 @@ class Chip():
                 gate.gate_id = location[0]
                 self.gates[gate.gate_id] = gate
 
-    def initializeNetlist(self, chip, netlist):
-        with open(f"data/realdata/gates_netlists/chip_{chip}/netlist_{netlist}.csv", "r") as inp:
+    def initializeNetlist(self, chip_id, netlist_id):
+        with open(f"data/realdata/gates_netlists/chip_{chip_id}/netlist_{netlist_id}.csv", "r") as inp:
             next(inp)
             for line in inp:
                 gate_ids = list(map(int,line.rstrip("\n").split(",")))
                 net = Net(self.gates[gate_ids[0]], self.gates[gate_ids[1]])
                 self.netlist.append(net)
-
-    def giveResults(self,folder,chip,netlist,score):
-        with open(f"scores/{folder}/score_{score}_chip_{chip}_netlist_{netlist}.csv", "w", newline="") as f:
-            thewriter = csv.writer(f)
-            thewriter.writerow(['net', 'wire'])
-
-            for key in self.outputdict:
-                thewriter.writerow([str(key), str(self.outputdict[key])])
-            return thewriter
     
     def addIntersection(self):
         self.amount_intersections += 1

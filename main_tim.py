@@ -2,11 +2,7 @@ from code.objects.chip import Chip
 from code.objects.wire import Wire
 from code.objects.net import Net
 from code.visualisation.visualise import visualise
-from code.visualisation import tim
-from code.algorithms.greedy_ext import greedy_ext
 from code.algorithms.greedy_simultaneous import GreedySimultaneous
-from code.costfunction import costfunction
-from code.algorithms import algorithmTim
 import time
 
 import numpy as np
@@ -14,7 +10,7 @@ import numpy as np
 import sys
 
 def main(args):
-    if len(args) == 4:
+    if len(args) == 2:
 
         #chip 1: 18,14
         #chip 2: 18,18
@@ -23,22 +19,18 @@ def main(args):
 
         solutions = []
 
-        n = 100
+        n = 3
 
         runtime = time.time() 
 
         for i in range(n):
             print("Iteration: " + str(i))     
-            chip = Chip(int(args[0]),int(args[1]))
-            chip.initializeGates(args[2])
-            chip.initializeNetlist(args[2],args[3])
+            chip = Chip(args[0],args[1])
             greedy = GreedySimultaneous(chip, 7)
 
             while not greedy.run():
                 del chip
-                chip = Chip(int(args[0]),int(args[1]))
-                chip.initializeGates(args[2])
-                chip.initializeNetlist(args[2],args[3])
+                chip = chip = Chip(args[0],args[1])
                 greedy = GreedySimultaneous(chip, 7)
         
             netlist = []
@@ -80,9 +72,7 @@ def main(args):
 
             del chip
 
-        chip = Chip(int(args[0]),int(args[1]))
-        chip.initializeGates(args[2])
-        chip.initializeNetlist(args[2],args[3])
+        chip = Chip(args[0],args[1])
 
         scores = []
 
@@ -105,18 +95,24 @@ def main(args):
         #     print(wires)
 
 
+        wires = []
 
         for g1,g2,w in solutions[0][1]:
-            wire = Wire()   
+            wire = Wire()
             for point in w:
                 x = point[0]
                 y = point[1]
                 z = point[2]
-                wire.wire_path.append(chip.getGridPoint(x,y,z))
-            chip.outputdict[Net(chip.gates[g1], chip.gates[g2])] = wire            
+                wire.path.append(chip.getGridPoint(x,y,z))
+            
+            wires.append(wire)
+            chip.solution[Net(chip.gates[g1], chip.gates[g2])] = wire       
+
+        visualise(chip,wires)     
 
         print("Score: " + str(solutions[0][0]))
-        chip.giveResults("greedy_simultaneous",args[2],args[3],solutions[0][0])
+
+
 
         print("tijd: " + str(time.time() - runtime))
 
