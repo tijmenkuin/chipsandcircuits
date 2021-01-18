@@ -20,13 +20,14 @@ class SizeDeterminator():
                 width_list.append(location[1])
                 height_list.append(location[2])
 
-            self.width = max(width_list)-min(width_list) + 3
-            self.height = max(height_list)-min(height_list) + 3
+            self.width = max(width_list) + 2
+            self.height = max(height_list) + 2
     
     def getWidth(self):
         return self.width
 
     def getHeight(self):
         return self.height
-        
+    
+    
     
