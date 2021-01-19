@@ -11,7 +11,7 @@ def greedy_ext(chip):
     total_nets = len(chip.netlist)
     i = -1 
 
-    # netlistSortDistance(chip)
+    netlistSortDistance(chip)
 
     for net in chip.netlist:
         current_point = net.target[0]
@@ -61,7 +61,7 @@ def heuristic(point, endpoint, look_ahead):
         else:
             intersection = 2
 
-        return distance_value / (amount_options + 1) * intersection
+        return distance_value / (amount_options + 1)
     else:
         score = 0
         for new_state in opts:

@@ -36,41 +36,41 @@ if __name__ == "__main__":
         
     # print("Gemiddelde kosten is:", total_costs / AMOUNT_SOLUTIONS)
 
-    # for i in range(3):
-    #     for j in range(3):
-    #         netlist_id = j + 1 + (3 * i)
-    #         amount_solutions = 0
-    #         scores = []
-    #         count = 0
-    #         breaked = False
+    for i in range(3):
+        for j in range(3):
+            netlist_id = j + 1 + (3 * i)
+            amount_solutions = 0
+            scores = []
+            count = 0
+            breaked = False
 
-    #         while AMOUNT_SOLUTIONS != amount_solutions:
-    #             count += 1
-    #             chip = Chip(i, netlist_id)
-    #             if greedy_ext(chip):
-    #                 cost = CostFunction(chip.solution, chip.amount_intersections)
-    #                 scores.append(cost.costs)
-    #                 amount_solutions += 1
-    #             if count == LOOP_AMOUNT:
-    #                 breaked = True
-    #                 break
+            while AMOUNT_SOLUTIONS != amount_solutions:
+                count += 1
+                chip = Chip(i, netlist_id)
+                if greedy_ext(chip):
+                    cost = CostFunction(chip.solution, chip.amount_intersections)
+                    scores.append(cost.costs)
+                    amount_solutions += 1
+                if count == LOOP_AMOUNT:
+                    breaked = True
+                    break
 
             
-    #         if not breaked:
-    #             print("Gevonden resultaten voor chip", i, "en netlist", netlist_id, "is:")
-    #             print("Gemiddelde kosten:", np.mean(scores))
-    #             print("Variantie in kosten:", np.var(scores))
-    #             print("Maximale kosten:", max(scores))
-    #             print("Minimale kosten:", min(scores))
-    #         elif amount_solutions != 0:
-    #             print(f"Gevonden resultaten voor chip {i} en netlist {netlist_id} is over {amount_solutions} oplossingen:")
-    #             print("Gemiddelde kosten:", np.mean(scores))
-    #             print("Variantie in kosten:", np.var(scores))
-    #             print("Maximale kosten:", max(scores))
-    #             print("Minimale kosten:", min(scores))
-    #         else:
-    #             print("Gevonden resultaten voor chip", i, "en netlist", netlist_id, "is:")
-    #             print(f"Geen oplossingen gevonden na {LOOP_AMOUNT} iteraties")
+            if not breaked:
+                print("Gevonden resultaten voor chip", i, "en netlist", netlist_id, "is:")
+                print("Gemiddelde kosten:", np.mean(scores))
+                print("Variantie in kosten:", np.var(scores))
+                print("Maximale kosten:", max(scores))
+                print("Minimale kosten:", min(scores))
+            elif amount_solutions != 0:
+                print(f"Gevonden resultaten voor chip {i} en netlist {netlist_id} is over {amount_solutions} oplossingen:")
+                print("Gemiddelde kosten:", np.mean(scores))
+                print("Variantie in kosten:", np.var(scores))
+                print("Maximale kosten:", max(scores))
+                print("Minimale kosten:", min(scores))
+            else:
+                print("Gevonden resultaten voor chip", i, "en netlist", netlist_id, "is:")
+                print(f"Geen oplossingen gevonden na {LOOP_AMOUNT} iteraties")
 
     
     # cost = CostFunction(chip.solution, chip.amount_intersections)
@@ -81,19 +81,19 @@ if __name__ == "__main__":
 
     #visualise(chip)
 
-    while True:
-        netlist_id = 4
-        chip_id = 1
+    # while True:
+    #     netlist_id = 4
+    #     chip_id = 1
 
-        chip = Chip(chip_id, netlist_id)
-        greedy_ext(chip)
+    #     chip = Chip(chip_id, netlist_id)
+    #     greedy_ext(chip)
 
 
-        visualise(chip)
+    #     visualise(chip)
 
-        for wire in chip.solution.values():
-            inter = selfIntersection(wire)
+    #     for wire in chip.solution.values():
+    #         inter = selfIntersection(wire)
 
-        if inter.self_intected:
-            visualise(chip)
-            break
+    #     if inter.self_intected:
+    #         visualise(chip)
+    #         break

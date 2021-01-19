@@ -5,7 +5,7 @@ class selfIntersection():
         self.wire = wire
         self.self_intected = False
         self.fixSelfIntersection()
-
+        
     def fixSelfIntersection(self):
         found = False
         for i, point in enumerate(self.wire.path):
