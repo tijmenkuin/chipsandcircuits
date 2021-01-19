@@ -54,11 +54,11 @@ def heuristic(point, endpoint, look_ahead):
 
         distance_value = manhattenDistance(point, endpoint)
         if point.intersected == 0:
-            intersection = 0
-        else:
             intersection = 1
+        else:
+            intersection = 2
 
-        return distance_value / (amount_options + 1)
+        return distance_value / (amount_options + 1) * intersection
     else:
         score = 0
         for new_state in opts:
