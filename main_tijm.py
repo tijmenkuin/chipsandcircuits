@@ -71,6 +71,9 @@ if __name__ == "__main__":
     #             print("Gevonden resultaten voor chip", i, "en netlist", netlist_id, "is:")
     #             print(f"Geen oplossingen gevonden na {LOOP_AMOUNT} iteraties")
 
-    chip = Chip(0, 2)
+    chip = Chip(0, 1)
     greedy_ext(chip)
-    visualise(chip, chip.solution)
+    cost = CostFunction(chip.solution, chip.amount_intersections)
+    costs = cost.costs
+    
+    write = CSVWriter(chip.solution, "greedy_ext", 0, 1, costs)
