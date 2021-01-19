@@ -23,7 +23,7 @@ class CSVWriter():
             thewriter.writerow(['net','wires'])
 
             for net, wire in self.solution.items():
-                thewriter.writerow([f"({net.target[0].gate_id},{net.target[1].gate_id})", wire])
+                thewriter.writerow([f"({net.target[0].gate_id},{net.target[1].gate_id})", str(wire).replace(" ", "")])
 
             thewriter.writerow([f"chip_{self.chip}_net_{self.netlist}", self.score])
             return thewriter

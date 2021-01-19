@@ -28,7 +28,7 @@ class Chip():
         self.initializeNetlist(chip_id, netlist_id)
 
         self.solution = {}
-        #self.amount_intersections = 0
+        self.amount_intersections = 0
     
     def initializeGrid(self):
         #Initialize GridPoints

@@ -15,21 +15,13 @@ class CostFunction():
 
     NOTE: Make sure the inserted solutions are valid, use checker class !!
     """
-    def __init__(self, solution):
+    def __init__(self, solution, intersections):
         self.solutioncopy = dict((k,v) for k,v in solution.items())
 
-        # self.costs = self.lengthCount() + 300 * self.intersectionCount()
-        self.intersectionCount()
+        self.costs = self.lengthCount() + 300 * intersections
 
     def lengthCount(self):
         length = 0
         for wire in self.solutioncopy.values():
-            length += len(wire) - 1
+            length += len(wire.path) - 1
         return length
-
-    def intersectionCount(self):
-        for wire in self.solutioncopy.values():
-            wire.path.pop()
-             
-
-        return 0
