@@ -1,5 +1,6 @@
 from ..objects.chip import Chip
 from ..objects.wire import Wire
+from ..optimizations.self_intersector import selfIntersection
 
 import random
 import numpy as np
@@ -39,6 +40,8 @@ def greedy_ext(chip):
 
             if current_point == end_point:
                 wire.connected = True
+        
+        selfIntersection(wire)
 
         chip.solution[net] = wire
         

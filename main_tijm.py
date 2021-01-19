@@ -5,6 +5,7 @@ from code.utils.size_determinator import SizeDeterminator
 from code.utils.csv_writer import CSVWriter
 from code.utils.costfunction import CostFunction
 from code.visualisation.visualise import visualise
+from code.optimizations.self_intersector import selfIntersection
 
 import numpy as np
 
@@ -71,9 +72,28 @@ if __name__ == "__main__":
     #             print("Gevonden resultaten voor chip", i, "en netlist", netlist_id, "is:")
     #             print(f"Geen oplossingen gevonden na {LOOP_AMOUNT} iteraties")
 
-    chip = Chip(0, 1)
-    greedy_ext(chip)
-    cost = CostFunction(chip.solution, chip.amount_intersections)
-    costs = cost.costs
     
-    write = CSVWriter(chip.solution, "greedy_ext", 0, 1, costs)
+    # cost = CostFunction(chip.solution, chip.amount_intersections)
+    # costs = cost.costs
+    # print(costs)
+    
+    # write = CSVWriter(chip.solution, "greedy_ext", chip_id, netlist_id, costs)
+
+    #visualise(chip)
+
+    while True:
+        netlist_id = 4
+        chip_id = 1
+
+        chip = Chip(chip_id, netlist_id)
+        greedy_ext(chip)
+
+
+        visualise(chip)
+
+        for wire in chip.solution.values():
+            inter = selfIntersection(wire)
+
+        if inter.self_intected:
+            visualise(chip)
+            break
