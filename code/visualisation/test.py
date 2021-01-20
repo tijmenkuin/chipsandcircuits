@@ -18,8 +18,11 @@ def visualise(chip):
     x_lines1 = [1, 1, 2]
     y_lines1 = [5, 5, 5]
     z_lines1 = [2, 3, 3]
+<<<<<<< HEAD
     # Create a blank figure with labels
     # df = px.data(X, Y, Z)
+=======
+>>>>>>> 4554dcb76a702d5eebab71186f43173aa291f13d
 
     for y in range(chip.height):
         for x in range(chip.width):
@@ -30,6 +33,7 @@ def visualise(chip):
                     Z.append(z)
                     Id.append(chip.getGridPoint(x,y,z).gate_id)
     
+<<<<<<< HEAD
     #create the coordinate list for the lines
     # for p in pairs:
     #     for i in range(2):
@@ -37,17 +41,27 @@ def visualise(chip):
     #         y_lines.append(Y[p[i]])
     #         z_lines.append(Z[p[i]])
     
+=======
+>>>>>>> 4554dcb76a702d5eebab71186f43173aa291f13d
     gates = go.Scatter3d(
                         x=X,
                         y=Y,
                         z=Z,
                         # x='Chip Width', y='Chip Height', z='Chip Depth',
+<<<<<<< HEAD
                         marker=dict(size=10, color='red'),
                         marker_symbol='square',
                         mode='markers',
                         text= Id,
                         name='gates',
                         layout(xaxis=list(range=c(0,6)))
+=======
+                        surfacecolor='orange', marker_symbol='square',
+                        mode='markers',
+                        text= Id,
+                        name='gates')
+
+>>>>>>> 4554dcb76a702d5eebab71186f43173aa291f13d
         # x_lines.append(None)
         # y_lines.append(None)
         # z_lines.append(None)
@@ -59,11 +73,16 @@ def visualise(chip):
         mode='lines',
         name='net_list',surfacecolor='orange'
     )
+<<<<<<< HEAD
+=======
+    
+>>>>>>> 4554dcb76a702d5eebab71186f43173aa291f13d
     net_list1 = go.Scatter3d(
         x=x_lines1,
         y=y_lines1,
         z=z_lines1,
         mode='lines',
+<<<<<<< HEAD
         name='net_list1',marker=dict(color='darkblue')
 
     )
@@ -113,5 +132,9 @@ def visualise(chip):
 
     # fig = px.scatter_3d(X, Y, Z, x='sepal_length', y='sepal_width', z='petal_width',
     #                     color='petal_length', symbol='species')
+=======
+        name='net_list1',surfacecolor='lightblue'
+    )
+>>>>>>> 4554dcb76a702d5eebab71186f43173aa291f13d
     fig = go.Figure(data=[gates, net_list, net_list1])
     fig.show()

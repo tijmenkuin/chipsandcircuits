@@ -1,54 +1,79 @@
 from code.objects.chip import Chip
-from code.visualisation.visualise import visualise
-from code.visualisation import tim
 from code.algorithms.greedy_ext import greedy_ext
-from code.costfunction import costfunction
-from code.algorithms import algorithmTim
 from code.utils.checker import Checker
 from code.utils.size_determinator import SizeDeterminator
 from code.utils.csv_writer import CSVWriter
 from code.utils.costfunction import CostFunction
+from code.visualisation.visualise import visualise
 
-
-import sys
-
-def main(args):
-    if len(args) == 4:
-        chip = Chip(int(args[0]),int(args[1]))
-        chip.initializeGates(args[2])
-        chip.initializeNetlist(args[2],args[3])
-        algorithmTim.StartersAlgoritme(chip)
-        tim.visualise(chip, 0)
-        tim.visualise(chip, 1)
-    else:
-        print("Wrong usage: python main.py [width] [height] [chip] [netlist]")
+import numpy as np
 
 if __name__ == "__main__":
-#    main(sys.argv[1:])
-    # LOOP_AMOUNT = 100
-    
+    AMOUNT_SOLUTIONS = 100
+
+    LOOP_AMOUNT = 2000
+
     # for i in range(3):
     #     for j in range(3):
     #         gem = 0
     #         for k in range(LOOP_AMOUNT):
-    #             netlist = j + 1 + (3 * i)
-    #             chip = Chip(22,22)
-    #             chip.initializeGates(i)
-    #             chip.initializeNetlist(i, netlist)
+    #             netlist_id = j + 1 + (3 * i)
+    #             chip = Chip(i, netlist_id)
     #             gem += greedy_ext(chip)
-    #         print("Gevonden resultaat voor chip", i, "en netlist", netlist, "is:")
-    #         print(gem / LOOP_AMOUNT * 100)
+    #         print("Gevonden resultaat voor chip", i, "en netlist", netlist_id, "is:")
+    #         print(gem)
 
-    size = SizeDeterminator(0)
-    
-    chip = Chip(size.getWidth(), size.getHeight())
-    chip.initializeGates(0)
-    chip.initializeNetlist(0, 1)
-    
+    # amount_solutions = 0
+    # total_costs = 0
+
+    # while AMOUNT_SOLUTIONS != amount_solutions:
+    #     chip = Chip(0,2)
+    #     if greedy_ext(chip):
+    #         cost = CostFunction(chip.solution, chip.amount_intersections)
+    #         total_costs += cost.costs
+    #         amount_solutions += 1
+        
+    # print("Gemiddelde kosten is:", total_costs / AMOUNT_SOLUTIONS)
+
+    # for i in range(3):
+    #     for j in range(3):
+    #         netlist_id = j + 1 + (3 * i)
+    #         amount_solutions = 0
+    #         scores = []
+    #         count = 0
+    #         breaked = False
+
+    #         while AMOUNT_SOLUTIONS != amount_solutions:
+    #             count += 1
+    #             chip = Chip(i, netlist_id)
+    #             if greedy_ext(chip):
+    #                 cost = CostFunction(chip.solution, chip.amount_intersections)
+    #                 scores.append(cost.costs)
+    #                 amount_solutions += 1
+    #             if count == LOOP_AMOUNT:
+    #                 breaked = True
+    #                 break
+
+            
+    #         if not breaked:
+    #             print("Gevonden resultaten voor chip", i, "en netlist", netlist_id, "is:")
+    #             print("Gemiddelde kosten:", np.mean(scores))
+    #             print("Variantie in kosten:", np.var(scores))
+    #             print("Maximale kosten:", max(scores))
+    #             print("Minimale kosten:", min(scores))
+    #         elif amount_solutions != 0:
+    #             print(f"Gevonden resultaten voor chip {i} en netlist {netlist_id} is over {amount_solutions} oplossingen:")
+    #             print("Gemiddelde kosten:", np.mean(scores))
+    #             print("Variantie in kosten:", np.var(scores))
+    #             print("Maximale kosten:", max(scores))
+    #             print("Minimale kosten:", min(scores))
+    #         else:
+    #             print("Gevonden resultaten voor chip", i, "en netlist", netlist_id, "is:")
+    #             print(f"Geen oplossingen gevonden na {LOOP_AMOUNT} iteraties")
+
+    chip = Chip(0, 1)
     greedy_ext(chip)
-    score = costfunction(chip)
-
-    # print(chip.solution)
-    # costs = CostFunction(chip.solution)
+    cost = CostFunction(chip.solution, chip.amount_intersections)
+    costs = cost.costs
     
-    write = CSVWriter(chip.solution, "greedy_ext", 0, 1, score)
+    write = CSVWriter(chip.solution, "greedy_ext", 0, 1, costs)

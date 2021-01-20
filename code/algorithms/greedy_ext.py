@@ -3,47 +3,62 @@ from ..objects.wire import Wire
 
 import random
 import numpy as np
+from operator import itemgetter
+import copy
 
 def greedy_ext(chip):
     total_nets = len(chip.netlist)
     i = -1 
 
+    # netlistSortDistance(chip)
+
     for net in chip.netlist:
         current_point = net.target[0]
         end_point = net.target[1]
-        wire = Wire(current_point)
+
+        wire = Wire()
+        wire.addPoint(current_point)
+
         i += 1
-        
+
         while not wire.connected:
             if current_point.intersected >= 1 and not current_point.isGate():
                 chip.addIntersection()
             
             current_point.intersect()
-            compare = valued_options(current_point, end_point, 1)
+            compare = valueOptions(current_point, end_point, 1)
 
             if compare == []:
-                return 0
+                return False
 
             move = selectMove(compare)
             current_point.grid_segments[move].used = True
             current_point = current_point.relatives[move] 
 
-            wire.path.append(current_point)
+            wire.addPoint(current_point)
 
             if current_point == end_point:
                 wire.connected = True
 
         chip.solution[net] = wire
         
-    return 1
+    return True
     
 def heuristic(point, endpoint, look_ahead):
     opts = options(point, endpoint)
 
     if look_ahead == 1:
         amount_options = len(opts)
-        distance_value = manhatten_distance(point, endpoint)
-        return distance_value / amount_options
+        # if amount_options == 0:
+        #     return 100000
+
+        distance_value = manhattenDistance(point, endpoint)
+        if point.intersected == 0:
+            intersection = 1
+        else:
+            intersection = 2
+
+        return distance_value / (amount_options + 1) * intersection
     else:
         score = 0
         for new_state in opts:
@@ -58,18 +73,19 @@ def selectMove(comparation):
     scores = [score[0] for score in comparation]
     minval = min(scores)
     indeces = [i for i, v in enumerate(scores) if v == minval]
+    
     pick = random.choice(indeces)
 
     return comparation[pick][1]
 
-def valued_options(current_point, end_point, look_ahead):
+def valueOptions(current_point, end_point, look_ahead):
     """
     Gives list of move options and their heuristic value
     """
     compare = []
-    for move, option in current_point.relatives.items():
+    for move, relative in current_point.relatives.items():
         if current_point.movePossible(move, end_point):
-            score = heuristic(option, end_point, look_ahead)
+            score = heuristic(relative, end_point, look_ahead)
             compare.append([score, move])
 
     return compare
@@ -85,8 +101,48 @@ def options(current_point, end_point):
 
     return options
 
-def manhatten_distance(point1, point2):
+def manhattenDistance(point1, point2):
     """
     Calculates Manhattan distance between points
     """
     return abs(point1.x - point2.x) + abs(point1.y - point2.y) + abs(point1.z - point2.z)
+
+def netlistSortDistance(chip):
+    """
+    Sorts netlist in manhatten-distance, small to big
+    """
+    distances = list()
+    just_distances = set()
+
+    for i, net in enumerate(chip.netlist):
+        dist = manhattenDistance(net.target[0], net.target[1])
+        distances.append((i, dist))
+        just_distances.add(dist)
+
+    distances.sort(key=itemgetter(1))
+
+    k = -1
+    bible = dict()
+
+    for dista in just_distances:
+        k += 1
+        newlist = []
+        for twiple in distances:
+            if twiple[1] == dista:
+                newlist.append(twiple)
+        
+        bible[k] = newlist
+    
+    for key, value in bible.items():
+        random.shuffle(value)
+        bible[key] = value
+
+    new_distances = []
+    for sub_list in bible.values():
+        new_distances.extend(sub_list)
+    
+    new_netlist = []
+    for order in new_distances:
+        new_netlist.append(chip.netlist[order[0]])
+
+    chip.netlist = new_netlist

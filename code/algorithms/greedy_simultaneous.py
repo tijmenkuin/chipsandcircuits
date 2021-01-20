@@ -13,11 +13,12 @@ class GreedySimultaneous:
         return abs(point1.x-point2.x) + abs(point1.y-point2.y) + abs(point1.z-point2.z)  
 
     def moveScore(self, new_point):
-        intersection =  300 if new_point.isIntersected() and (not new_point.isGate()) else 0
+
+        intersection =  300 * new_point.isIntersected() if new_point.isIntersected() > 0 and (not new_point.isGate()) else 0
         movescore = 1 + new_point.getMoveScore()
         distance = self.manhattanDistance(new_point, self.destination_point)
 
-        return (distance + intersection*intersection) / (movescore*movescore) 
+        return (distance + intersection**4) / (movescore**2) 
 
     def pathFinder(self):
         found_paths = []
