@@ -90,5 +90,25 @@ class Chip():
                 net = Net(self.gates[gate_ids[0]], self.gates[gate_ids[1]])
                 self.netlist.append(net)
     
-    def addIntersection(self):
-        self.amount_intersections += 1
+    # def addIntersection(self):
+    #     self.amount_intersections += 1
+
+    def clear(self):
+        self.cost = 0
+        for net in self.netlist:
+            if net in self.solution:
+                wire = self.solution[net]
+                del wire
+            net.copy = [net.target[0], net.target[1]]
+            net.wire_0 = []
+            net.wire_1 = []
+        self.solution = {}
+
+        for z in range(self.depth):
+            for y in range(self.height):
+                for x in range(self.width):
+                    point = self.getGridPoint(x,y,z)
+                    for _,grid_segment in point.grid_segments.items():
+                        grid_segment.used = False
+                    point.last_move = []
+                    point.intersected = 0
