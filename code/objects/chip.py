@@ -5,6 +5,7 @@ from .net import Net
 from .wire import Wire
 
 import csv
+import math
 
 class Chip():
     def __init__(self, chip_id, netlist_id):
@@ -92,3 +93,17 @@ class Chip():
     
     def addIntersection(self):
         self.amount_intersections += 1
+
+    def giveHeuristicValues(self, target_point):
+        for z in range(self.depth):
+            for y in range(self.height):
+                for x in range(self.width):
+                    this_gridpoint = self.getGridPoint(x,y,z)
+                    this_gridpoint.heuristic_value = this_gridpoint.manhattanDistanceTo(target_point)
+
+    def giveDefaultGScores(self):
+        for z in range(self.depth):
+            for y in range(self.height):
+                for x in range(self.width):
+                    this_gridpoint = self.getGridPoint(x,y,z)
+                    this_gridpoint.gscore = math.inf
