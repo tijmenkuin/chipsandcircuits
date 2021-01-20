@@ -1,42 +1,69 @@
-import matplotlib.pyplot as plt
-import numpy as np
+import plotly.express as px
+import plotly.graph_objects as go
+import plotly
 
-def visualise(chip, z):
+import random
+
+def visualise(chip, wires):
     X = []
     Y = []
+    Z = []
     Id = []
 
-    # Create a blank figure with labels
-    # p = figure(plot_width = chip.width, plot_height = chip.height,
-    # title = '3D visualisation',
-    # x_axis_label = 'X', y_axis_label = 'Y')
-    fig = plt.figure()
-    ax = plt.axes(projection="3d")
+    x_wires = []
+    y_wires = []
+    z_wires = []
 
-    for y in range(chip.height):
-        for x in range(chip.width):
-            if chip.getGridPoint(x,y,z).gate_id is not None:
-                Y.append(y)
-                X.append(x)
-                Id.append(chip.getGridPoint(x,y,z).gate_id)
+    for wire in wires:
+        x_wire = []
+        y_wire = []
+        z_wire = []
+        for point in wire.path:
+            x_wire.append(point.x)
+            y_wire.append(point.y)
+            z_wire.append(point.z)
+        x_wires.append(x_wire)
+        y_wires.append(y_wire)
+        z_wires.append(z_wire)
 
-    # plt.xlim( -1, chip.width + 1, 1)
-    # plt.ylim(-1, chip.height + 1, 1)
-        # p.square(X, Y, size = 12, color = 'red', alpha = 0.6)
-
-    np.arange(0, chip.width-1, 1)
-    np.arange(0, chip.height-1, 1)
-        # plt.text(X, Y, "chip.getGridPoint(X, Y, 0).gate_id")
-        
+    for gate_id in chip.gates:
+        Y.append(chip.gates[gate_id].y)
+        X.append(chip.gates[gate_id].x)
+        Z.append(chip.gates[gate_id].z)
+        Id.append(gate_id)
     
-    ax.scatter3D(X, Y, Z, c=Z, cmap='hsv')
-    # plt.scatter(X,Y, )
-        
-    for i, txt in enumerate(Id):
-        plt.annotate(txt, (X[i], Y[i]))
-    
-    # plt.grid(True)
-    # plt.savefig('baz.png')
+    gates = go.Scatter3d(
+            x=X,
+            y=Y,
+            z=Z,
+            marker_symbol='square',
+            mode='markers+text',
+            text= Id,
+            name='gates',
+            marker=dict(size=8, color='red'),
+            textposition="middle center")
 
-    # Show the plot
-    plt.show()
+
+    net_lists = []
+    for i,_ in enumerate(x_wires):
+        red = random.randint(0, 255)
+        blue = random.randint(0, 255)
+        green = random.randint(0, 255)
+
+        net_list = go.Scatter3d(
+            x=x_wires[i],
+            y=y_wires[i],
+            z=z_wires[i],
+            mode='lines',
+            name=f'netlist{i}',
+            marker=dict(color=f'rgb({red},{green},{blue})')
+        )
+
+        net_lists.append(net_list)
+
+    data = [gates] + [net_list for net_list in net_lists]
+
+    fig = go.Figure(data=data)
+    
+    fig.update_layout(height=750,width=750)
+    fig.show()

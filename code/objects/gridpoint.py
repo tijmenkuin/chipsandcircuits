@@ -12,12 +12,12 @@ class GridPoint():
     def __repr__(self):
         return f"({self.x},{self.y},{self.z})"
     
-    def __str__(self):
-        return f"({self.x},{self.y},{self.z})"
+    # def __str__(self):
+    #     return f"({self.x},{self.y},{self.z})"
     
-    @property
-    def getCoordinates(self):
-        return [self.x, self.y, self.z]
+    # @property
+    # def getCoordinates(self):
+    #     return [self.x, self.y, self.z]
 
     def intersect(self):
         self.intersected += 1
@@ -65,67 +65,67 @@ class GridPoint():
         else:
             return False
 
-    def undoMove(self):
-        direction = None
+    # def undoMove(self):
+    #     direction = None
 
-        if len(self.last_move) < 1:
-            return False
+    #     if len(self.last_move) < 1:
+    #         return False
 
-        reverse_move = self.last_move.pop()
+    #     reverse_move = self.last_move.pop()
 
-        if reverse_move == 'up':
-            direction = 'down'
-        elif reverse_move == 'down':
-            direction = 'up'
-        elif reverse_move == 'backwards':
-            direction = 'forwards'
-        elif reverse_move == 'forwards':
-            direction = 'backwards'
-        elif reverse_move == 'left':
-            direction = 'right'
-        elif reverse_move == 'right':
-            direction = 'left'       
+    #     if reverse_move == 'up':
+    #         direction = 'down'
+    #     elif reverse_move == 'down':
+    #         direction = 'up'
+    #     elif reverse_move == 'backwards':
+    #         direction = 'forwards'
+    #     elif reverse_move == 'forwards':
+    #         direction = 'backwards'
+    #     elif reverse_move == 'left':
+    #         direction = 'right'
+    #     elif reverse_move == 'right':
+    #         direction = 'left'       
 
-        if direction is None:
-            return False
+    #     if direction is None:
+    #         return False
 
-        if self.checkMoveUsed(direction):
-            self.grid_segments[direction].used = False
-            if self.grid_segments[direction].connections[0] == self:
-                return self.grid_segments[direction].connections[1]
-            return self.grid_segments[direction].connections[0]
-        else:
-            return False
+    #     if self.checkMoveUsed(direction):
+    #         self.grid_segments[direction].used = False
+    #         if self.grid_segments[direction].connections[0] == self:
+    #             return self.grid_segments[direction].connections[1]
+    #         return self.grid_segments[direction].connections[0]
+    #     else:
+    #         return False
 
 
-    def getDirection(self, x,y,z):
-        x = x - self.x
-        y = y - self.y
-        z = z - self.z
+    # def getDirection(self, x,y,z):
+    #     x = x - self.x
+    #     y = y - self.y
+    #     z = z - self.z
 
-        if x == 1 and y == 0 and z == 0:
-            return 'right'
-        if x == -1 and y == 0 and z == 0:
-            return 'left'
-        if x == 0 and y == 1 and z == 0:
-            return 'forwards'
-        if x == 0 and y == -1 and z == 0:
-            return 'backwards'
-        if x == 0 and y == 0 and z == 1:
-            return 'up'
-        if x == 0 and y == 0 and z == -1:
-            return 'down'
+    #     if x == 1 and y == 0 and z == 0:
+    #         return 'right'
+    #     if x == -1 and y == 0 and z == 0:
+    #         return 'left'
+    #     if x == 0 and y == 1 and z == 0:
+    #         return 'forwards'
+    #     if x == 0 and y == -1 and z == 0:
+    #         return 'backwards'
+    #     if x == 0 and y == 0 and z == 1:
+    #         return 'up'
+    #     if x == 0 and y == 0 and z == -1:
+    #         return 'down'
             
-        return None
+    #     return None
 
-    def distanceToTarget(self, target_point):
-        return self.distanceBetweenCoordinates(self.getCoordinates, target_point.getCoordinates)
+    # def distanceToTarget(self, target_point):
+    #     return self.distanceBetweenCoordinates(self.getCoordinates, target_point.getCoordinates)
 
-    def distanceBetweenCoordinates(self, coordinate1, coordinate2):
-        distance = 0
-        for i in range(3):
-            distance += abs(coordinate1[i] - coordinate2[i])
-        return distance
+    # def distanceBetweenCoordinates(self, coordinate1, coordinate2):
+    #     distance = 0
+    #     for i in range(3):
+    #         distance += abs(coordinate1[i] - coordinate2[i])
+    #     return distance
     
     def movePossible(self, move, end_gate):
         if self.grid_segments[move] != None:
@@ -133,3 +133,34 @@ class GridPoint():
         
         if self.relatives[move].isGate():
             return self.relatives[move] == end_gate
+
+
+    # this is just for test
+
+    def add_relatives(self):
+        self.relatives = ['up', 'down', 'left', 'right','forwards', 'backwards']
+
+    def get_directions(self, options):
+        """
+        Returns a list of all available directions that can be used,
+        based on the assigned values of gridsegment or the gridpoint.
+        """
+        available_directions = set(directions)
+
+        unavailable_directions = set()
+        for direction in self.relatives.used():
+            unavailable_directions.add(relatives.get_used())
+
+        return list(available_directions - unavailable_directions)
+        
+
+    def set_used(self):
+        self.used = used
+
+    def get_used(self):
+        return self.used
+
+    def has_used(self):
+        return self.used is not None
+
+    def directions(self):

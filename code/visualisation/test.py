@@ -46,7 +46,8 @@ def visualise(chip):
                         marker_symbol='square',
                         mode='markers',
                         text= Id,
-                        name='gates')
+                        name='gates',
+                        layout(xaxis=list(range=c(0,6)))
         # x_lines.append(None)
         # y_lines.append(None)
         # z_lines.append(None)
@@ -63,7 +64,7 @@ def visualise(chip):
         y=y_lines1,
         z=z_lines1,
         mode='lines',
-        name='net_list1',marker=dict(color='darkblue'),
+        name='net_list1',marker=dict(color='darkblue')
 
     )
 
