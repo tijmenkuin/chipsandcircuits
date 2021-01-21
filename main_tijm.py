@@ -1,10 +1,12 @@
 from code.objects.chip import Chip
 from code.algorithms.greedy_ext import greedy_ext
+from code.algorithms.asearch_tijm import ASearch
 from code.utils.checker import Checker
 from code.utils.size_determinator import SizeDeterminator
 from code.utils.csv_writer import CSVWriter
-from code.utils.costfunction import CostFunction
+from code.utils.resultfunction import ResultFunction
 from code.visualisation.visualise import visualise
+from code.optimizations.self_intersector import selfIntersection
 
 import numpy as np
 
@@ -47,7 +49,7 @@ if __name__ == "__main__":
     #             count += 1
     #             chip = Chip(i, netlist_id)
     #             if greedy_ext(chip):
-    #                 cost = CostFunction(chip.solution, chip.amount_intersections)
+    #                 cost = CostFunction(chip.solution)
     #                 scores.append(cost.costs)
     #                 amount_solutions += 1
     #             if count == LOOP_AMOUNT:
@@ -71,9 +73,59 @@ if __name__ == "__main__":
     #             print("Gevonden resultaten voor chip", i, "en netlist", netlist_id, "is:")
     #             print(f"Geen oplossingen gevonden na {LOOP_AMOUNT} iteraties")
 
-    chip = Chip(0, 1)
-    greedy_ext(chip)
-    cost = CostFunction(chip.solution, chip.amount_intersections)
-    costs = cost.costs
     
-    write = CSVWriter(chip.solution, "greedy_ext", 0, 1, costs)
+    # chip = Chip(0,3)
+    # if greedy_ext(chip):
+    #     print(len(chip.solution.values()))
+
+    #     results = ResultFunction(chip.solution)
+
+    #     print(results.costs)
+    #     print(results.length)
+    #     print(results.intersections)
+
+    #     visualise(chip)
+
+    # cost = CostFunction(chip.solution)
+    # costs = cost.costs
+    # print(costs)
+    
+    # write = CSVWriter(chip.solution, "greedy_ext", chip_id, netlist_id, costs)
+
+        
+
+    # while True:
+    #     netlist_id = 4
+    #     chip_id = 1
+
+    #     chip = Chip(chip_id, netlist_id)
+    #     greedy_ext(chip)
+
+
+    #     visualise(chip)
+
+    #     for wire in chip.solution.values():
+    #         inter = selfIntersection(wire)
+
+    #     if inter.self_intected:
+    #         visualise(chip)
+    #         break
+
+    netlist_id = 4
+    chip_id = 1
+
+    chip = Chip(chip_id, netlist_id)
+
+    asearch = ASearch(chip)
+
+    if asearch.run():
+        results = ResultFunction(chip)
+
+        print(results.costs)
+        print(results.length)
+        print(results.intersections)
+
+        visualise(chip)
+    else:
+        print("Geen oplossingen gevonden")
+        visualise(chip)

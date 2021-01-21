@@ -5,6 +5,7 @@ from .net import Net
 from .wire import Wire
 
 import csv
+import math
 
 class Chip():
     def __init__(self, chip_id, netlist_id):
@@ -89,9 +90,6 @@ class Chip():
                 gate_ids = list(map(int,line.rstrip("\n").split(",")))
                 net = Net(self.gates[gate_ids[0]], self.gates[gate_ids[1]])
                 self.netlist.append(net)
-    
-    # def addIntersection(self):
-    #     self.amount_intersections += 1
 
     def clear(self):
         self.cost = 0
@@ -112,3 +110,21 @@ class Chip():
                         grid_segment.used = False
                     point.last_move = []
                     point.intersected = 0
+
+    def addIntersection(self):
+        self.amount_intersections += 1
+
+    def giveHeuristicValues(self, target_point):
+        for z in range(self.depth):
+            for y in range(self.height):
+                for x in range(self.width):
+                    this_gridpoint = self.getGridPoint(x,y,z)
+                    this_gridpoint.heuristic_value = this_gridpoint.manhattanDistanceTo(target_point)
+
+    def giveDefaultGScores(self):
+        for z in range(self.depth):
+            for y in range(self.height):
+                for x in range(self.width):
+                    this_gridpoint = self.getGridPoint(x,y,z)
+                    this_gridpoint.gscore = math.inf
+
