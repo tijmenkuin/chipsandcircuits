@@ -11,9 +11,10 @@ from code.optimizations.self_intersector import selfIntersection
 import numpy as np
 
 if __name__ == "__main__":
-    AMOUNT_SOLUTIONS = 100
+    AMOUNT_SOLUTIONS = 10000
 
-    LOOP_AMOUNT = 2000
+
+    LOOP_AMOUNT = 20000
 
     # for i in range(3):
     #     for j in range(3):
@@ -37,45 +38,54 @@ if __name__ == "__main__":
         
     # print("Gemiddelde kosten is:", total_costs / AMOUNT_SOLUTIONS)
 
-    # for i in range(3):
-    #     for j in range(3):
-    #         netlist_id = j + 1 + (3 * i)
-    #         amount_solutions = 0
-    #         scores = []
-    #         count = 0
-    #         breaked = False
+    for i in range(3):
+        for j in range(3):
+            netlist_id = j + 1 + (3 * i)
+            amount_solutions = 0
+            costs = []
+            amount_intersections = []
+            count = 0
+            breaked = False
 
-    #         while AMOUNT_SOLUTIONS != amount_solutions:
-    #             count += 1
-    #             chip = Chip(i, netlist_id)
-    #             if greedy_ext(chip):
-    #                 cost = CostFunction(chip.solution)
-    #                 scores.append(cost.costs)
-    #                 amount_solutions += 1
-    #             if count == LOOP_AMOUNT:
-    #                 breaked = True
-    #                 break
+            while AMOUNT_SOLUTIONS != amount_solutions:
+                count += 1
+                chip = Chip(i, netlist_id)
+                chip.netlistRandomizer()
+                asearch = ASearch(chip)
+                if asearch.run():
+                    result = ResultFunction(chip)
+                    if count == 1 or result.costs < min(costs):
+                        writer = CSVWriter(chip.solution, "asearch", i, netlist_id, result.costs)
+                        costs.append(result.costs)
+                    amount_intersections.append(result.intersections)
+                    amount_solutions += 1
+                if count == LOOP_AMOUNT:
+                    breaked = True
+                    break
 
             
-    #         if not breaked:
-    #             print("Gevonden resultaten voor chip", i, "en netlist", netlist_id, "is:")
-    #             print("Gemiddelde kosten:", np.mean(scores))
-    #             print("Variantie in kosten:", np.var(scores))
-    #             print("Maximale kosten:", max(scores))
-    #             print("Minimale kosten:", min(scores))
-    #         elif amount_solutions != 0:
-    #             print(f"Gevonden resultaten voor chip {i} en netlist {netlist_id} is over {amount_solutions} oplossingen:")
-    #             print("Gemiddelde kosten:", np.mean(scores))
-    #             print("Variantie in kosten:", np.var(scores))
-    #             print("Maximale kosten:", max(scores))
-    #             print("Minimale kosten:", min(scores))
-    #         else:
-    #             print("Gevonden resultaten voor chip", i, "en netlist", netlist_id, "is:")
-    #             print(f"Geen oplossingen gevonden na {LOOP_AMOUNT} iteraties")
+            if not breaked:
+                print("Gevonden resultaten voor chip", i, "en netlist", netlist_id, "is:")
+                print("Gemiddelde kosten:", np.mean(costs))
+                print("Gemiddeld aantal intersecties:", np.mean(amount_intersections))
+                print("Minimale kosten:", min(costs))
+                print("Minimale aantal intersecties:", min(amount_intersections))
+            elif amount_solutions != 0:
+                print("Gevonden resultaten voor chip", i, "en netlist", netlist_id, f"over {amount_solutions} oplossingen:")
+                print("Gemiddelde kosten:", np.mean(costs))
+                print("Gemiddeld aantal intersecties:", np.mean(amount_intersections))
+                print("Minimale kosten:", min(costs))
+                print("Minimale aantal intersecties:", min(amount_intersections))
+            else:
+                print("Gevonden resultaten voor chip", i, "en netlist", netlist_id, "is:")
+                print(f"Geen oplossingen gevonden na {LOOP_AMOUNT} iteraties")
 
-    
-    # chip = Chip(0,3)
-    # if greedy_ext(chip):
+    # while True:
+    #     chip = Chip(1,5)
+    #     if greedy_ext(chip):
+    #         visualise(chip)
+    #         break
+           
     #     print(len(chip.solution.values()))
 
     #     results = ResultFunction(chip.solution)
@@ -84,7 +94,7 @@ if __name__ == "__main__":
     #     print(results.length)
     #     print(results.intersections)
 
-    #     visualise(chip)
+        
 
     # cost = CostFunction(chip.solution)
     # costs = cost.costs
@@ -111,21 +121,21 @@ if __name__ == "__main__":
     #         visualise(chip)
     #         break
 
-    netlist_id = 4
-    chip_id = 1
+    # netlist_id = 9
+    # chip_id = 2
 
-    chip = Chip(chip_id, netlist_id)
+    # chip = Chip(chip_id, netlist_id)
 
-    asearch = ASearch(chip)
+    # asearch = ASearch(chip)
 
-    if asearch.run():
-        results = ResultFunction(chip)
+    # if asearch.run():
+    #     results = ResultFunction(chip)
 
-        print(results.costs)
-        print(results.length)
-        print(results.intersections)
+    #     print(results.costs)
+    #     print(results.length)
+    #     print(results.intersections)
 
-        visualise(chip)
-    else:
-        print("Geen oplossingen gevonden")
-        visualise(chip)
+    #     visualise(chip)
+    # else:
+    #     print("Geen oplossingen gevonden")
+    #     visualise(chip)

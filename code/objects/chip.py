@@ -6,6 +6,7 @@ from .wire import Wire
 
 import csv
 import math
+import random
 
 class Chip():
     def __init__(self, chip_id, netlist_id):
@@ -107,3 +108,6 @@ class Chip():
                 for x in range(self.width):
                     this_gridpoint = self.getGridPoint(x,y,z)
                     this_gridpoint.gscore = math.inf
+
+    def netlistRandomizer(self):
+        random.shuffle(self.netlist)
