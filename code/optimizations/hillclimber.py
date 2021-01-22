@@ -94,7 +94,6 @@ class HillClimber():
             asearch.run()
 
             new_results = ResultFunction(self.chip)
-            print(new_results.costs)
 
             if new_results.costs < self.results.costs:
                 self.results = new_results

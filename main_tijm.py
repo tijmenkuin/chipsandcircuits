@@ -123,8 +123,8 @@ if __name__ == "__main__":
     #         break
 
 
-    chip_id = 1
-    netlist_id = 5
+    chip_id = 0
+    netlist_id = 1
 
     chip = Chip(chip_id, netlist_id)
     chip.netlistRandomizer()
@@ -133,10 +133,15 @@ if __name__ == "__main__":
     asearch.run()
 
     hillclimber = HillClimber(chip)
-    hillclimber.run(5,2,10)
+    hillclimber.run(5,4,100)
 
-    print("Beste resultaat:", hillclimber.results.costs)
-    csvwriter = CSVWriter(hillclimber.best_solution.solution, "hillclimber_asearch", chip_id, netlist_id, hillclimber.results.costs)
+    results = ResultFunction(hillclimber.best_solution)
+
+    print("Beste resultaat Kosten:", results.costs)
+    print("Beste resultaat Intersecties:", results.intersections)
+    print("Beste resultaat Lengte:", results.length)
+
+    # csvwriter = CSVWriter(hillclimber.best_solution.solution, "hillclimber_asearch", chip_id, netlist_id, results.costs)
     visualise(hillclimber.best_solution)
 
 
