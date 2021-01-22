@@ -5,6 +5,8 @@ from .net import Net
 from .wire import Wire
 
 import csv
+import math
+import random
 
 class Chip():
     def __init__(self, chip_id, netlist_id):
@@ -89,7 +91,45 @@ class Chip():
                 gate_ids = list(map(int,line.rstrip("\n").split(",")))
                 net = Net(self.gates[gate_ids[0]], self.gates[gate_ids[1]])
                 self.netlist.append(net)
-    
+
+    def clear(self):
+        self.cost = 0
+        for net in self.netlist:
+            if net in self.solution:
+                wire = self.solution[net]
+                del wire
+            net.copy = [net.target[0], net.target[1]]
+            net.wire_0 = []
+            net.wire_1 = []
+        self.solution = {}
+
+        for z in range(self.depth):
+            for y in range(self.height):
+                for x in range(self.width):
+                    point = self.getGridPoint(x,y,z)
+                    for _,grid_segment in point.grid_segments.items():
+                        grid_segment.used = False
+                    point.last_move = []
+                    point.intersected = 0
+
     def addIntersection(self):
         self.amount_intersections += 1
     
+
+    def giveHeuristicValues(self, target_point):
+        for z in range(self.depth):
+            for y in range(self.height):
+                for x in range(self.width):
+                    this_gridpoint = self.getGridPoint(x,y,z)
+                    this_gridpoint.heuristic_value = this_gridpoint.manhattanDistanceTo(target_point)
+
+    def giveDefaultGScores(self):
+        for z in range(self.depth):
+            for y in range(self.height):
+                for x in range(self.width):
+                    this_gridpoint = self.getGridPoint(x,y,z)
+                    this_gridpoint.gscore = math.inf
+
+
+    def netlistRandomizer(self):
+        random.shuffle(self.netlist)

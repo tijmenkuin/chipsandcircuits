@@ -1,3 +1,5 @@
+import random
+
 class GridPoint():
     def __init__(self, x, y, z):
         self.x = x
@@ -8,19 +10,19 @@ class GridPoint():
         self.grid_segments = {}
         self.last_move = []
         self.intersected = 0
+        self.checked = False
+        self.heuristic_value = None
+        self.gscore = None
+        self.fscore = None
 
     def __repr__(self):
         return f"({self.x},{self.y},{self.z})"
-    
-    # def __str__(self):
-    #     return f"({self.x},{self.y},{self.z})"
-    
-    # @property
-    # def getCoordinates(self):
-    #     return [self.x, self.y, self.z]
 
     def intersect(self):
         self.intersected += 1
+    
+    def deIntersect(self):
+        self.intersected -= 1
 
     def isGate(self):
         return self.gate_id is not None
@@ -34,6 +36,9 @@ class GridPoint():
         if used == 5 or used == 6:
             return 2
         return 0
+
+    def isIntersected2(self):
+        return self.intersected > 0 
 
     def getMoveScore(self):
         if self.gate_id is not None:
@@ -69,6 +74,18 @@ class GridPoint():
             return newPoint
         else:
             return False
+
+    def reachableRelatives(self, end_gate):
+        """
+        Gives list of relatives that are reachable (no colissions)
+        """
+        reachables = []
+        #end gate
+        for move, relative in self.relatives.items():
+            if not self.grid_segments[move].used and (not relative.isGate() or relative == end_gate):
+                reachables.append(relative)
+        
+        return reachables
 
     # def undoMove(self):
     #     direction = None
@@ -144,8 +161,11 @@ class GridPoint():
 
         return True
 
+    def manhattanDistanceTo(self, point):
+        return abs(self.x - point.x) + abs(self.y - point.y) + abs(self.z - point.z)
 
-    # this is just for test
+
+ # this is just for test
 
     def add_relatives(self):
         self.relatives = ['up', 'down', 'left', 'right','forwards', 'backwards']

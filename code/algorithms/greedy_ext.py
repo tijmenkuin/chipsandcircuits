@@ -1,5 +1,6 @@
 from ..objects.chip import Chip
 from ..objects.wire import Wire
+from ..optimizations.self_intersector import selfIntersection
 
 import random
 import numpy as np
@@ -22,9 +23,6 @@ def greedy_ext(chip):
         i += 1
 
         while not wire.connected:
-            if current_point.intersected >= 1 and not current_point.isGate():
-                chip.addIntersection()
-            
             current_point.intersect()
             compare = valueOptions(current_point, end_point, 1)
 
@@ -39,6 +37,13 @@ def greedy_ext(chip):
 
             if current_point == end_point:
                 wire.connected = True
+        
+        self_intersect = selfIntersection(wire)
+
+        if self_intersect.amount_fixes > 0:
+            for fix in self_intersect.fixes.values():
+                for point in fix:
+                    point.deIntersect()
 
         chip.solution[net] = wire
         
@@ -49,16 +54,14 @@ def heuristic(point, endpoint, look_ahead):
 
     if look_ahead == 1:
         amount_options = len(opts)
-        # if amount_options == 0:
-        #     return 100000
 
         distance_value = manhattenDistance(point, endpoint)
         if point.intersected == 0:
-            intersection = 1
+            intersection = 0
         else:
-            intersection = 2
+            intersection = 1
 
-        return distance_value / (amount_options + 1) * intersection
+        return (distance_value + intersection * 300) / (amount_options + 1) 
     else:
         score = 0
         for new_state in opts:
