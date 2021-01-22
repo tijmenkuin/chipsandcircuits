@@ -40,6 +40,8 @@ if __name__ == "__main__":
 
     for i in range(3):
         for j in range(3):
+            if i == 0:
+                continue 
             netlist_id = j + 1 + (3 * i)
             amount_solutions = 0
             costs = []
