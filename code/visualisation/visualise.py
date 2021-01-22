@@ -57,7 +57,7 @@ def visualise(chip):
             y=y_wires[i],
             z=z_wires[i],
             mode='lines',
-            name=f'netlist{i}',
+            name=f'net{i}',
             marker=dict(color=f'rgb({red},{green},{blue})')
         )
 

@@ -1,4 +1,5 @@
 from ..objects.chip import Wire
+import random
 
 class ASearch():
     def __init__(self, chip):
@@ -50,7 +51,7 @@ class ASearch():
             
             del self.queue[current]
 
-            for relative in current.reachableRelatives():
+            for relative in current.reachableRelatives(end_point):
                 tentative_gScore = current.gscore + 1 + 300 * relative.isIntersected2()
 
                 

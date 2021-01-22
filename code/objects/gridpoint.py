@@ -1,3 +1,5 @@
+import random
+
 class GridPoint():
     def __init__(self, x, y, z):
         self.x = x
@@ -36,7 +38,7 @@ class GridPoint():
         return 0
 
     def isIntersected2(self):
-        return self.intersected > 0
+        return self.intersected > 0 
 
     def getMoveScore(self):
         if self.gate_id is not None:
@@ -73,13 +75,14 @@ class GridPoint():
         else:
             return False
 
-    def reachableRelatives(self):
+    def reachableRelatives(self, end_gate):
         """
         Gives list of relatives that are reachable (no colissions)
         """
         reachables = []
+        #end gate
         for move, relative in self.relatives.items():
-            if not self.grid_segments[move].used:
+            if not self.grid_segments[move].used and (not relative.isGate() or relative == end_gate):
                 reachables.append(relative)
         
         return reachables
