@@ -111,8 +111,8 @@ if __name__ == "__main__":
     #         visualise(chip)
     #         break
 
-    netlist_id = 4
-    chip_id = 1
+    netlist_id = 9
+    chip_id = 2
 
     chip = Chip(chip_id, netlist_id)
 

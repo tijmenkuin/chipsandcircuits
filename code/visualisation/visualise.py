@@ -11,6 +11,8 @@ def visualise(chip):
     Z = []
     Id = []
 
+    net = []
+
     x_wires = []
     y_wires = []
     z_wires = []
@@ -52,12 +54,19 @@ def visualise(chip):
         blue = random.randint(0, 255)
         green = random.randint(0, 255)
 
+        temp_netlist = list(chip.solution.keys())
+
+        gate_1 = temp_netlist[i].target[0].gate_id
+        gate_2 = temp_netlist[i].target[1].gate_id
+
+        net_name = f"net ({gate_1}, {gate_2})"
+
         net_list = go.Scatter3d(
             x=x_wires[i],
             y=y_wires[i],
             z=z_wires[i],
             mode='lines',
-            name=f'netlist{i}',
+            name=net_name,
             marker=dict(color=f'rgb({red},{green},{blue})')
         )
 
