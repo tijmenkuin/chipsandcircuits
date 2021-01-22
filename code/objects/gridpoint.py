@@ -172,5 +172,3 @@ class GridPoint():
 
     def has_used(self):
         return self.used is not None
-
-    def directions(self):
