@@ -87,13 +87,31 @@ class GreedySimultaneous:
             return None
         return moves
 
-    def run(self):
+    def setNewPoints(self):
+        currentid = 0
+        destinationid = 1
+
+        if random() < .5:
+            currentid = 1
+            destinationid = 0
+
+        self.current_point = self.netlist [self.netid].copy[currentid]
+        self.destination_point = self.netlist [self.netid].copy[destinationid]
+
+        if currentid == 1:
+            self.netlist [self.netid].wire_1.append(self.current_point)
+        else:
+            self.netlist [self.netid].wire_0.append(self.current_point)
+            
+
+    def run(self, score = None):
         copynetlist = []
         for net in self.chip.netlist:
             copynetlist.append(net)
 
         self.netlist = self.chip.netlist
         self.netid = randint(0,len(self.netlist )-1)
+
         currentid = 0
         destinationid = 1
 
@@ -115,9 +133,20 @@ class GreedySimultaneous:
 
             if path is None:
                 print("No solution found!")
+                self.chip.netlist = copynetlist
                 return False
 
             self.current_point = self.current_point.moveTo(path[0][1][0])
+
+            # if self.current_point.isIntersected():
+            #     self.chip.cost = self.chip.cost + 300
+            # self.chip.cost = self.chip.cost + 1
+
+            # if score is not None:
+            #     if score < self.chip.cost:
+            #         print(f"Too expensive! Cost: {self.chip.cost}")
+            #         self.chip.netlist = copynetlist
+            #         return False
 
             if currentid == 1:
                 self.netlist [self.netid].wire_1.append(self.current_point)
@@ -128,11 +157,11 @@ class GreedySimultaneous:
  
             if (self.manhattanDistance(self.current_point, self.destination_point) == 0):
                 if len(self.netlist ) > 0:
-                    self.netlist .pop(self.netid)
+                    self.netlist.pop(self.netid)
                 if len(self.netlist ) < 1:
-                    print("Solution found!")
+                    print(f"Solution found! Cost: {self.chip.cost}")
                     self.chip.netlist = copynetlist
-                    return True
+                    return score
             
             self.netid = randint(0,len(self.netlist )-1)
             currentid = 0
