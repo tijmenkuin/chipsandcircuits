@@ -122,6 +122,7 @@ if __name__ == "__main__":
     #         visualise(chip)
     #         break
 
+
     chip_id = 1
     netlist_id = 5
 
@@ -137,9 +138,6 @@ if __name__ == "__main__":
     print("Beste resultaat:", hillclimber.results.costs)
     csvwriter = CSVWriter(hillclimber.best_solution.solution, "hillclimber_asearch", chip_id, netlist_id, hillclimber.results.costs)
     visualise(hillclimber.best_solution)
-
-
-
 
 
 
