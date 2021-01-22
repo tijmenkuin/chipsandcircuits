@@ -15,7 +15,7 @@ import sys
 def main(args):
 
     
-    chip = SolutionToChip("greedt_simultaneous", 2,9, 50347).readResults()
+    chip = SolutionToChip("asearch", 2,9, 24015).readResults()
     visualise(chip)
     return
 

@@ -34,6 +34,11 @@ class SolutionToChip():
 
                     wire = Wire()
 
+                    for i in range(len(wire_path)-1):
+                        for direction, point in wire_path[i].relatives.items():
+                            if point == wire_path[i+1]:
+                                wire_path[i].grid_segments[direction].used = True
+
                     wire.path = wire_path
 
                     chip.solution[Net(net_gate_1,net_gate_2)] = wire
