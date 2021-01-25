@@ -146,4 +146,5 @@ class Chip():
                     for grid_segment in point.grid_segments.values():
                         grid_segment.used = False
                     point.intersected = 0
+                    point.checked = False
 
