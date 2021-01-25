@@ -10,10 +10,23 @@ from code.optimizations.hillclimber import HillClimber
 
 import numpy as np
 
+
+from datetime import datetime
+
+
+
 if __name__ == "__main__":
-    AMOUNT_SOLUTIONS = 2
+
+
+    AMOUNT_SOLUTIONS = 10
+
 
     LOOP_AMOUNT = 20000
+
+    start=datetime.now()
+
+
+
 
     # for i in range(3):
     #     for j in range(3):
@@ -81,6 +94,8 @@ if __name__ == "__main__":
     #             print("Gevonden resultaten voor chip", i, "en netlist", netlist_id, "is:")
     #             print(f"Geen oplossingen gevonden na {LOOP_AMOUNT} iteraties")
 
+            now = datetime.now()
+            print(now-start)
     # while True:
     #     chip = Chip(1,5)
     #     if greedy_ext(chip):
@@ -121,13 +136,18 @@ if __name__ == "__main__":
     #         break
 
 
+    # netlist_id = 9
+    # chip_id = 2
+
+
+
     chip_id = 2
     netlist_id = 9
 
     chip = Chip(chip_id, netlist_id)
     chip.netlistRandomizer()
 
-    asearch = ASearch(chip)
+
     
     while True:
         if asearch.run():
