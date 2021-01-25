@@ -116,13 +116,18 @@ class Chip():
         self.amount_intersections += 1
     
 
-    def giveHeuristicValues(self, target_point):
+    def giveHeuristicValues(self, target_point, start_point):
         for z in range(self.depth):
             for y in range(self.height):
                 for x in range(self.width):
                     this_gridpoint = self.getGridPoint(x,y,z)
-                    this_gridpoint.heuristic_value = this_gridpoint.manhattanDistanceTo(target_point)
+                    # this_gridpoint.heuristic_value = this_gridpoint.manhattanDistanceTo(target_point)
+                    # this_gridpoint.heuristic_value = this_gridpoint.manhattanDistanceTo1(target_point, start_point)
+                    # this_gridpoint.heuristic_value = this_gridpoint.EuclideanDistance(target_point)
+                    this_gridpoint.heuristic_value = this_gridpoint.EuclideanDistance1(target_point, start_point)
+                    # this_gridpoint.heuristic_value = this_gridpoint.T(target_point, start_point)
 
+                    
     def giveDefaultGScores(self):
         for z in range(self.depth):
             for y in range(self.height):
@@ -133,3 +138,27 @@ class Chip():
 
     def netlistRandomizer(self):
         random.shuffle(self.netlist)
+
+
+
+    def netlistOrder(self):
+        OrderedList_Afstand = list()
+
+        for net in self.netlist:
+            self.X  = abs(net.target[1].x - net.target[0].x)
+            self.Y =  abs(net.target[1].y - net.target[0].y)
+
+            # print("net is", net)
+            if self.X >= self.Y:
+                OrderedList_Afstand.append((self.Y, net))
+                # OrderedList_nets.append(net)
+            else:
+                OrderedList_Afstand.append((self.Y, net))
+                # OrderedList_nets.append(net)
+            # print(OrderedList_nets)
+        # print(OrderedList_Afstand)
+            # C = zip(OrderedList_Afstand, OrderedList_nets)
+        OrderedList = sorted(OrderedList_Afstand, key=lambda OrderedList_Afstand: OrderedList_Afstand[0], reverse=True)
+        OrderedList_nets = [i[1] for i in OrderedList]
+        # print(OrderedList)
+        return OrderedList_nets

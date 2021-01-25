@@ -1,4 +1,5 @@
 import random
+import math
 
 class GridPoint():
     def __init__(self, x, y, z):
@@ -161,9 +162,41 @@ class GridPoint():
 
         return True
 
+    #  Few heuristics 
     def manhattanDistanceTo(self, point):
         return abs(self.x - point.x) + abs(self.y - point.y) + abs(self.z - point.z)
 
+    def manhattanDistanceTo1(self, target_point, start_point):
+        return abs(start_point.x - target_point.x) + abs(start_point.y - target_point.y) + abs(start_point.z - target_point.z)
+
+    def EuclideanDistance(self, point):
+        self.dx = abs(point.x - self.x)
+        self.dy = abs(point.y - self.y)
+        return (self.dx * self.dx + self.dy * self.dy)
+
+    def EuclideanDistance2(self, point):
+        dx = abs(point.x - self.x)
+        dy = abs(point.y - self.y)
+        dz = abs(point.z - self.z)
+        return (math.pow(dx, 2) + math.pow(dy, 2)+  math.pow(dz, 2))
+
+    def EuclideanDistance1(self,target_point, start_point):
+        dx = abs(start_point.x - target_point.x)
+        dy = abs(start_point.y - target_point.y)
+        dz = abs(start_point.z - target_point.z)
+        return math.sqrt(math.pow(dx, 2) + math.pow(dy , 2) +  math.pow(dz , 2))
+
+    # def TiesHeuristic(self, point):
+    #     self.p = 1/1000
+    #     return h *= (1.0 + p)
+
+    def T(self, target_point, start_point):
+        dx1 = self.x - target_point.x
+        dy1 = self.y - target_point.y
+        dx2 = start_point.x - target_point.x
+        dy2 = start_point.y - target_point.y
+        cross = abs(dx1*dy2 - dx2*dy1)
+        return cross*0.001
 
  # this is just for test
 

@@ -35,7 +35,7 @@ class ASearch():
         start_point = net.target[0]
         end_point = net.target[1]
 
-        self.chip.giveHeuristicValues(end_point)
+        self.chip.giveHeuristicValues(end_point, start_point)
         self.chip.giveDefaultGScores()
 
         self.queue[start_point] = start_point.heuristic_value

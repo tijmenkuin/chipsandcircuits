@@ -11,7 +11,7 @@ from code.optimizations.self_intersector import selfIntersection
 import numpy as np
 
 if __name__ == "__main__":
-    AMOUNT_SOLUTIONS = 10000
+    AMOUNT_SOLUTIONS = 100
 
 
     LOOP_AMOUNT = 20000
@@ -52,7 +52,8 @@ if __name__ == "__main__":
             while AMOUNT_SOLUTIONS != amount_solutions:
                 count += 1
                 chip = Chip(i, netlist_id)
-                chip.netlistRandomizer()
+                # chip.netlistRandomizer()
+                chip.netlistOrder()
                 asearch = ASearch(chip)
                 if asearch.run():
                     result = ResultFunction(chip)
@@ -137,7 +138,7 @@ if __name__ == "__main__":
     #     print(results.length)
     #     print(results.intersections)
 
-    #     visualise(chip)
+        # visualise(chip)
     # else:
     #     print("Geen oplossingen gevonden")
     #     visualise(chip)
