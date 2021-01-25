@@ -128,6 +128,8 @@ class Chip():
     def giveHeuristicValues(self, start_point, end_point):
         #distance = abs((abs(int(self.height/2) - start_point.y) + abs(int(self.width/2) - start_point.x) + abs(int(self.height/2) - end_point.y) + abs(int(self.width/2) - end_point.x)) / (int(self.height) + int(self.width)))
 
+       
+
 
 
         for z in range(self.depth):
@@ -146,8 +148,15 @@ class Chip():
                     # print("start: " + str(start_point))
                     # print("end: " + str(end_point))
                     # print("point: " + str(this_gridpoint))
+                    
+                    #als dichtbij startpunt dan omhoog
 
-                    formula = int(((1-distance) * z**2))*2 + this_gridpoint.manhattanDistanceTo(end_point)
+                    #als dichtbij eindpunt dan omlaag
+
+                    start_worth = this_gridpoint.manhattanDistanceTo(start_point)
+                    end_worth = this_gridpoint.manhattanDistanceTo(start_point)
+
+                    formula = int(0.5 * (start_worth - z)) + end_worth
 
                     # print("formula: " + str(formula))
                     # print("manhat: " + str(this_gridpoint.manhattanDistanceTo(end_point)))
