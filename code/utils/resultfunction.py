@@ -16,6 +16,7 @@ class ResultFunction():
     NOTE: Make sure the inserted solutions are valid, use checker class !!
     """
     def __init__(self, chip):
+        self.chip = chip
         self.solution = chip.solution
 
         self.intersections = None
@@ -43,6 +44,7 @@ class ResultFunction():
                         counter += point.intersected - 1
          
         self.intersections = counter
+        self.chip.setCheckedFalse()
 
     def costPerWire(self, wire):
         """
