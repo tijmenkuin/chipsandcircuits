@@ -1,6 +1,6 @@
 from code.objects.chip import Chip
 from code.algorithms.greedy_ext import greedy_ext
-from code.algorithms.asearch_tijm import ASearch
+from code.algorithms.asearch_tim import ASearch
 from code.utils.checker import Checker
 from code.utils.size_determinator import SizeDeterminator
 from code.utils.csv_writer import CSVWriter
@@ -16,7 +16,7 @@ from datetime import datetime
 
 if __name__ == "__main__":
 
-    AMOUNT_SOLUTIONS = 10
+    AMOUNT_SOLUTIONS = 25
 
     LOOP_AMOUNT = 20000
 
@@ -90,8 +90,6 @@ if __name__ == "__main__":
     #             print("Gevonden resultaten voor chip", i, "en netlist", netlist_id, "is:")
     #             print(f"Geen oplossingen gevonden na {LOOP_AMOUNT} iteraties")
 
-    #         now = datetime.now()
-    #         print(now-start)
     # while True:
     #     chip = Chip(1,5)
     #     if greedy_ext(chip):
@@ -144,11 +142,13 @@ if __name__ == "__main__":
         chip = Chip(chip_id, netlist_id)
         chip.netlistRandomizer()
 
+        #chip = SolutionToChip("hillclimber_asearch", chip_id,netlist_id, 2699).readResults()
+
         asearch = ASearch(chip)
         print("waah")
         if asearch.run():
             hillclimber = HillClimber(chip)
-            hillclimber.run(12,9,1000)
+            hillclimber.run(12,9,500)
 
             results = ResultFunction(hillclimber.best_solution)
 

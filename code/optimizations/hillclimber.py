@@ -2,7 +2,7 @@ from ..utils.resultfunction import ResultFunction
 from ..objects.chip import Chip
 from ..objects.net import Net
 from ..objects.wire import Wire
-from ..algorithms.asearch_tijm import ASearch
+from ..algorithms.asearch_tim import ASearch
 from ..visualisation.visualise import visualise
 
 
@@ -104,11 +104,15 @@ class HillClimber():
       
             new_results = ResultFunction(self.chip)
             
-            if new_results.costs < self.best_score and found_solution:
+            print("Counter:", counter)
+            print("Beste:", self.best_score)
+
+            if new_results.costs <= self.best_score and found_solution:
                 print("Verbetering:", new_results.costs)
                 self.best_score = new_results.costs
                 self.best_solution = self.updateChip(self.best_solution, self.chip)
             else:
+                print("Afwijzing:", new_results.costs)
                 self.chip = self.updateChip(self.chip, self.best_solution)
             
             counter += 1

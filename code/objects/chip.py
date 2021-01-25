@@ -130,7 +130,6 @@ class Chip():
                     # this_gridpoint.heuristic_value = this_gridpoint.EuclideanDistance1(end_point, start_point)
                     this_gridpoint.heuristic_value = this_gridpoint.T(target_point, start_point)
 
-
     def giveHeuristicValues(self, target_point):
         for z in range(self.depth):
             for y in range(self.height):
@@ -145,7 +144,6 @@ class Chip():
             for y in range(self.height):
                 for x in range(self.width):
                     this_gridpoint = self.getGridPoint(x,y,z)
-
                     start_worth = this_gridpoint.manhattanDistanceTo(start_point)
                     end_worth = this_gridpoint.manhattanDistanceTo(start_point)
                     extra_worth = 0
