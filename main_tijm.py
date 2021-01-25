@@ -120,19 +120,19 @@ if __name__ == "__main__":
     #         visualise(chip)
     #         break
 
-
-    chip_id = 2
-    netlist_id = 9
-
-    chip = Chip(chip_id, netlist_id)
-    chip.netlistRandomizer()
-
-    asearch = ASearch(chip)
     
     while True:
+        chip_id = 2
+        netlist_id = 9
+
+        chip = Chip(chip_id, netlist_id)
+        chip.netlistRandomizer()
+
+        asearch = ASearch(chip)
+        print("waah")
         if asearch.run():
             hillclimber = HillClimber(chip)
-            hillclimber.run(12,8,500)
+            hillclimber.run(12,9,1000)
 
             results = ResultFunction(hillclimber.best_solution)
 
