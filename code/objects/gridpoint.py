@@ -198,8 +198,8 @@ class GridPoint():
         cross = abs(dx1*dy2 - dx2*dy1)
         return cross*0.001
 
- # this is just for test
 
+ # this is just for test
     def add_relatives(self):
         self.relatives = ['up', 'down', 'left', 'right','forwards', 'backwards']
 
