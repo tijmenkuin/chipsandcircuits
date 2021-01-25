@@ -2,7 +2,7 @@ from ..utils.resultfunction import ResultFunction
 from ..objects.chip import Chip
 from ..objects.net import Net
 from ..objects.wire import Wire
-from ..algorithms.asearch_tim import ASearch
+from ..algorithms.asearch_tijm import ASearch
 from ..visualisation.visualise import visualise
 
 
