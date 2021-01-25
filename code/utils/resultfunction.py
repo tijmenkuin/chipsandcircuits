@@ -16,6 +16,7 @@ class ResultFunction():
     NOTE: Make sure the inserted solutions are valid, use checker class !!
     """
     def __init__(self, chip):
+        self.chip = chip
         self.solution = chip.solution
 
         self.intersections = None
@@ -39,9 +40,33 @@ class ResultFunction():
             for point in wire.path:
                 if not (point.isGate() or point.checked) :
                     point.checked = True
-                    if point.intersected > 0:
+                    if point.intersected > 1:
                         counter += point.intersected - 1
          
         self.intersections = counter
-            
-            
+        self.chip.setCheckedFalse()
+
+    def costPerWire(self, wire):
+        """
+        Calculates the "costs" of a wire
+        """
+        intersection_counter = 0
+        wire_length = len(wire.path) - 1
+
+        for point in wire.path:
+            if not point.isGate():
+                if point.intersected > 1:
+                    intersection_counter += 1
+        
+        return 300 * intersection_counter + wire_length
+
+    def dictCostPerWire(self):
+        """
+        Return dict with keys the nets and values the "costs"
+        """
+        costs_per_wire = dict()
+
+        for net, wire in self.solution.items():
+            costs_per_wire[net] = self.costPerWire(wire)
+
+        return costs_per_wire
