@@ -11,7 +11,7 @@ from code.optimizations.hillclimber import HillClimber
 import numpy as np
 
 if __name__ == "__main__":
-    AMOUNT_SOLUTIONS = 100
+    AMOUNT_SOLUTIONS = 10
 
     LOOP_AMOUNT = 20000
 
@@ -66,21 +66,21 @@ if __name__ == "__main__":
                     break
   
             
-    #         if not breaked:
-    #             print("Gevonden resultaten voor chip", i, "en netlist", netlist_id, "is:")
-    #             print("Gemiddelde kosten:", np.mean(costs))
-    #             print("Gemiddeld aantal intersecties:", np.mean(amount_intersections))
-    #             print("Minimale kosten:", min(costs))
-    #             print("Minimale aantal intersecties:", min(amount_intersections))
-    #         elif amount_solutions != 0:
-    #             print("Gevonden resultaten voor chip", i, "en netlist", netlist_id, f"over {amount_solutions} oplossingen:")
-    #             print("Gemiddelde kosten:", np.mean(costs))
-    #             print("Gemiddeld aantal intersecties:", np.mean(amount_intersections))
-    #             print("Minimale kosten:", min(costs))
-    #             print("Minimale aantal intersecties:", min(amount_intersections))
-    #         else:
-    #             print("Gevonden resultaten voor chip", i, "en netlist", netlist_id, "is:")
-    #             print(f"Geen oplossingen gevonden na {LOOP_AMOUNT} iteraties")
+            if not breaked:
+                print("Gevonden resultaten voor chip", i, "en netlist", netlist_id, "is:")
+                print("Gemiddelde kosten:", np.mean(costs))
+                print("Gemiddeld aantal intersecties:", np.mean(amount_intersections))
+                print("Minimale kosten:", min(costs))
+                print("Minimale aantal intersecties:", min(amount_intersections))
+            elif amount_solutions != 0:
+                print("Gevonden resultaten voor chip", i, "en netlist", netlist_id, f"over {amount_solutions} oplossingen:")
+                print("Gemiddelde kosten:", np.mean(costs))
+                print("Gemiddeld aantal intersecties:", np.mean(amount_intersections))
+                print("Minimale kosten:", min(costs))
+                print("Minimale aantal intersecties:", min(amount_intersections))
+            else:
+                print("Gevonden resultaten voor chip", i, "en netlist", netlist_id, "is:")
+                print(f"Geen oplossingen gevonden na {LOOP_AMOUNT} iteraties")
 
     # while True:
     #     chip = Chip(1,5)
@@ -124,23 +124,25 @@ if __name__ == "__main__":
     #         break
 
 
-    chip_id = 0
-    netlist_id = 3
+    # chip_id = 2
+    # netlist_id = 9
 
-    chip = Chip(chip_id, netlist_id)
-    chip.netlistRandomizer()
+    # chip = Chip(chip_id, netlist_id)
+    # # chip.netlistRandomizer()
+    # chip.netlistOrder()
 
-    asearch = ASearch(chip)
-    asearch.run()
 
-    hillclimber = HillClimber(chip)
-    hillclimber.run(5,5,100)
+    # asearch = ASearch(chip)
+    # asearch.run()
 
-    results = ResultFunction(hillclimber.best_solution)
+    # hillclimber = HillClimber(chip)
+    # hillclimber.run(5,5,20)
 
-    print("Beste resultaat Kosten:", results.costs)
-    print("Beste resultaat Intersecties:", results.intersections)
-    print("Beste resultaat Lengte:", results.length)
+    # results = ResultFunction(hillclimber.best_solution)
+
+    # print("Beste resultaat Kosten:", results.costs)
+    # print("Beste resultaat Intersecties:", results.intersections)
+    # print("Beste resultaat Lengte:", results.length)
 
     # csvwriter = CSVWriter(hillclimber.best_solution.solution, "hillclimber_asearch", chip_id, netlist_id, results.costs)
     # visualise(hillclimber.best_solution)
