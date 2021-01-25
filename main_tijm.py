@@ -16,13 +16,10 @@ from datetime import datetime
 
 
 if __name__ == "__main__":
-<<<<<<< HEAD
+
 
     AMOUNT_SOLUTIONS = 10
 
-=======
-    AMOUNT_SOLUTIONS = 2
->>>>>>> f0ae0adb055e515a8f480b5f4248add9f469aa3c
 
     LOOP_AMOUNT = 20000
 
@@ -121,8 +118,6 @@ if __name__ == "__main__":
     
     # write = CSVWriter(chip.solution, "greedy_ext", chip_id, netlist_id, costs)
 
-        
-
     # while True:
     #     netlist_id = 4
     #     chip_id = 1
@@ -140,11 +135,11 @@ if __name__ == "__main__":
     #         visualise(chip)
     #         break
 
-<<<<<<< HEAD
+
     # netlist_id = 9
     # chip_id = 2
 
-=======
+
 
     chip_id = 2
     netlist_id = 9
@@ -152,22 +147,23 @@ if __name__ == "__main__":
     chip = Chip(chip_id, netlist_id)
     chip.netlistRandomizer()
 
-    asearch = ASearch(chip)
-    asearch.run()
->>>>>>> f0ae0adb055e515a8f480b5f4248add9f469aa3c
 
-    hillclimber = HillClimber(chip)
-    hillclimber.run(12,8,500)
+    
+    while True:
+        if asearch.run():
+            hillclimber = HillClimber(chip)
+            hillclimber.run(12,8,500)
 
-    results = ResultFunction(hillclimber.best_solution)
+            results = ResultFunction(hillclimber.best_solution)
 
-    print("-------------------------------------")
-    print("Beste resultaat Kosten:", results.costs)
-    print("Beste resultaat Intersecties:", results.intersections)
-    print("Beste resultaat Lengte:", results.length)
-   
-    csvwriter = CSVWriter(hillclimber.best_solution.solution, "hillclimber_asearch", chip_id, netlist_id, results.costs)
-    visualise(hillclimber.best_solution)
+            print("-------------------------------------")
+            print("Beste resultaat Kosten:", results.costs)
+            print("Beste resultaat Intersecties:", results.intersections)
+            print("Beste resultaat Lengte:", results.length)
+            visualise(hillclimber.best_solution)
+    
+            csvwriter = CSVWriter(hillclimber.best_solution.solution, "hillclimber_asearch", chip_id, netlist_id, results.costs)
+            break
 
     # if asearch.run():
     #     results = ResultFunction(chip)
