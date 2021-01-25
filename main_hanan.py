@@ -30,20 +30,21 @@ from code.utils.csv_writer import CSVWriter
 from code.utils.resultfunction import ResultFunction
 from code.visualisation.visualise import visualise
 from code.optimizations.hillclimber import HillClimber
+from code.utils.solution_reader import SolutionToChip
+from code.utils.lower_bound import lowerBound
+
 
 import numpy as np
 
 from datetime import datetime
 
+# if __name__ == "__main__":
 
+#     AMOUNT_SOLUTIONS = 10
 
-if __name__ == "__main__":
+#     LOOP_AMOUNT = 20000
 
-    AMOUNT_SOLUTIONS = 10
-
-    LOOP_AMOUNT = 20000
-
-    start=datetime.now()
+#     start=datetime.now()
 
 
     # for i in range(3):
@@ -159,35 +160,39 @@ if __name__ == "__main__":
     # chip = Chip(chip_id, netlist_id)
     # # chip.netlistRandomizer()
     # chip.netlistOrder()
+    #=------------------------------------------------------------------------- 
+    # while True:
+    #     chip_id = 2
+    #     netlist_id = 9
+
+    #     chip = Chip(chip_id, netlist_id)
+    #     chip = SolutionToChip("hillclimber_asearch", chip_id,netlist_id, 1481).readResults()
+
+    #         # chip = SolutionToChip("asearch-tim", 2,9, 27349).readResults()
+
+    #     # chip.netlistRandomizer()
+    #     chip.netlistOrder()
+
+    #     # hillclimber = HillClimber(chip)
+    #     # hillclimber.run(len(chip.netlist),5,3000)
+
+    #     asearch = ASearch(chip)
+    #     print("waah")
+    #     if asearch.run():
+    #         hillclimber = HillClimber(chip)
+    #         hillclimber.run(12,9,1000)
+
+    #         results = ResultFunction(hillclimber.best_solution)
+
+    #         print("-------------------------------------")
+    #         print("Beste resultaat Kosten:", results.costs)
+    #         print("Beste resultaat Intersecties:", results.intersections)
+    #         print("Beste resultaat Lengte:", results.length)
+    #         visualise(hillclimber.best_solution)
     
-    while True:
-        chip_id = 2
-        netlist_id = 9
-
-        chip = Chip(chip_id, netlist_id)
-            # chip = SolutionToChip("asearch-tim", 2,9, 27349).readResults()
-
-        # chip.netlistRandomizer()
-        chip.netlistOrder()
-
-
-        asearch = ASearch(chip)
-        print("waah")
-        if asearch.run():
-            hillclimber = HillClimber(chip)
-            hillclimber.run(12,9,1000)
-
-            results = ResultFunction(hillclimber.best_solution)
-
-            print("-------------------------------------")
-            print("Beste resultaat Kosten:", results.costs)
-            print("Beste resultaat Intersecties:", results.intersections)
-            print("Beste resultaat Lengte:", results.length)
-            visualise(hillclimber.best_solution)
-    
-            csvwriter = CSVWriter(hillclimber.best_solution.solution, "hillclimber_asearch", chip_id, netlist_id, results.costs)
-            break
-
+    #         csvwriter = CSVWriter(hillclimber.best_solution.solution, "hillclimber_asearch", chip_id, netlist_id, results.costs)
+    #         break
+# -----------------------------------
     # if asearch.run():
     #     results = ResultFunction(chip)
 
@@ -199,3 +204,30 @@ if __name__ == "__main__":
     # else:
     #     print("Geen oplossingen gevonden")
     #     visualise(chip)
+
+
+if __name__ == "__main__":
+
+    chip_id = 1
+    netlist_id = 5
+
+    chip = SolutionToChip("hillclimber_asearch", chip_id, netlist_id, 143).readResults()
+    chip.netlistOrder()
+
+    print("LowerBound: ", lowerBound(chip))
+    
+    hillclimber = HillClimber(chip)
+    print("this is len(chip.netlist)", len(chip.netlist))
+    # hillclimber.run(len(chip.netlist), len(chip.netlist), 3000)
+    hillclimber.run(12, 5, 500)
+
+
+    results = ResultFunction(hillclimber.best_solution)
+
+    print("-------------------------------------")
+    print("Beste resultaat Kosten:", results.costs)
+    print("Beste resultaat Intersecties:", results.intersections)
+    print("Beste resultaat Lengte:", results.length)
+    visualise(hillclimber.best_solution)
+
+    csvwriter = CSVWriter(hillclimber.best_solution.solution, "hillclimber_asearch", chip_id, netlist_id, results.costs)

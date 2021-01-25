@@ -23,7 +23,7 @@ if __name__ == "__main__":
     
 
     hillclimber = HillClimber(chip)
-    hillclimber.run(len(chip.netlist),5,3000)
+    hillclimber.run(len(chip.netlist),5,1000)
 
     results = ResultFunction(hillclimber.best_solution)
 
@@ -34,7 +34,3 @@ if __name__ == "__main__":
     visualise(hillclimber.best_solution)
 
     csvwriter = CSVWriter(hillclimber.best_solution.solution, "hillclimber_asearch", chip_id, netlist_id, results.costs)
-
-
-
-
