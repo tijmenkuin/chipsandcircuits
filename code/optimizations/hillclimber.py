@@ -15,9 +15,10 @@ class HillClimber():
         """
         self.chip = None
         self.best_solution = None
+        self.best_score = None
+
         self.initialize(chip)
-        self.results = ResultFunction(self.chip)
-        print(self.results.costs)
+        print(self.best_score)
 
     def initialize(self, chip):
         """
@@ -25,6 +26,8 @@ class HillClimber():
         """
         self.chip = self.writeDummyChip(chip)
         self.best_solution = self.writeDummyChip(chip)
+        results = ResultFunction(self.chip)
+        self.best_score = results.costs
 
     def writeDummyChip(self, chip):
         """
@@ -75,7 +78,6 @@ class HillClimber():
         assert worst_x >= y_reorganizations
 
         counter = 0
-        visualise(self.chip)
         while counter != loop_amount:
             worst_nets = self.selectWorstNets(worst_x)
 
@@ -87,7 +89,7 @@ class HillClimber():
                     net = random.choice(worst_nets)
                     if net not in investigations:
                         investigations.append(net)
-                        worst_nets.removen(net)
+                        worst_nets.remove(net)
            
             for net in investigations:
                 self.clear(net)
@@ -97,17 +99,15 @@ class HillClimber():
             asearch.run()
 
             new_results = ResultFunction(self.chip)
-
-            if new_results.costs < self.results.costs:
-                self.results = new_results
-                print(new_results.costs)
-                visualise(self.chip)
-                self.updateChip(self.best_solution, self.chip)
-            else:
-                self.updateChip(self.chip, self.best_solution)
-                problem = True
             
-            counter += 1 
+            if new_results.costs < self.best_score:
+                print("Verbetering:", new_results.costs)
+                self.best_score = new_results.costs
+                self.best_solution = self.updateChip(self.best_solution, self.chip)
+            else:
+                self.chip = self.updateChip(self.chip, self.best_solution)
+            
+            counter += 1
 
     def clear(self, net):
         wire = self.chip.solution[net]
@@ -122,8 +122,8 @@ class HillClimber():
                     break
     
     def selectWorstNets(self, worst_x):
-        self.results = ResultFunction(self.chip)
-        valued_wires = self.results.dictCostPerWire()
+        results = ResultFunction(self.chip)
+        valued_wires = results.dictCostPerWire()
         worst_nets = []
 
         for i in range(worst_x):
@@ -140,6 +140,7 @@ class HillClimber():
         chip1.clear2()
 
         for net, wire in chip2.solution.items():
+
             # copies nets
             point1 = net.target[0]
             point2 = net.target[1]
@@ -169,3 +170,4 @@ class HillClimber():
                     if dummy_neighbour == relative:
                         dummy_point.grid_segments[move].used = True
                         break
+        return chip1
