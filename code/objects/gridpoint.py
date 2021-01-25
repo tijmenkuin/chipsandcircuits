@@ -85,7 +85,7 @@ class GridPoint():
         for move, relative in self.relatives.items():
             if not self.grid_segments[move].used and (not relative.isGate() or relative == end_gate):
                 reachables.append(relative)
-        
+        random.shuffle(reachables)
         return reachables
 
     # def undoMove(self):

@@ -11,10 +11,15 @@ def visualise(chip):
     Z = []
     Id = []
 
+    net = []
+
     x_wires = []
     y_wires = []
     z_wires = []
 
+    X_intersection = []
+    Y_intersection  = []
+    Z_intersection  = []
 
     for wire in chip.solution.values():
         x_wire = []
@@ -34,6 +39,24 @@ def visualise(chip):
         Z.append(chip.gates[gate_id].z)
         Id.append(gate_id)
     
+    for z in range(chip.depth):
+        for y in range(chip.height):
+            for x in range(chip.width):
+                point = chip.getGridPoint(x,y,z)
+                if (point.isIntersected()):
+                    X_intersection.append(x)
+                    Y_intersection.append(y)
+                    Z_intersection.append(z)
+
+    intersections = go.Scatter3d(
+            x=X_intersection,
+            y=Y_intersection,
+            z=Z_intersection,
+            marker_symbol='square',
+            mode='markers',
+            name='intersections',
+            marker=dict(size=3, color='blue'))
+
     gates = go.Scatter3d(
             x=X,
             y=Y,
@@ -52,18 +75,25 @@ def visualise(chip):
         blue = random.randint(0, 255)
         green = random.randint(0, 255)
 
+        temp_netlist = list(chip.solution.keys())
+
+        gate_1 = temp_netlist[i].target[0].gate_id
+        gate_2 = temp_netlist[i].target[1].gate_id
+
+        net_name = f"net ({gate_1}, {gate_2})"
+
         net_list = go.Scatter3d(
             x=x_wires[i],
             y=y_wires[i],
             z=z_wires[i],
             mode='lines',
-            name=f'net{i}',
+            name=net_name,
             marker=dict(color=f'rgb({red},{green},{blue})')
         )
 
         net_lists.append(net_list)
 
-    data = [gates] + [net_list for net_list in net_lists]
+    data = [gates] + [intersections] + [net_list for net_list in net_lists]
 
     fig = go.Figure(data=data)
     

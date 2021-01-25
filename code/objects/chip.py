@@ -10,7 +10,9 @@ import random
 
 class Chip():
     def __init__(self, chip_id, netlist_id):
-        
+        self.chip_id = chip_id
+        self.netlist_id = netlist_id
+
         sd = SizeDeterminator(chip_id)
 
         self.width = sd.getWidth()
@@ -107,7 +109,7 @@ class Chip():
             for y in range(self.height):
                 for x in range(self.width):
                     point = self.getGridPoint(x,y,z)
-                    for _,grid_segment in point.grid_segments.items():
+                    for grid_segment in point.grid_segments.values():
                         grid_segment.used = False
                     point.last_move = []
                     point.intersected = 0
@@ -140,7 +142,6 @@ class Chip():
         random.shuffle(self.netlist)
 
 
-
     def netlistOrder(self):
         OrderedList_Afstand = list()
 
@@ -162,3 +163,16 @@ class Chip():
         OrderedList_nets = [i[1] for i in OrderedList]
         # print(OrderedList)
         return OrderedList_nets
+
+    def clear2(self):
+        self.netlist = []
+        self.solution = {}
+
+        for z in range(self.depth):
+            for y in range(self.height):
+                for x in range(self.width):
+                    point = self.getGridPoint(x,y,z)
+                    for grid_segment in point.grid_segments.values():
+                        grid_segment.used = False
+                    point.intersected = 0
+                    point.checked = False

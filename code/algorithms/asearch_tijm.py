@@ -13,19 +13,20 @@ class ASearch():
         Returns True is solution is found, else false
         """
         for net in self.chip.netlist:
-            new_wire = self.findPath(net)
-            if new_wire == []:
-                return False
-            
-            wire = Wire()
-            for point in new_wire:
-                wire.addPoint(point)
-            
-            self.chip.solution[net] = wire
-            self.markPath(wire)
+            if net not in self.chip.solution:
+                new_wire = self.findPath(net)
+                if new_wire == []:
+                    return False
+                
+                wire = Wire()
+                for point in new_wire:
+                    wire.addPoint(point)
+                
+                self.chip.solution[net] = wire
+                self.markPath(wire)
 
-            self.queue = dict()
-            self.came_from = dict()
+                self.queue = dict()
+                self.came_from = dict()
         return True
 
     def findPath(self, net):
