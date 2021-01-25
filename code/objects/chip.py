@@ -125,46 +125,22 @@ class Chip():
                     this_gridpoint = self.getGridPoint(x,y,z)
                     this_gridpoint.heuristic_value = this_gridpoint.manhattanDistanceTo(target_point)
 
-    def giveHeuristicValues2(self, start_point, end_point):
-        #distance = abs((abs(int(self.height/2) - start_point.y) + abs(int(self.width/2) - start_point.x) + abs(int(self.height/2) - end_point.y) + abs(int(self.width/2) - end_point.x)) / (int(self.height) + int(self.width)))
-
-       
-
-
+    def giveHeuristicValues2(self, start_point, end_point):      
+        radius = int((self.height*self.width)/((self.height+self.width)*2))
 
         for z in range(self.depth):
             for y in range(self.height):
                 for x in range(self.width):
                     this_gridpoint = self.getGridPoint(x,y,z)
 
-                    #x en y dichtbij het centrum, dan lage heuristische waarde, bij lage z
-                    #x en y ver van het centrum, dan hoge heuristische waarde, bij lage z
-                    #bij hoge z een lage heuristische waarde, bij x en y ver van het centrum
-                    #bij lage z een hoge heuristische waarde, bij x en y ver van het centrum
-
-                    # centrum van het punt
-                    # center = abs(int(self.height/2) - y) + abs(int(self.width/2) - x)                    
-
-                    # print("start: " + str(start_point))
-                    # print("end: " + str(end_point))
-                    # print("point: " + str(this_gridpoint))
-                    
-                    #als dichtbij startpunt dan omhoog
-
-                    #als dichtbij eindpunt dan omlaag
-
                     start_worth = this_gridpoint.manhattanDistanceTo(start_point)
                     end_worth = this_gridpoint.manhattanDistanceTo(start_point)
                     extra_worth = 0
 
-                    if x in range(end_point.x-2, end_point.x+3) and y in range(end_point.y-2, end_point.y+3):
-                        extra_worth = z
+                    if x in range(end_point.x-radius, end_point.x+1+radius) and y in range(end_point.y-radius, end_point.y+1+radius):
+                        extra_worth = 2*z
 
-                    formula = int(0.5 * (start_worth - z*2)) + end_worth + extra_worth
-
-                    # print("formula: " + str(formula))
-                    # print("manhat: " + str(this_gridpoint.manhattanDistanceTo(end_point)))
-                    
+                    formula = int((0.5 * start_worth)) - 2*z + end_worth + extra_worth
 
                     this_gridpoint.heuristic_value = formula
 
