@@ -179,7 +179,7 @@ class GridPoint():
         dy = abs(point.y - self.y)
         dz = abs(point.z - self.z)
         return (math.pow(dx, 2) + math.pow(dy, 2)+  math.pow(dz, 2))
-
+        
     def EuclideanDistance1(self,target_point, start_point):
         dx = abs(start_point.x - target_point.x)
         dy = abs(start_point.y - target_point.y)

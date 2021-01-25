@@ -15,6 +15,7 @@ from datetime import datetime
 
 
 if __name__ == "__main__":
+
     AMOUNT_SOLUTIONS = 10
 
     LOOP_AMOUNT = 20000
@@ -44,53 +45,53 @@ if __name__ == "__main__":
         
     # print("Gemiddelde kosten is:", total_costs / AMOUNT_SOLUTIONS)
 
-    for i in range(3):
-        for j in range(3):
-            if i == 0:
-                continue 
-            netlist_id = j + 1 + (3 * i)
-            amount_solutions = 0
-            costs = []
-            amount_intersections = []
-            count = 0
-            breaked = False
+    # for i in range(3):
+    #     for j in range(3):
+    #         if i == 0:
+    #             continue 
+    #         netlist_id = j + 1 + (3 * i)
+    #         amount_solutions = 0
+    #         costs = []
+    #         amount_intersections = []
+    #         count = 0
+    #         breaked = False
 
-            while AMOUNT_SOLUTIONS != amount_solutions:
-                count += 1
-                chip = Chip(i, netlist_id)
-                # chip.netlistRandomizer()
-                chip.netlistOrder()
-                asearch = ASearch(chip)
-                if asearch.run():
-                    result = ResultFunction(chip)
-                    if count == 1 or result.costs < min(costs):
-                        writer = CSVWriter(chip.solution, "asearch", i, netlist_id, result.costs)
-                        costs.append(result.costs)
-                    amount_intersections.append(result.intersections)
-                    amount_solutions += 1
-                if count == LOOP_AMOUNT:
-                    breaked = True
-                    break
+    #         while AMOUNT_SOLUTIONS != amount_solutions:
+    #             count += 1
+    #             chip = Chip(i, netlist_id)
+    #             # chip.netlistRandomizer()
+    #             chip.netlistOrder()
+    #             asearch = ASearch(chip)
+    #             if asearch.run():
+    #                 result = ResultFunction(chip)
+    #                 if count == 1 or result.costs < min(costs):
+    #                     writer = CSVWriter(chip.solution, "asearch", i, netlist_id, result.costs)
+    #                     costs.append(result.costs)
+    #                 amount_intersections.append(result.intersections)
+    #                 amount_solutions += 1
+    #             if count == LOOP_AMOUNT:
+    #                 breaked = True
+    #                 break
   
             
-            if not breaked:
-                print("Gevonden resultaten voor chip", i, "en netlist", netlist_id, "is:")
-                print("Gemiddelde kosten:", np.mean(costs))
-                print("Gemiddeld aantal intersecties:", np.mean(amount_intersections))
-                print("Minimale kosten:", min(costs))
-                print("Minimale aantal intersecties:", min(amount_intersections))
-            elif amount_solutions != 0:
-                print("Gevonden resultaten voor chip", i, "en netlist", netlist_id, f"over {amount_solutions} oplossingen:")
-                print("Gemiddelde kosten:", np.mean(costs))
-                print("Gemiddeld aantal intersecties:", np.mean(amount_intersections))
-                print("Minimale kosten:", min(costs))
-                print("Minimale aantal intersecties:", min(amount_intersections))
-            else:
-                print("Gevonden resultaten voor chip", i, "en netlist", netlist_id, "is:")
-                print(f"Geen oplossingen gevonden na {LOOP_AMOUNT} iteraties")
+    #         if not breaked:
+    #             print("Gevonden resultaten voor chip", i, "en netlist", netlist_id, "is:")
+    #             print("Gemiddelde kosten:", np.mean(costs))
+    #             print("Gemiddeld aantal intersecties:", np.mean(amount_intersections))
+    #             print("Minimale kosten:", min(costs))
+    #             print("Minimale aantal intersecties:", min(amount_intersections))
+    #         elif amount_solutions != 0:
+    #             print("Gevonden resultaten voor chip", i, "en netlist", netlist_id, f"over {amount_solutions} oplossingen:")
+    #             print("Gemiddelde kosten:", np.mean(costs))
+    #             print("Gemiddeld aantal intersecties:", np.mean(amount_intersections))
+    #             print("Minimale kosten:", min(costs))
+    #             print("Minimale aantal intersecties:", min(amount_intersections))
+    #         else:
+    #             print("Gevonden resultaten voor chip", i, "en netlist", netlist_id, "is:")
+    #             print(f"Geen oplossingen gevonden na {LOOP_AMOUNT} iteraties")
 
-            now = datetime.now()
-            print(now-start)
+    #         now = datetime.now()
+    #         print(now-start)
     # while True:
     #     chip = Chip(1,5)
     #     if greedy_ext(chip):
@@ -112,8 +113,6 @@ if __name__ == "__main__":
     # print(costs)
     
     # write = CSVWriter(chip.solution, "greedy_ext", chip_id, netlist_id, costs)
-
-        
 
     # while True:
     #     netlist_id = 4
@@ -138,24 +137,29 @@ if __name__ == "__main__":
     # # chip.netlistRandomizer()
     # chip.netlistOrder()
     
-    chip_id = 2
-    netlist_id = 9
+    while True:
+        chip_id = 2
+        netlist_id = 9
 
-    asearch = ASearch(chip)
-    asearch.run()
+        chip = Chip(chip_id, netlist_id)
+        chip.netlistRandomizer()
 
-    hillclimber = HillClimber(chip)
-    hillclimber.run(12,8,500)
+        asearch = ASearch(chip)
+        print("waah")
+        if asearch.run():
+            hillclimber = HillClimber(chip)
+            hillclimber.run(12,9,1000)
 
-    # results = ResultFunction(hillclimber.best_solution)
+            results = ResultFunction(hillclimber.best_solution)
 
-    print("-------------------------------------")
-    print("Beste resultaat Kosten:", results.costs)
-    print("Beste resultaat Intersecties:", results.intersections)
-    print("Beste resultaat Lengte:", results.length)
-   
-    csvwriter = CSVWriter(hillclimber.best_solution.solution, "hillclimber_asearch", chip_id, netlist_id, results.costs)
-    visualise(hillclimber.best_solution)
+            print("-------------------------------------")
+            print("Beste resultaat Kosten:", results.costs)
+            print("Beste resultaat Intersecties:", results.intersections)
+            print("Beste resultaat Lengte:", results.length)
+            visualise(hillclimber.best_solution)
+    
+            csvwriter = CSVWriter(hillclimber.best_solution.solution, "hillclimber_asearch", chip_id, netlist_id, results.costs)
+            break
 
     # if asearch.run():
     #     results = ResultFunction(chip)

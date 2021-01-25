@@ -17,6 +17,8 @@ class HillClimber():
         self.best_solution = None
         self.best_score = None
 
+        self.nets_to_fill = None
+
         self.initialize(chip)
         print(self.best_score)
 
@@ -28,6 +30,7 @@ class HillClimber():
         self.best_solution = self.writeDummyChip(chip)
         results = ResultFunction(self.chip)
         self.best_score = results.costs
+        self.nets_to_fill = len(self.chip.netlist)
 
     def writeDummyChip(self, chip):
         """
@@ -72,7 +75,7 @@ class HillClimber():
     
     def run(self, worst_x, y_reorganizations, loop_amount):
         """
-        Picks the worst x wire, selects y of those, and tries to find new A* paths,
+        Picks the worst x wires, selects y of those, and tries to find new A* paths,
         and loops z times trying to find better solutions.
         """
         assert worst_x >= y_reorganizations
@@ -96,11 +99,12 @@ class HillClimber():
                 del self.chip.solution[net]
 
             asearch = ASearch(self.chip)
-            asearch.run()
 
+            found_solution = asearch.run() and len(self.chip.solution.keys()) == self.nets_to_fill
+      
             new_results = ResultFunction(self.chip)
             
-            if new_results.costs < self.best_score:
+            if new_results.costs < self.best_score and found_solution:
                 print("Verbetering:", new_results.costs)
                 self.best_score = new_results.costs
                 self.best_solution = self.updateChip(self.best_solution, self.chip)

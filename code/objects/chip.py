@@ -116,18 +116,10 @@ class Chip():
 
     def addIntersection(self):
         self.amount_intersections += 1
-    
-    # def giveHeuristicValues(self, target_point):
-    #     for z in range(self.depth):
-    #         for y in range(self.height):
-    #             for x in range(self.width):
-    #                 this_gridpoint = self.getGridPoint(x,y,z)
-    #                 this_gridpoint.heuristic_value = this_gridpoint.manhattanDistanceTo(target_point)
-
-    def giveHeuristicValues(self, start_point, end_point):
-        #distance = abs((abs(int(self.height/2) - start_point.y) + abs(int(self.width/2) - start_point.x) + abs(int(self.height/2) - end_point.y) + abs(int(self.width/2) - end_point.x)) / (int(self.height) + int(self.width)))
 
 
+
+    def giveHeuristicValues3(self, target_point, start_point):
         for z in range(self.depth):
             for y in range(self.height):
                 for x in range(self.width):
@@ -135,29 +127,36 @@ class Chip():
                     # this_gridpoint.heuristic_value = this_gridpoint.manhattanDistanceTo(target_point)
                     # this_gridpoint.heuristic_value = this_gridpoint.manhattanDistanceTo1(target_point, start_point)
                     # this_gridpoint.heuristic_value = this_gridpoint.EuclideanDistance(target_point)
-                    this_gridpoint.heuristic_value = this_gridpoint.EuclideanDistance1(end_point, start_point)
-                    # this_gridpoint.heuristic_value = this_gridpoint.T(target_point, start_point)
+                    # this_gridpoint.heuristic_value = this_gridpoint.EuclideanDistance1(end_point, start_point)
+                    this_gridpoint.heuristic_value = this_gridpoint.T(target_point, start_point)
 
-                    #x en y dichtbij het centrum, dan lage heuristische waarde, bij lage z
-                    #x en y ver van het centrum, dan hoge heuristische waarde, bij lage z
-                    #bij hoge z een lage heuristische waarde, bij x en y ver van het centrum
-                    #bij lage z een hoge heuristische waarde, bij x en y ver van het centrum
 
-                    # centrum van het punt
-                    # center = abs(int(self.height/2) - y) + abs(int(self.width/2) - x)                    
+    def giveHeuristicValues(self, target_point):
+        for z in range(self.depth):
+            for y in range(self.height):
+                for x in range(self.width):
+                    this_gridpoint = self.getGridPoint(x,y,z)
+                    this_gridpoint.heuristic_value = this_gridpoint.manhattanDistanceTo(target_point)
 
-                    # print("start: " + str(start_point))
-                    # print("end: " + str(end_point))
-                    # print("point: " + str(this_gridpoint))
+    def giveHeuristicValues2(self, start_point, end_point):      
+        radius = int((self.height*self.width)/((self.height+self.width)*2))
 
-                    # formula = int(((1-distance) * z**2))*2 + this_gridpoint.manhattanDistanceTo(end_point)
+        for z in range(self.depth):
+            for y in range(self.height):
+                for x in range(self.width):
+                    this_gridpoint = self.getGridPoint(x,y,z)
 
-                    # # print("formula: " + str(formula))
-                    # # print("manhat: " + str(this_gridpoint.manhattanDistanceTo(end_point)))
+                    start_worth = this_gridpoint.manhattanDistanceTo(start_point)
+                    end_worth = this_gridpoint.manhattanDistanceTo(start_point)
+                    extra_worth = 0
 
-                    # this_gridpoint.heuristic_value = formula
+                    if x in range(end_point.x-radius, end_point.x+1+radius) and y in range(end_point.y-radius, end_point.y+1+radius):
+                        extra_worth = 2*z
 
-                    
+                    formula = int((0.5 * start_worth)) - 2*z + end_worth + extra_worth
+
+                    this_gridpoint.heuristic_value = formula
+
     def giveDefaultGScores(self):
         for z in range(self.depth):
             for y in range(self.height):

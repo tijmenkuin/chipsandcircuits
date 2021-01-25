@@ -9,24 +9,19 @@ class Checker():
 
     Checks are done by simulating the made paths in dummy chip
     """
-    def __init__(self, solution, chip_number, netlist_number, width, height):
+    def __init__(self, solution, chip_number, netlist_number):
         self.solution = solution
 
-        self.chip = None
-        self.chipBuild(width, height, chip_number, netlist_number)
-
+        self.chip = Chip(chip_number, netlist_number)
+        
         self.collision_troubles = dict()
         self.connection_troubles = list()
 
-        self.solutionCheck()
+    def isValid(self):
+        return self.solutionCheck() and self.allNetsIn()
     
-    def chipBuild(self, width, height, chip_number, netlist_number):
-        """
-        Builds dummy chip
-        """
-        self.chip = Chip(width, height)
-        self.chip.initializeGrid()
-        self.chip.initializeGates(chip_number)
+    def allNetsIn(self):
+        return len(self.chip.netlist) == len(self.solution.keys())
 
     def solutionCheck(self):
         """
@@ -56,26 +51,4 @@ class Checker():
                     else:
                         self.connection_troubles.append(net)
 
-    def giveResults(self):
-        if self.collision_troubles == {} and self.connection_troubles == []:
-            print("Congrats, no collision or connection errors found")
-        elif self.collision_troubles != {} and self.connection_troubles != []:
-            print("Oops, there are found some connection and collision errors found")
-            print("Connection errors:")
-            print(f"{self.connection_troubles}")
-            print("Collision errors:")
-            print(f"{self.collision_troubles}")
-        elif self.collision_troubles != {} and self.connection_troubles == []:
-            print("Oops, there are found some collision errors found")
-            print("Collision errors:")
-            print(f"{self.collision_troubles}")
-        else:
-            print("Oops, there are found some connection errors found")
-            print("Connection errors:")
-            print(f"{self.connection_troubles}")
-
-
-
-                    
-                
-                
+        return self.collision_troubles == {} and self.connection_troubles == []
