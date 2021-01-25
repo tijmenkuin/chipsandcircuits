@@ -115,12 +115,43 @@ class Chip():
     def addIntersection(self):
         self.amount_intersections += 1
 
-    def giveHeuristicValues(self, target_point):
+
+    # def giveHeuristicValues(self, target_point):
+    #     for z in range(self.depth):
+    #         for y in range(self.height):
+    #             for x in range(self.width):
+    #                 this_gridpoint = self.getGridPoint(x,y,z)
+    #                 this_gridpoint.heuristic_value = this_gridpoint.manhattanDistanceTo(target_point)
+
+    def giveHeuristicValues(self, start_point, end_point):
+        #distance = abs((abs(int(self.height/2) - start_point.y) + abs(int(self.width/2) - start_point.x) + abs(int(self.height/2) - end_point.y) + abs(int(self.width/2) - end_point.x)) / (int(self.height) + int(self.width)))
+
+
+
         for z in range(self.depth):
             for y in range(self.height):
                 for x in range(self.width):
                     this_gridpoint = self.getGridPoint(x,y,z)
-                    this_gridpoint.heuristic_value = this_gridpoint.manhattanDistanceTo(target_point)
+
+                    #x en y dichtbij het centrum, dan lage heuristische waarde, bij lage z
+                    #x en y ver van het centrum, dan hoge heuristische waarde, bij lage z
+                    #bij hoge z een lage heuristische waarde, bij x en y ver van het centrum
+                    #bij lage z een hoge heuristische waarde, bij x en y ver van het centrum
+
+                    # centrum van het punt
+                    # center = abs(int(self.height/2) - y) + abs(int(self.width/2) - x)                    
+
+                    # print("start: " + str(start_point))
+                    # print("end: " + str(end_point))
+                    # print("point: " + str(this_gridpoint))
+
+                    formula = int(((1-distance) * z**2))*2 + this_gridpoint.manhattanDistanceTo(end_point)
+
+                    # print("formula: " + str(formula))
+                    # print("manhat: " + str(this_gridpoint.manhattanDistanceTo(end_point)))
+                    
+
+                    this_gridpoint.heuristic_value = formula
 
     def giveDefaultGScores(self):
         for z in range(self.depth):
