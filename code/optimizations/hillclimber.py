@@ -3,7 +3,7 @@ from ..objects.chip import Chip
 from ..objects.net import Net
 from ..objects.wire import Wire
 from ..algorithms.asearch_tijm import ASearch
-from ..utils.csv_writer import CSVWriter
+from ..visualisation.visualise import visualise
 
 
 import random
@@ -14,11 +14,8 @@ class HillClimber():
         Given a chip with a solution, runs for finding better solutions
         """
         self.chip = None
-
         self.best_solution = None
-
         self.initialize(chip)
-
         self.results = ResultFunction(self.chip)
         print(self.results.costs)
 
@@ -75,17 +72,23 @@ class HillClimber():
         Picks the worst x wire, selects y of those, and tries to find new A* paths,
         and loops z times trying to find better solutions.
         """
+        assert worst_x >= y_reorganizations
+
         counter = 0
+        visualise(self.chip)
         while counter != loop_amount:
             worst_nets = self.selectWorstNets(worst_x)
 
             investigations = []
-
-            while len(investigations) != y_reorganizations:
-                net = random.choice(worst_nets)
-                if net not in investigations:
-                    investigations.append(net)
-            
+            if worst_x == y_reorganizations:
+                investigations = worst_nets
+            else:
+                while len(investigations) != y_reorganizations:
+                    net = random.choice(worst_nets)
+                    if net not in investigations:
+                        investigations.append(net)
+                        worst_nets.removen(net)
+           
             for net in investigations:
                 self.clear(net)
                 del self.chip.solution[net]
@@ -97,10 +100,12 @@ class HillClimber():
 
             if new_results.costs < self.results.costs:
                 self.results = new_results
+                print(new_results.costs)
+                visualise(self.chip)
                 self.updateChip(self.best_solution, self.chip)
             else:
-                problem = True
                 self.updateChip(self.chip, self.best_solution)
+                problem = True
             
             counter += 1 
 
@@ -132,7 +137,7 @@ class HillClimber():
         """
         Updates chip1 with chip2
         """
-        chip1.clear()
+        chip1.clear2()
 
         for net, wire in chip2.solution.items():
             # copies nets
