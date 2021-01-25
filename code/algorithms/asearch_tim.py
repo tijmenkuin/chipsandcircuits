@@ -35,7 +35,7 @@ class ASearch():
         start_point = net.target[0]
         end_point = net.target[1]
 
-        self.chip.giveHeuristicValues(start_point, end_point)
+        self.chip.giveHeuristicValues2(start_point, end_point)
         self.chip.giveDefaultGScores()
 
         self.queue[start_point] = start_point.heuristic_value
@@ -44,11 +44,12 @@ class ASearch():
         start_point.fscore = start_point.heuristic_value
 
         while self.queue != {}:
-            minimum = self.queue[min(self.queue, key=self.queue.get)]
-            choices = [point for point, heuristic_value in self.queue.items() if heuristic_value == minimum]
+            # minimum = self.queue[min(self.queue, key=self.queue.get)]
+            # choices = [point for point, heuristic_value in self.queue.items() if heuristic_value == minimum]
 
-            current = random.choice(choices)
+            # current = random.choice(choices)
 
+            current = min(self.queue, key=self.queue.get)
 
             if current == end_point:
                 return self.reconstructPath(current)

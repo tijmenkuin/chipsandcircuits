@@ -15,7 +15,7 @@ import sys
 def main(args):
 
     
-    chip = SolutionToChip("asearch-tim", 2,9, 34639).readResults()
+    chip = SolutionToChip("asearch-tim", 2,9, 27349).readResults()
     visualise(chip)
     return
 
