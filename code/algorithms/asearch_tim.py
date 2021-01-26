@@ -13,19 +13,20 @@ class ASearch():
         Returns True is solution is found, else false
         """
         for net in self.chip.netlist:
-            new_wire = self.findPath(net)
-            if new_wire == []:
-                return False
-            
-            wire = Wire()
-            for point in new_wire:
-                wire.addPoint(point)
-            
-            self.chip.solution[net] = wire
-            self.markPath(wire)
+            if net not in self.chip.solution:
+                new_wire = self.findPath(net)
+                if new_wire == []:
+                    return False
+                
+                wire = Wire()
+                for point in new_wire:
+                    wire.addPoint(point)
+                
+                self.chip.solution[net] = wire
+                self.markPath(wire)
 
-            self.queue = dict()
-            self.came_from = dict()
+                self.queue = dict()
+                self.came_from = dict()
         return True
 
     def findPath(self, net):
@@ -44,13 +45,8 @@ class ASearch():
         start_point.fscore = start_point.heuristic_value
 
         while self.queue != {}:
-            # minimum = self.queue[min(self.queue, key=self.queue.get)]
-            # choices = [point for point, heuristic_value in self.queue.items() if heuristic_value == minimum]
-
-            # current = random.choice(choices)
-
             current = min(self.queue, key=self.queue.get)
-
+            
             if current == end_point:
                 return self.reconstructPath(current)
             

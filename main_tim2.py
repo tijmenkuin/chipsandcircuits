@@ -1,72 +1,50 @@
 from code.objects.chip import Chip
 from code.algorithms.greedy_ext import greedy_ext
-from code.algorithms.asearch_tim import ASearch
+from code.algorithms.asearch_tijm import ASearch
 from code.utils.checker import Checker
 from code.utils.size_determinator import SizeDeterminator
 from code.utils.csv_writer import CSVWriter
 from code.utils.resultfunction import ResultFunction
 from code.visualisation.visualise import visualise
-from code.optimizations.self_intersector import selfIntersection
+from code.optimizations.hillclimber import HillClimber
+from code.utils.solution_reader import SolutionToChip
+from code.utils.lower_bound import lowerBound
+
+from random import randrange
 
 import numpy as np
 
+import sys
 
-from datetime import datetime
 
+def main(args):
+    if len(args) == 2:
+
+        chip_id = args[0]
+        netlist_id = args[1]
+
+        while True:
+            chip = SolutionToChip("hillclimber_asearch", chip_id,netlist_id, 351).readLowest()
+            # chip = Chip(args[0],args[1])
+            # asearch = ASearch(chip)
+
+            # if asearch.run():
+            print("LowerBound:",lowerBound(chip))
+        
+            hillclimber = HillClimber(chip)
+            hillclimber.run(len(chip.netlist),5,500)
+
+            results = ResultFunction(hillclimber.best_solution)
+
+            print("-------------------------------------")
+            print("Beste resultaat Kosten:", results.costs)
+            print("Beste resultaat Intersecties:", results.intersections)
+            print("Beste resultaat Lengte:", results.length)
+            visualise(hillclimber.best_solution)
+
+            csvwriter = CSVWriter(hillclimber.best_solution.solution, "hillclimber_asearch", chip_id, netlist_id, results.costs)
+    else:
+        print("Wrong usage: python main_tim2.py [chip] [netlist]")
 
 if __name__ == "__main__":
-    AMOUNT_SOLUTIONS = 10
-
-
-    LOOP_AMOUNT = 20000
-
-
-    start=datetime.now()
-
-    for i in range(3):
-        for j in range(3):
-            if i == 0:
-                continue 
-            netlist_id = j + 1 + (3 * i)
-            amount_solutions = 0
-            costs = []
-            amount_intersections = []
-            count = 0
-            breaked = False
-
-            while AMOUNT_SOLUTIONS != amount_solutions:
-                count += 1
-                chip = Chip(i, netlist_id)
-                chip.netlistRandomizer()
-                asearch = ASearch(chip)
-                if asearch.run():
-                    result = ResultFunction(chip)
-                    if count == 1 or result.costs < min(costs):
-                        writer = CSVWriter(chip.solution, "asearch-tim", i, netlist_id, result.costs)
-                        costs.append(result.costs)
-                    amount_intersections.append(result.intersections)
-                    amount_solutions += 1
-                if count == LOOP_AMOUNT:
-                    breaked = True
-                    break
-
-            
-            if not breaked:
-                print("Gevonden resultaten voor chip", i, "en netlist", netlist_id, "is:")
-                print("Gemiddelde kosten:", np.mean(costs))
-                print("Gemiddeld aantal intersecties:", np.mean(amount_intersections))
-                print("Minimale kosten:", min(costs))
-                print("Minimale aantal intersecties:", min(amount_intersections))
-            elif amount_solutions != 0:
-                print("Gevonden resultaten voor chip", i, "en netlist", netlist_id, f"over {amount_solutions} oplossingen:")
-                print("Gemiddelde kosten:", np.mean(costs))
-                print("Gemiddeld aantal intersecties:", np.mean(amount_intersections))
-                print("Minimale kosten:", min(costs))
-                print("Minimale aantal intersecties:", min(amount_intersections))
-            else:
-                print("Gevonden resultaten voor chip", i, "en netlist", netlist_id, "is:")
-                print(f"Geen oplossingen gevonden na {LOOP_AMOUNT} iteraties")
-
-
-            now = datetime.now()
-            print(now-start)
+   main(sys.argv[1:])

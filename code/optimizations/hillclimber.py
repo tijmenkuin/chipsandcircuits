@@ -112,6 +112,7 @@ class HillClimber():
                 self.best_score = new_results.costs
                 self.best_solution = self.updateChip(self.best_solution, self.chip)
             else:
+                print("Afwijzing:", new_results.costs)
                 self.chip = self.updateChip(self.chip, self.best_solution)
             
             counter += 1
