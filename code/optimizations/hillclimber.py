@@ -2,7 +2,7 @@ from ..utils.resultfunction import ResultFunction
 from ..objects.chip import Chip
 from ..objects.net import Net
 from ..objects.wire import Wire
-from ..algorithms.asearch_tijm import ASearch
+from ..algorithms.asearch import ASearch
 from ..visualisation.visualise import visualise
 
 
@@ -145,7 +145,7 @@ class HillClimber():
         """
         Updates chip1 with chip2
         """
-        chip1.clear2()
+        chip1.clear()
 
         for net, wire in chip2.solution.items():
 

@@ -11,8 +11,6 @@ def greedy_ext(chip):
     total_nets = len(chip.netlist)
     i = -1 
 
-    # netlistSortDistance(chip)
-
     for net in chip.netlist:
         current_point = net.target[0]
         end_point = net.target[1]

@@ -1,4 +1,4 @@
-import copy
+from ..objects.wire import Wire
 from random import random, randint
 
 
@@ -95,7 +95,7 @@ class GreedySimultaneous:
             currentid = 1
             destinationid = 0
 
-        self.current_point = self.netlist [self.netid].copy[currentid]
+        self.current_point = self.netlist[self.netid].copy[currentid]
         self.destination_point = self.netlist [self.netid].copy[destinationid]
 
         if currentid == 1:
@@ -104,7 +104,7 @@ class GreedySimultaneous:
             self.netlist [self.netid].wire_0.append(self.current_point)
             
 
-    def run(self, score = None):
+    def run(self):
         copynetlist = []
         for net in self.chip.netlist:
             copynetlist.append(net)
@@ -138,16 +138,6 @@ class GreedySimultaneous:
 
             self.current_point = self.current_point.moveTo(path[0][1][0])
 
-            # if self.current_point.isIntersected():
-            #     self.chip.cost = self.chip.cost + 300
-            # self.chip.cost = self.chip.cost + 1
-
-            # if score is not None:
-            #     if score < self.chip.cost:
-            #         print(f"Too expensive! Cost: {self.chip.cost}")
-            #         self.chip.netlist = copynetlist
-            #         return False
-
             if currentid == 1:
                 self.netlist [self.netid].wire_1.append(self.current_point)
             else:
@@ -159,9 +149,27 @@ class GreedySimultaneous:
                 if len(self.netlist ) > 0:
                     self.netlist.pop(self.netid)
                 if len(self.netlist ) < 1:
-                    print(f"Solution found! Cost: {self.chip.cost}")
+                    print(f"Solution found!")
                     self.chip.netlist = copynetlist
-                    return score
+
+                    for net in self.chip.netlist:
+                        wire = Wire()
+                        wire.path = net.wire()
+                        self.chip.solution[net] = wire
+                    
+                    total = 0
+
+                    for z in range(self.chip.depth):
+                        for y in range(self.chip.height):
+                            for x in range(self.chip.width):
+                                point = self.chip.getGridPoint(x,y,z)
+                                intersections = point.isIntersected()
+                                total += intersections
+                                point.intersected = intersections + 1
+
+                    print(total)
+
+                    return True
             
             self.netid = randint(0,len(self.netlist )-1)
             currentid = 0

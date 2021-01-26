@@ -12,19 +12,12 @@ class Chip():
     def __init__(self, chip_id, netlist_id):
         self.chip_id = chip_id
         self.netlist_id = netlist_id
-
         sd = SizeDeterminator(chip_id)
-
         self.width = sd.getWidth()
         self.height = sd.getHeight()
         self.depth = 8
-
-        self.cost = 0
-
         self.grid = {}
-
         self.netlist = []
-
         self.gates = {}
 
         self.initializeGrid()
@@ -32,7 +25,6 @@ class Chip():
         self.initializeNetlist(chip_id, netlist_id)
 
         self.solution = {}
-        self.amount_intersections = 0
     
     def initializeGrid(self):
         #Initialize GridPoints
@@ -94,31 +86,11 @@ class Chip():
                 net = Net(self.gates[gate_ids[0]], self.gates[gate_ids[1]])
                 self.netlist.append(net)
 
-    def clear(self):
-        self.cost = 0
-        for net in self.netlist:
-            if net in self.solution:
-                wire = self.solution[net]
-                del wire
-            net.copy = [net.target[0], net.target[1]]
-            net.wire_0 = []
-            net.wire_1 = []
-        self.solution = {}
-
-        for z in range(self.depth):
-            for y in range(self.height):
-                for x in range(self.width):
-                    point = self.getGridPoint(x,y,z)
-                    for grid_segment in point.grid_segments.values():
-                        grid_segment.used = False
-                    point.last_move = []
-                    point.intersected = 0
-
-    def addIntersection(self):
-        self.amount_intersections += 1
 
 
-    def giveHeuristicValues3(self, start_point, target_point):
+#### A SEARCH
+
+    def giveTiesHeuristicValues(self, start_point, target_point):
         for z in range(self.depth):
             for y in range(self.height):
                 for x in range(self.width):
@@ -130,7 +102,7 @@ class Chip():
                     cross = abs(dx1*dy2 - dx2*dy1)
                     this_gridpoint.heuristic_value = int(cross)
 
-    def giveHeuristicValues4(self, target_point):
+    def giveEuclidesHeuristicValues(self, target_point):
         for z in range(self.depth):
             for y in range(self.height):
                 for x in range(self.width):
@@ -141,31 +113,12 @@ class Chip():
                     this_gridpoint.heuristic_value = (math.pow(dx, 2) + math.pow(dy, 2)+ math.pow(dz, 2))
 
 
-    def giveHeuristicValues(self, target_point):
+    def giveManhattanHeuristicValues(self, target_point):
         for z in range(self.depth):
             for y in range(self.height):
                 for x in range(self.width):
                     this_gridpoint = self.getGridPoint(x,y,z)
                     this_gridpoint.heuristic_value = this_gridpoint.manhattanDistanceTo(target_point)
-
-    def giveHeuristicValues2(self, start_point, end_point):      
-        radius = int((self.height*self.width)/((self.height+self.width)*2))
-
-        for z in range(self.depth):
-            for y in range(self.height):
-                for x in range(self.width):
-                    this_gridpoint = self.getGridPoint(x,y,z)
-
-                    start_worth = this_gridpoint.manhattanDistanceTo(start_point)
-                    end_worth = this_gridpoint.manhattanDistanceTo(start_point)
-                    extra_worth = 0
-
-                    if x in range(end_point.x-radius, end_point.x+1+radius) and y in range(end_point.y-radius, end_point.y+1+radius):
-                        extra_worth = 2*z
-
-                    formula = int((0.5 * start_worth)) - 2*z + end_worth + extra_worth
-
-                    this_gridpoint.heuristic_value = formula
 
     def giveDefaultGScores(self):
         for z in range(self.depth):
@@ -178,10 +131,9 @@ class Chip():
     def netlistRandomizer(self):
         random.shuffle(self.netlist)
 
-    def clear2(self):
+    def clear(self):
         self.netlist = []
         self.solution = {}
-
         for z in range(self.depth):
             for y in range(self.height):
                 for x in range(self.width):
@@ -196,4 +148,3 @@ class Chip():
                 for x in range(self.width):
                     point = self.getGridPoint(x,y,z)
                     point.checked = False
-
