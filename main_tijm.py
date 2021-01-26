@@ -130,7 +130,7 @@ if __name__ == "__main__":
             asearch = ASearch(chip)
             if asearch.run():
                 hillclimber = HillClimber(chip)
-                hillclimber.run(20, 11, 1000)
+                hillclimber.run(22, 13, 1500)
 
                 results = ResultFunction(hillclimber.best_solution)
 
