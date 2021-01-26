@@ -126,8 +126,8 @@ class Chip():
                     this_gridpoint = self.getGridPoint(x,y,z)
                     # this_gridpoint.heuristic_value = this_gridpoint.manhattanDistanceTo(target_point)
                     # this_gridpoint.heuristic_value = this_gridpoint.manhattanDistanceTo1(target_point, start_point)
-                    # this_gridpoint.heuristic_value = this_gridpoint.EuclideanDistance(target_point)
-                    # this_gridpoint.heuristic_value = this_gridpoint.EuclideanDistance1(end_point, start_point)
+                    # this_gridpoint.heuristic_value = this_gridpoint.EuclideanDistance2(target_point)
+                    # this_gridpoint.heuristic_value = this_gridpoint.EuclideanDistance1(target_point, start_point)
                     this_gridpoint.heuristic_value = this_gridpoint.T(target_point, start_point)
 
     def giveHeuristicValues(self, target_point):
@@ -184,7 +184,7 @@ class Chip():
             # print(OrderedList_nets)
         # print(OrderedList_Afstand)
             # C = zip(OrderedList_Afstand, OrderedList_nets)
-        OrderedList = sorted(OrderedList_Afstand, key=lambda OrderedList_Afstand: OrderedList_Afstand[0], reverse=True)
+        OrderedList = sorted(OrderedList_Afstand, key=lambda OrderedList_Afstand: OrderedList_Afstand[0])
         OrderedList_nets = [i[1] for i in OrderedList]
         # print(OrderedList)
         return OrderedList_nets
