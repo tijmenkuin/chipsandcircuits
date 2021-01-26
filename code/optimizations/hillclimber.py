@@ -20,7 +20,6 @@ class HillClimber():
         self.nets_to_fill = None
 
         self.initialize(chip)
-        print(self.best_score)
 
     def initialize(self, chip):
         """
@@ -84,9 +83,6 @@ class HillClimber():
         while counter != loop_amount:
             worst_nets = self.selectWorstNets(worst_x)
 
-            if counter % 100 == 0:
-                print(counter)
-
             investigations = []
             if worst_x == y_reorganizations:
                 investigations = worst_nets
@@ -108,7 +104,6 @@ class HillClimber():
             new_results = ResultFunction(self.chip)
             
             if new_results.costs <= self.best_score and found_solution:
-                print("Verbetering:", new_results.costs)
                 self.best_score = new_results.costs
                 self.best_solution = self.updateChip(self.best_solution, self.chip)
             else:
