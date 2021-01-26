@@ -190,6 +190,7 @@ class GridPoint():
     #     self.p = 1/1000
     #     return h *= (1.0 + p)
 
+
     def T(self, target_point, start_point):
         dx1 = self.x - target_point.x
         dy1 = self.y - target_point.y

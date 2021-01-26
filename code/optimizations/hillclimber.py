@@ -84,6 +84,9 @@ class HillClimber():
         while counter != loop_amount:
             worst_nets = self.selectWorstNets(worst_x)
 
+            if counter % 100 == 0:
+                print(counter)
+
             investigations = []
             if worst_x == y_reorganizations:
                 investigations = worst_nets
@@ -104,9 +107,6 @@ class HillClimber():
       
             new_results = ResultFunction(self.chip)
             
-            print("Counter:", counter)
-            print("Beste:", self.best_score)
-
             if new_results.costs <= self.best_score and found_solution:
                 print("Verbetering:", new_results.costs)
                 self.best_score = new_results.costs

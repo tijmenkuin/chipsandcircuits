@@ -118,8 +118,19 @@ class Chip():
         self.amount_intersections += 1
 
 
+    def giveHeuristicValues3(self, start_point, target_point):
+        for z in range(self.depth):
+            for y in range(self.height):
+                for x in range(self.width):
+                    this_gridpoint = self.getGridPoint(x,y,z)
+                    dx1 = this_gridpoint.x - target_point.x
+                    dy1 = this_gridpoint.y - target_point.y
+                    dx2 = start_point.x - target_point.x
+                    dy2 = start_point.y - target_point.y
+                    cross = abs(dx1*dy2 - dx2*dy1)
+                    this_gridpoint.heuristic_value = int(cross)
 
-    def giveHeuristicValues3(self, target_point, start_point):
+    def giveHeuristicValues4(self, target_point):
         for z in range(self.depth):
             for y in range(self.height):
                 for x in range(self.width):
@@ -129,6 +140,12 @@ class Chip():
                     # this_gridpoint.heuristic_value = this_gridpoint.EuclideanDistance2(target_point)
                     # this_gridpoint.heuristic_value = this_gridpoint.EuclideanDistance1(target_point, start_point)
                     this_gridpoint.heuristic_value = this_gridpoint.T(target_point, start_point)
+
+                    # dx = abs(this_gridpoint.x - target_point.x)
+                    # dy = abs(this_gridpoint.y - target_point.y)
+                    # dz = abs(this_gridpoint.z - target_point.z)
+                    # this_gridpoint.heuristic_value = (math.pow(dx, 2) + math.pow(dy, 2)+ math.pow(dz, 2))
+
 
     def giveHeuristicValues(self, target_point):
         for z in range(self.depth):
