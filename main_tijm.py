@@ -10,23 +10,10 @@ from code.optimizations.hillclimber import HillClimber
 
 import numpy as np
 
-
-from datetime import datetime
-
-
-
 if __name__ == "__main__":
 
-
     AMOUNT_SOLUTIONS = 25
-
-
     LOOP_AMOUNT = 20000
-
-    start=datetime.now()
-
-
-
 
     # for i in range(3):
     #     for j in range(3):
@@ -94,7 +81,6 @@ if __name__ == "__main__":
     #             print("Gevonden resultaten voor chip", i, "en netlist", netlist_id, "is:")
     #             print(f"Geen oplossingen gevonden na {LOOP_AMOUNT} iteraties")
 
-
     # while True:
     #     chip = Chip(1,5)
     #     if greedy_ext(chip):
@@ -134,31 +120,30 @@ if __name__ == "__main__":
     #         visualise(chip)
     #         break
     
-    while True:
-        chip_id = 2
-        netlist_id = 9
 
-        chip = Chip(chip_id, netlist_id)
-        chip.netlistRandomizer()
+    for i in range(20):
+        while True:
+            chip_id = 2
+            netlist_id = 7
 
-        #chip = SolutionToChip("hillclimber_asearch", chip_id,netlist_id, 2699).readResults()
+            chip = Chip(chip_id, netlist_id)
+            chip.netlistRandomizer()
 
-        asearch = ASearch(chip)
-        print("waah")
-        if asearch.run():
-            hillclimber = HillClimber(chip)
-            hillclimber.run(12,9,500)
+            asearch = ASearch(chip)
+            if asearch.run():
+                hillclimber = HillClimber(chip)
+                hillclimber.run(22, 13, 1500)
 
-            results = ResultFunction(hillclimber.best_solution)
+                results = ResultFunction(hillclimber.best_solution)
 
-            print("-------------------------------------")
-            print("Beste resultaat Kosten:", results.costs)
-            print("Beste resultaat Intersecties:", results.intersections)
-            print("Beste resultaat Lengte:", results.length)
-            visualise(hillclimber.best_solution)
-    
-            csvwriter = CSVWriter(hillclimber.best_solution.solution, "hillclimber_asearch", chip_id, netlist_id, results.costs)
-            break
+                print("-------------------------------------")
+                print("Beste resultaat Kosten:", results.costs)
+                print("Beste resultaat Intersecties:", results.intersections)
+                print("Beste resultaat Lengte:", results.length)
+                visualise(hillclimber.best_solution)
+        
+                csvwriter = CSVWriter(hillclimber.best_solution.solution, "hillclimber_asearch", chip_id, netlist_id, results.costs)
+                break
 
     # if asearch.run():
     #     results = ResultFunction(chip)
