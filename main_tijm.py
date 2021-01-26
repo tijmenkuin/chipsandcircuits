@@ -1,6 +1,6 @@
 from code.objects.chip import Chip
 from code.algorithms.greedy_ext import greedy_ext
-from code.algorithms.asearch_tijm import ASearch
+from code.algorithms.asearch_tim import ASearch
 from code.utils.checker import Checker
 from code.utils.size_determinator import SizeDeterminator
 from code.utils.csv_writer import CSVWriter
@@ -12,7 +12,8 @@ import numpy as np
 import time
 
 if __name__ == "__main__":
-    AMOUNT_SOLUTIONS = 10
+
+    AMOUNT_SOLUTIONS = 25
     LOOP_AMOUNT = 20000
     
     # for i in range(3):
@@ -120,6 +121,7 @@ if __name__ == "__main__":
     #         visualise(chip)
     #         break
     
+
     for i in range(2):
         for j in range(3):
             chip_id = i + 1
