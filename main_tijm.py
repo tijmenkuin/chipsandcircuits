@@ -9,12 +9,13 @@ from code.visualisation.visualise import visualise
 from code.optimizations.hillclimber import HillClimber
 
 import numpy as np
+import time
 
 if __name__ == "__main__":
 
     AMOUNT_SOLUTIONS = 25
     LOOP_AMOUNT = 20000
-
+    
     # for i in range(3):
     #     for j in range(3):
     #         gem = 0
@@ -121,29 +122,45 @@ if __name__ == "__main__":
     #         break
     
 
-    for i in range(20):
-        while True:
-            chip_id = 2
-            netlist_id = 7
+    for i in range(2):
+        for j in range(3):
+            chip_id = i + 1
+            netlist_id = j + 1 + (3 * (i + 1))
+            result_costs = []
+            result_intersections = []
+            result_time = []
 
-            chip = Chip(chip_id, netlist_id)
-            chip.netlistRandomizer()
+            for k in range(10):
+                while True:
+                    chip = Chip(chip_id, netlist_id)
+                    chip.netlistRandomizer()
 
-            asearch = ASearch(chip)
-            if asearch.run():
-                hillclimber = HillClimber(chip)
-                hillclimber.run(22, 13, 1500)
+                    asearch = ASearch(chip)
 
-                results = ResultFunction(hillclimber.best_solution)
+                    if asearch.run():
+                        hillclimber = HillClimber(chip)
+                        length = len(chip.netlist)
 
-                print("-------------------------------------")
-                print("Beste resultaat Kosten:", results.costs)
-                print("Beste resultaat Intersecties:", results.intersections)
-                print("Beste resultaat Lengte:", results.length)
-                visualise(hillclimber.best_solution)
-        
-                csvwriter = CSVWriter(hillclimber.best_solution.solution, "hillclimber_asearch", chip_id, netlist_id, results.costs)
-                break
+                        start = time.time()
+                        hillclimber.run(length // 2, length // 4, 500)
+                        stop = time.time()
+
+                        results = ResultFunction(hillclimber.best_solution)
+
+                        result_costs.append(results.costs)
+                        result_intersections.append(results.intersections)
+                        result_time.append(int(stop - start))
+                        break
+
+                    
+            
+            print("Gevonden resultaten voor chip", i, "en netlist", netlist_id, "is:")
+            print("Gemiddelde kosten:", np.mean(result_costs))
+            print("Gemiddeld aantal intersecties:", np.mean(result_intersections))
+            print("Minimale kosten:", min(result_costs))
+            print("Minimale aantal intersecties:", min(result_intersections))
+            print("Gemiddelde duur per oplossing:", np.mean(result_time))
+            print("Totaal aantal oplossingen:", len(result_costs))
 
     # if asearch.run():
     #     results = ResultFunction(chip)
