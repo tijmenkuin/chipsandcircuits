@@ -160,3 +160,11 @@ class GridPoint():
 
     def manhattanDistanceTo(self, point):
         return abs(self.x - point.x) + abs(self.y - point.y) + abs(self.z - point.z)
+
+    def T(self, target_point, start_point):
+        dx1 = self.x - target_point.x
+        dy1 = self.y - target_point.y
+        dx2 = start_point.x - target_point.x
+        dy2 = start_point.y - target_point.y
+        cross = abs(dx1*dy2 - dx2*dy1)
+        return cross*0.001
