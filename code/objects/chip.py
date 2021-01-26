@@ -130,7 +130,7 @@ class Chip():
                     cross = abs(dx1*dy2 - dx2*dy1)
                     this_gridpoint.heuristic_value = int(cross)
 
-    def giveHeuristicValues4(self, target_point):
+    def giveHeuristicValues4(self, start_point, target_point):
         for z in range(self.depth):
             for y in range(self.height):
                 for x in range(self.width):
