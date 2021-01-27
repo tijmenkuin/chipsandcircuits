@@ -1,3 +1,11 @@
+"""
+Tim Alessie, Hanan Almoustafa, Tijmen Kuin
+
+size_determinator.py
+
+Chips and Circuits 2021
+"""
+
 class SizeDeterminator():
     """
     Determines given a csv-file with gate coördinates, the width and height of the matching chip
@@ -10,8 +18,11 @@ class SizeDeterminator():
 
         self.determineSize()
         
-    def determineSize(self):    
-        with open(f"data/realdata/gates_netlists/chip_{self.print_id}/print_{self.print_id}.csv", "r") as inp:
+    def determineSize(self):
+        """
+        Updates the width and height of a chip given the print id
+        """    
+        with open(f"data/chip_{self.print_id}/print_{self.print_id}.csv", "r") as inp:
             next(inp)
             width_list = []
             height_list = []

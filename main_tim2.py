@@ -1,13 +1,13 @@
 from code.objects.chip import Chip
 #from code.algorithms.greedy_ext import greedy_ext
 from code.algorithms.greedy_simultaneous import GreedySimultaneous
-from code.algorithms.asearch import ASearch
+from code.algorithms.a_search import ASearch
 from code.utils.checker import Checker
 from code.utils.size_determinator import SizeDeterminator
 from code.utils.csv_writer import CSVWriter
-from code.utils.resultfunction import ResultFunction
+from code.utils.result_function import ResultFunction
 from code.visualisation.visualise import visualise
-from code.optimizations.hillclimber import HillClimber
+from code.algorithms.hill_climber import HillClimber
 from code.utils.solution_reader import SolutionToChip
 
 from random import randrange
@@ -20,19 +20,32 @@ import time
 
 def main(args):
 
-    chip = Chip(2,9)
-    gd = GreedySimultaneous(chip, 7)
+    chip_id = 2
 
-    test = gd.run()
+    net_id = 9
+    n = 100
 
-    results = ResultFunction(chip)
+    solutions = []
+    for _ in range(n):
 
-    print(chip.solution)
 
-    print(results.costs)
+        a = False
+        while not a:
+            chip = Chip(chip_id,net_id)
+            gd = GreedySimultaneous(chip, 7)
 
-    if test:
-        visualise(chip)
+            test = gd.run()
+            if test:
+                results = ResultFunction(chip)
+                #print(chip.solution)
+                print(results.costs)
+                #visualise(chip)
+                a = True
+                solutions.append((results.costs, chip))
+
+    solutions.sort(key=lambda x: x[0])    
+
+    CSVWriter(solutions[0][1].solution, "greedy_simultaneous", chip_id, net_id, solutions[0][0])
 
     return
 

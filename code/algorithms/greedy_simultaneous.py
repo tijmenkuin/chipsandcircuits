@@ -1,26 +1,44 @@
-from ..objects.wire import Wire
-from random import random, randint
+"""
+Tim Alessie, Hanan Almoustafa, Tijmen Kuin
 
+greedy_simultaneous.py
+
+Chips and Circuits 2021
+"""
+
+from ..objects.wire import Wire
+from random import choice, random
 
 class GreedySimultaneous:
+
     def __init__(self, chip, n):
         self.chip = chip
         self.n = n
         self.current_point = None
         self.destination_point = None
 
-    def manhattanDistance(self, point1, point2):
-        return abs(point1.x-point2.x) + abs(point1.y-point2.y) + abs(point1.z-point2.z)  
+        self.targets = dict()
+        for net in self.chip.netlist:
+            self.targets[(net.target[0], net.target[1])] = ([net.target[0]],[net.target[1]])
 
-    def moveScore(self, new_point):
+    def moveHeuristicScore(self, new_point):
+        """
+        Gives a Heuristic value to a possible move by taking the possible moves left, intersections and Manhattan Distance into consideration
+        """
+        intersection_penalty = 300
+        exponential_intersection = 4
+        exponential_movescore = 2
 
-        intersection =  300 * new_point.isIntersected() if new_point.isIntersected() > 0 and (not new_point.isGate()) else 0
-        movescore = 1 + new_point.getMoveScore()
-        distance = self.manhattanDistance(new_point, self.destination_point)
+        intersection =  intersection_penalty if not new_point.isGate() and new_point.amountOfIntersections() > 1 else 0
+        distance = new_point.manhattanDistanceTo(self.destination_point)
+        movescore = (new_point.getMoveScore() if not new_point.isGate() else 0) + 1
 
-        return (distance + intersection**4) / (movescore**2) 
+        return (distance + intersection**exponential_intersection) / (movescore**exponential_movescore) 
 
     def pathFinder(self):
+        """
+        Generates a list of all possible paths
+        """
         found_paths = []
         points = self.createMoveList(self.current_point)
 
@@ -39,145 +57,133 @@ class GreedySimultaneous:
 
         return found_paths
 
-
     def depthPath(self, score, iterator_point, direction):
+        """
+        Creates a path with a length of n that uses the moveHeuristicScore function to determine the impact of one move in the future
+        """
         path = [direction]
 
         for _ in range(self.n):
             moves = self.createMoveList(iterator_point)
-
-            finished = [move for move in moves if self.manhattanDistance(move[1], self.destination_point) == 0]
+            if moves is None:
+                return None
             moves.sort(key=lambda x: x[0])
 
             path.append(moves[0][2])
             iterator_point = moves[0][1] 
             score = score + moves[0][0]
-            moves.clear()
 
+            finished = [move for move in moves if move[1].manhattanDistanceTo(self.destination_point) == 0]
             if len(finished) > 0:
                 return (score, path)
 
         return (score, path)
 
-
     def moveChecker(self, point, direction):
-        if direction in point.grid_segments:
-            if point.grid_segments[direction].used == False:
-                if direction in point.relatives:
-                    new_point = point.relatives[direction]
-                    if new_point.isGate():
-                        if new_point not in self.netlist[self.netid].copy:
-                            return None
-                    point.grid_segments[direction].used = True
-                    score = self.moveScore(new_point)
-                    point.grid_segments[direction].used = False
-                    return (score, new_point, direction)
+        """
+        Checks if a move in a certain direction can be made, and returns moveScore, the new point and the same direction
+        """
+        if direction in point.relatives:
+
+            if point.grid_segments[direction].used:
+                return None
+
+            new_point = point.relatives[direction]
+
+            if new_point.isGate() and new_point is not self.destination_point:
+                return None
+
+            point.grid_segments[direction].used = True
+            score = self.moveHeuristicScore(new_point)
+            point.grid_segments[direction].used = False
+
+            return (score, new_point, direction)
         return None
                     
     def createMoveList(self, point):
-        moves = []
-        moves.append(self.moveChecker(point, 'left'))
-        moves.append(self.moveChecker(point, 'right'))
-        moves.append(self.moveChecker(point, 'forwards'))
-        moves.append(self.moveChecker(point, 'backwards'))
-        moves.append(self.moveChecker(point, 'up'))
-        moves.append(self.moveChecker(point, 'down'))
+        """
+        Generates a list of all the possible moves, returns none if empty
+        """
+        moves = [self.moveChecker(point, direction) for direction in point.relatives.keys()]
         moves = list(filter(None, moves))
         if len(moves) == 0:
             return None
-        return moves
+        return moves       
 
-    def setNewPoints(self):
-        currentid = 0
-        destinationid = 1
-
-        if random() < .5:
-            currentid = 1
-            destinationid = 0
-
-        self.current_point = self.netlist[self.netid].copy[currentid]
-        self.destination_point = self.netlist [self.netid].copy[destinationid]
-
-        if currentid == 1:
-            self.netlist [self.netid].wire_1.append(self.current_point)
+    def selectPoints(self, target, rdm):
+        """
+        Selects a point of a random wire and it's destination point
+        """
+        if rdm < .5:
+            self.current_point = self.targets[target][1][-1]
+            self.destination_point = self.targets[target][0][-1]
         else:
-            self.netlist [self.netid].wire_0.append(self.current_point)
-            
+            self.current_point = self.targets[target][0][-1]
+            self.destination_point = self.targets[target][1][-1]
+
+    def addToWire(self, target, rdm):
+        """
+        Adds the point to a temporary list to build up the wire
+        """
+        if rdm < .5:
+            self.targets[target][1].append(self.current_point)
+        else:
+            self.targets[target][0].append(self.current_point)
+
+    def makeResultFunctionCompatible(self):
+        """
+        Counts intersections and assigns them to the correct points
+        """
+        for z in range(self.chip.depth):
+            for y in range(self.chip.height):
+                for x in range(self.chip.width):
+                    point = self.chip.getGridPoint(x,y,z)
+                    if not point.isGate():
+                        intersections = point.amountOfIntersections()
+                        point.intersected = intersections + 1
 
     def run(self):
-        copynetlist = []
-        for net in self.chip.netlist:
-            copynetlist.append(net)
+        """
+        Runs the greedy algorithm, slowly builds up the wires and makes greedy selections based on the Heuristic score
+        """
+        # Select starting point
+        target = choice(list(self.targets.keys()))
+        rdm = random()
 
-        self.netlist = self.chip.netlist
-        self.netid = randint(0,len(self.netlist )-1)
-
-        currentid = 0
-        destinationid = 1
-
-        if random() < .5:
-            currentid = 1
-            destinationid = 0
-
-        self.current_point = self.netlist [self.netid].copy[currentid]
-        self.destination_point = self.netlist [self.netid].copy[destinationid]
-
-        if currentid == 1:
-            self.netlist [self.netid].wire_1.append(self.current_point)
-        else:
-            self.netlist [self.netid].wire_0.append(self.current_point)
+        self.selectPoints(target, rdm)
+        self.addToWire(target, rdm)
 
         while self.current_point:
-
             path = self.pathFinder()
 
             if path is None:
                 print("No solution found!")
-                self.chip.netlist = copynetlist
+                self.chip.solution = dict()
                 return False
 
             self.current_point = self.current_point.moveTo(path[0][1][0])
+            self.addToWire(target, rdm)
 
-            if currentid == 1:
-                self.netlist [self.netid].wire_1.append(self.current_point)
-            else:
-                self.netlist [self.netid].wire_0.append(self.current_point)
+            # Checks if newly assigned point is the destination point
+            if self.current_point.manhattanDistanceTo(self.destination_point) == 0:
+                
+                wire = Wire()
+                wire.path = self.targets[target][0] + self.targets[target][1][::-1][1:]
+                net = [net for net in self.chip.netlist if (net.target[0], net.target[1]) == target][0]
+                self.chip.solution[net] = wire
 
-            self.netlist [self.netid].copy[currentid] = self.current_point
- 
-            if (self.manhattanDistance(self.current_point, self.destination_point) == 0):
-                if len(self.netlist ) > 0:
-                    self.netlist.pop(self.netid)
-                if len(self.netlist ) < 1:
-                    print(f"Solution found!")
-                    self.chip.netlist = copynetlist
+                del self.targets[target]
 
-                    for net in self.chip.netlist:
-                        wire = Wire()
-                        wire.path = net.wire()
-                        self.chip.solution[net] = wire
-                    
-                    total = 0
-
-                    for z in range(self.chip.depth):
-                        for y in range(self.chip.height):
-                            for x in range(self.chip.width):
-                                point = self.chip.getGridPoint(x,y,z)
-                                intersections = point.isIntersected()
-                                total += intersections
-                                point.intersected = intersections + 1
-
-                    print(total)
+                # No more targets to wire, algorithm has been finished
+                if len(self.targets) == 0:
+                    print("Solution found!")
+                    self.makeResultFunctionCompatible()
 
                     return True
             
-            self.netid = randint(0,len(self.netlist )-1)
-            currentid = 0
-            destinationid = 1
+            # Pick a new point
+            target = choice(list(self.targets.keys()))
+            rdm = random()
 
-            if random() < .5:
-                currentid = 1
-                destinationid = 0
-
-            self.current_point = self.netlist[self.netid].copy[currentid]
-            self.destination_point = self.netlist[self.netid].copy[destinationid]
+            self.selectPoints(target, rdm)
+        return False

@@ -1,3 +1,11 @@
+"""
+Tim Alessie, Hanan Almoustafa, Tijmen Kuin
+
+visualise.py
+
+Chips and Circuits 2021
+"""
+
 import plotly.express as px
 import plotly.graph_objects as go
 import plotly
@@ -6,10 +14,15 @@ import random
 
 
 def visualise(chip):
-    X = []
-    Y = []
-    Z = []
-    Id = []
+    """
+    Uses the plotly library to generate a visualisation
+    For more info on plotly check-out: https://plotly.com/python/
+    """
+
+    X_gates = []
+    Y_gates = []
+    Z_gates = []
+    Id_gates = []
 
     net = []
 
@@ -21,6 +34,7 @@ def visualise(chip):
     Y_intersection  = []
     Z_intersection  = []
 
+    # Reads the solution into lists
     for wire in chip.solution.values():
         x_wire = []
         y_wire = []
@@ -34,20 +48,21 @@ def visualise(chip):
         z_wires.append(z_wire)
 
     for gate_id in chip.gates:
-        Y.append(chip.gates[gate_id].y)
-        X.append(chip.gates[gate_id].x)
-        Z.append(chip.gates[gate_id].z)
-        Id.append(gate_id)
+        Y_gates.append(chip.gates[gate_id].y)
+        X_gates.append(chip.gates[gate_id].x)
+        Z_gates.append(chip.gates[gate_id].z)
+        Id_gates.append(gate_id)
     
     for z in range(chip.depth):
         for y in range(chip.height):
             for x in range(chip.width):
                 point = chip.getGridPoint(x,y,z)
-                if (point.isIntersected()):
+                if point.amountOfIntersections():
                     X_intersection.append(x)
                     Y_intersection.append(y)
                     Z_intersection.append(z)
 
+    # Create points on 3D grid
     intersections = go.Scatter3d(
             x=X_intersection,
             y=Y_intersection,
@@ -58,20 +73,18 @@ def visualise(chip):
             marker=dict(size=3, color='blue'))
 
     gates = go.Scatter3d(
-            x=X,
-            y=Y,
-            z=Z,
+            x=X_gates,
+            y=Y_gates,
+            z=Z_gates,
             marker_symbol='square',
             mode='markers+text',
-            text= Id,
+            text= Id_gates,
             name='gates',
             marker=dict(size=8, color='red'),
             textposition="middle center")
 
 
-    # Show the plot
-    # plt.save()
-
+    # Create netlist on 3D grid
     net_lists = []
     for i,_ in enumerate(x_wires):
         red = random.randint(0, 255)
@@ -100,5 +113,7 @@ def visualise(chip):
 
     fig = go.Figure(data=data)
     
+    # Show figure
+
     fig.update_layout(height=900,width=1400)
     fig.show()
