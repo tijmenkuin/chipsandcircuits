@@ -22,41 +22,24 @@ class GridPoint():
     def isGate(self):
         return self.gate_id is not None
 
-
-
-
-    
-
-
     def manhattanDistanceTo(self, point):
         return abs(self.x - point.x) + abs(self.y - point.y) + abs(self.z - point.z)
 
-    # code for greedyEXT
-
-    def movePossible(self, move, end_gate):
-        if self.grid_segments[move].used:
-            return False
-        
-        if self.relatives[move].isGate() and self.relatives[move] != end_gate:
-            return False
-
-        return True
+    
+    
 
     # code for A search
 
-    def isIntersected2(self):
-        return self.intersected > 0 
-
     def reachableRelatives(self, end_gate):
         """
-        Gives list of relatives that are reachable (no colissions)
+        Gives randomly shuffled list of relatives that are reachable (no colissions, no different gates)
         """
         reachables = []
-        #end gate
         for move, relative in self.relatives.items():
             if not self.grid_segments[move].used and (not relative.isGate() or relative == end_gate):
                 reachables.append(relative)
         random.shuffle(reachables)
+        
         return reachables
 
     def intersect(self):
@@ -64,6 +47,10 @@ class GridPoint():
     
     def deIntersect(self):
         self.intersected -= 1
+
+    #??
+    def isIntersected2(self):
+        return self.intersected > 0 
 
     # code for GreedySimultenous
 

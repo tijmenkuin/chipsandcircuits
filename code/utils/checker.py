@@ -1,11 +1,11 @@
 from ..objects.chip import Chip
-from ..objects.wire import Wire
 
 class Checker():
     """
     Checks whether a solution is a valid solution, makes three checks:
     - There are no collisions in the solution
     - The wires are connected paths, which connect the wright gates
+    - Amount wires in chip are correct
 
     Checks are done by simulating the made paths in dummy chip
     """
