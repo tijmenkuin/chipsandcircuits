@@ -157,7 +157,7 @@ def main(args):
             except:
                 print("Could not visualise this solution!")
                 return
-        if args[1] == "asearch" or args[1] == "as":
+        elif args[1] == "asearch" or args[1] == "as":
             try:
                 chip = SolutionToChip("asearch", int(args[2]), int(args[3]), int(args[4])).readResults()
                 visualise(chip)
@@ -188,7 +188,7 @@ def main(args):
             except:
                 print("Can not use hill climber on this solution!")
                 return
-        if args[1] == "asearch" or args[1] == "as":
+        elif args[1] == "asearch" or args[1] == "as":
             try:
                 chip = SolutionToChip("asearch", int(args[2]), int(args[3]), int(args[4])).readResults()
                 
