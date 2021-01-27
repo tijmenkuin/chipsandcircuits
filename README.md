@@ -45,3 +45,50 @@ python main.py [timer]
 
 python main.py [chip_id] [netlist_id] [algoritme] ([hillclimber] [oude oplossing])
 ```
+
+
+## Reproductie van resultaten
+
+Door het uitvoeren van de onderstaande commands, is het mogelijk de algoritmes te runnen.
+
+```python
+python main.py [algorithm] [iterations]
+```
+>**example:** ```python python main.py gs 10
+```
+>**example:** ```python python main.py asearch 50
+```
+
+Maakt het mogelijk om ofwel Greedy Simultanious ofwel A*-search te runnen. De functie schrijft voor elke netlist een csv-bestand in de map solutions een goedkoopste oplossing uit [iterations]-aantal oplossingen.
+
+```python
+python main.py [algorithm] [chip_id] [net_id] [iterations]
+```
+>**example:** ```python
+python main.py as 2 9 100
+```
+
+Maakt het mogelijk om de goedkoopste oplossing over [iterations]-aantal oplossingen voor een specifieke netlist op te schrijven als een csv-bestand. 
+
+```python
+python main.py hc [algorithm] [chip_id] [net_id] [solution_score] [iterations]
+python main.py hillclimber [algorithm] [chip_id] [net_id] [solution_score] [iterations]
+```
+
+>**example:** ```python
+python main.py hc greedy_simultaneous 2 9 51123 100
+```
+
+Maakt het mogelijk om een specifieke opgeslagen oplossing in de [algorithm]-map [iterations]-aantal keer te verbeteren aan de hand van het hillclimber algoritme.
+
+```python
+python main.py view [algorithm] [chip_id] [netlist_id] [solution_score]
+```
+
+>**example:**```python
+ python main.py view asearch 2 9 32514
+```
+
+Maakt het mogelijk om een oplossing in de [algorithm]-map te visualiseren
+
+Indien nodig kan er met de command: ```python python main.py help```, wordt de code informatie ook in de terminal gegeven. Ook is het mogelijk in de runHillClimber-functie in main.py om de hierboven beschreven x en y anders in te stellen. Verder kan in de runAlgorithm-functie ook de depth search van het Greedy Simultanious algoritme aangepast worden.
