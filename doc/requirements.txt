@@ -1,11 +1,13 @@
-# To be able to run this code you need to install the following:
-# --------------------------------------------------------------
+# Om deze code te kunnen gebruiken, moet u het volgende installeren:
+# ------------------------------------------------------------------
 # 1. Visual Studio Code
-# 2. Python3
-# 3. pip to be able to install Python packages
-# 4. check50
-# 5. Libraries needed:
+# 2. WSL
+# 3. Ubuntu
+# 4. python3 
+# 5. pip om Python packages te installeren
+# 6. check50
+# 7. Libraries nodig:
 #     1- pip3 install python3
 #     2- pip3 install plotly version 4.14.3
 #     3- pip3 install pandas version 1.2.0
-#     4- pip3 install numpy  version 1.19.5
+#     4- pip3 install numpy version 1.19.5
