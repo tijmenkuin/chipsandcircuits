@@ -69,7 +69,7 @@ class Chip():
             return None
 
     def initializeGates(self, chip_id):
-        with open(f"data/realdata/gates_netlists/chip_{chip_id}/print_{chip_id}.csv", "r") as inp:
+        with open(f"data/chip_{chip_id}/print_{chip_id}.csv", "r") as inp:
             next(inp)
             for line in inp:
                 location = list(map(int,line.rstrip("\n").split(",")))
@@ -79,7 +79,7 @@ class Chip():
                 self.gates[gate.gate_id] = gate
 
     def initializeNetlist(self, chip_id, netlist_id):
-        with open(f"data/realdata/gates_netlists/chip_{chip_id}/netlist_{netlist_id}.csv", "r") as inp:
+        with open(f"data/chip_{chip_id}/netlist_{netlist_id}.csv", "r") as inp:
             next(inp)
             for line in inp:
                 gate_ids = list(map(int,line.rstrip("\n").split(",")))
@@ -127,10 +127,11 @@ class Chip():
                     this_gridpoint = self.getGridPoint(x,y,z)
                     this_gridpoint.gscore = math.inf
 
-
     def netlistRandomizer(self):
         random.shuffle(self.netlist)
 
+    # Hill Climber
+    
     def clear(self):
         self.netlist = []
         self.solution = {}
@@ -142,6 +143,8 @@ class Chip():
                         grid_segment.used = False
                     point.intersected = 0
     
+    
+    # Resultfunction
     def setCheckedFalse(self):
         for z in range(self.depth):
             for y in range(self.height):

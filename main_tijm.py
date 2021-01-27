@@ -1,12 +1,14 @@
 from code.objects.chip import Chip
-from code.algorithms.greedy_ext import greedy_ext
-from code.algorithms.asearch_tim import ASearch
+
+from code.algorithms.asearch import ASearch
+from code.algorithms.hillclimber import HillClimber
+
 from code.utils.checker import Checker
-from code.utils.size_determinator import SizeDeterminator
 from code.utils.csv_writer import CSVWriter
 from code.utils.resultfunction import ResultFunction
+
 from code.visualisation.visualise import visualise
-from code.optimizations.hillclimber import HillClimber
+
 
 import numpy as np
 import time
@@ -122,45 +124,45 @@ if __name__ == "__main__":
     #         break
     
 
-    for i in range(2):
-        for j in range(3):
-            chip_id = i + 1
-            netlist_id = j + 1 + (3 * (i + 1))
-            result_costs = []
-            result_intersections = []
-            result_time = []
+    # for i in range(2):
+    #     for j in range(3):
+    #         chip_id = i + 1
+    #         netlist_id = j + 1 + (3 * (i + 1))
+    #         result_costs = []
+    #         result_intersections = []
+    #         result_time = []
 
-            for k in range(10):
-                while True:
-                    chip = Chip(chip_id, netlist_id)
-                    chip.netlistRandomizer()
+    #         for k in range(10):
+    #             while True:
+    #                 chip = Chip(chip_id, netlist_id)
+    #                 chip.netlistRandomizer()
 
-                    asearch = ASearch(chip)
+    #                 asearch = ASearch(chip)
 
-                    if asearch.run():
-                        hillclimber = HillClimber(chip)
-                        length = len(chip.netlist)
+    #                 if asearch.run():
+    #                     hillclimber = HillClimber(chip)
+    #                     length = len(chip.netlist)
 
-                        start = time.time()
-                        hillclimber.run(length // 2, length // 4, 500)
-                        stop = time.time()
+    #                     start = time.time()
+    #                     hillclimber.run(length // 2, length // 4, 500)
+    #                     stop = time.time()
 
-                        results = ResultFunction(hillclimber.best_solution)
+    #                     results = ResultFunction(hillclimber.best_solution)
 
-                        result_costs.append(results.costs)
-                        result_intersections.append(results.intersections)
-                        result_time.append(int(stop - start))
-                        break
+    #                     result_costs.append(results.costs)
+    #                     result_intersections.append(results.intersections)
+    #                     result_time.append(int(stop - start))
+    #                     break
 
                     
             
-            print("Gevonden resultaten voor chip", i, "en netlist", netlist_id, "is:")
-            print("Gemiddelde kosten:", np.mean(result_costs))
-            print("Gemiddeld aantal intersecties:", np.mean(result_intersections))
-            print("Minimale kosten:", min(result_costs))
-            print("Minimale aantal intersecties:", min(result_intersections))
-            print("Gemiddelde duur per oplossing:", np.mean(result_time))
-            print("Totaal aantal oplossingen:", len(result_costs))
+    #         print("Gevonden resultaten voor chip", i, "en netlist", netlist_id, "is:")
+    #         print("Gemiddelde kosten:", np.mean(result_costs))
+    #         print("Gemiddeld aantal intersecties:", np.mean(result_intersections))
+    #         print("Minimale kosten:", min(result_costs))
+    #         print("Minimale aantal intersecties:", min(result_intersections))
+    #         print("Gemiddelde duur per oplossing:", np.mean(result_time))
+    #         print("Totaal aantal oplossingen:", len(result_costs))
 
     # if asearch.run():
     #     results = ResultFunction(chip)
@@ -174,3 +176,18 @@ if __name__ == "__main__":
     #     print("Geen oplossingen gevonden")
     #     visualise(chip)
 
+    chip = Chip(0,3)
+
+    asearch = ASearch(chip)
+    asearch.run()
+    # visualise(chip)
+    result_a = ResultFunction(chip)
+    print(result_a.costs)
+
+    hillclimber = HillClimber(chip)
+    hillclimber.run(10,8,1000)
+
+    # visualise(hillclimber.best_chip)
+    result_b = ResultFunction(hillclimber.best_chip)
+    print(result_b.costs)
+    visualise(hillclimber.best_chip)

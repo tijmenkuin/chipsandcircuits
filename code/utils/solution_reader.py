@@ -7,9 +7,6 @@ import glob
 
 class SolutionToChip():
     """
-    Writes a csv-file for a given solution, takes 4 extra arguments for orderly inventory
-
-    NOTE : Before usage make sure the directories in writeResults-method exist !!
     """
     def __init__(self, algorithm, chip, netlist, score):
         self.score = score
