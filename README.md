@@ -1,7 +1,8 @@
-<img src="Chipsandcircuits2.jpg" align="right" />
- 
-# Chips and circuits
+ # Chips and circuits
 > Dit is Chip and circuits opdracht voor de vak programmeren theorie als deel van minor programmeren in de Universiteit van Amsterdam.
+
+<img src="Chipsandcircuits2.jpg" align="right"/>
+
 
 ## Korte omschrijving
 In deze opdracht worden chips bestudeerd. Een chip kun je voorstellen als een 3D-rooster. Een 3D-rooster bestaat uit punten, de **grid points** genaamd, en lijnstukken die deze grid points met elkaar verbinden, de **grid segments** genaamd. Van de onderste laag van het 3D-rooster kunnen sommige grid points een **gate** zijn, deze hebben elk een eigen nummer. De opdracht is om verschillende gates door middel van een pad over grid segments en langs grid points met elkaar te verbinden. Welke gates met elkaar verbonden moeten worden, wordt gegeven door een net. Een **net** is niet meer dan een tupeltje van twee gates die met elkaar verbonden moeten worden. In de opdracht hebben we voor verschillende chips verschillende lijsten met nets gekregen, zo’n lijst wordt een **netlist** genoemd. Een pad dat een net, ofwel twee gates, met elkaar verbindt, wordt een **wire** genoemd. Een wire kan gezien worden als een verzameling van op een volgende *(of naast elkaar liggende)* grid points, waarvan de eerste en de laatste grid points de te verbinden gates zijn. De bedoeling van de opdracht is om alle wires van een netlist in de chip, of 3D-rooster, te krijgen. Hier zijn echter wel wat regels aan verbonden.
@@ -28,7 +29,7 @@ Dit proces herhaalt zich punt voor punt tot de wires uiteindelijk opgebouwd zijn
 
 ## A*-search algoritme
 
-Bij dit  A*-search algoritme worden net voor net de goedkoopste paden tussen twee gates neergelegd. De netlist wordt initiëel in een willekeurige volgorde gezet, om meer willekeur toe te laten. Het A*-search algoritme kiest bij gelijke waarden, onder de punten met de beste f-waarden, een willekeurig nieuw punt uit. Verder is er gebruik gemaakt van verschillende heuristieken, namelijk: **Manhattan Distance**, Euclidische afstand en Ties. 
+Bij dit  A*-search algoritme worden net voor net de goedkoopste paden tussen twee gates neergelegd. De netlist wordt initiëel in een willekeurige volgorde gezet, om meer willekeur toe te laten. Het A*-search algoritme kiest bij gelijke waarden, onder de punten met de beste f-waarden, een willekeurig nieuw punt uit. Verder is er gebruik gemaakt van verschillende heuristieken, namelijk: **Manhattan Distance**, **Euclidische afstand** en **Ties**. 
 
 ## Hill Climber
 
