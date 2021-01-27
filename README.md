@@ -1,5 +1,5 @@
  # Chips and circuits
-> Dit is Chip and circuits opdracht voor de vak programmeren theorie als deel van minor programmeren in de Universiteit van Amsterdam.
+> Programmeer Theorie: Minor Programmeren,Universiteit van Amsterdam.
 
 <img src="Chipsandcircuits2.jpg" align="right"/>
 
