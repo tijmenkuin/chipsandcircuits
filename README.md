@@ -1,5 +1,5 @@
 
-<img src="Chipsandcircuits2.jpg" align="right"/>
+<img src="doc/images/cpu.jpg" align="right"/>
 
 # Chips and circuits
 > Programmeer Theorie: Minor Programmeren, Universiteit van Amsterdam.
