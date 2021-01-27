@@ -7,7 +7,7 @@ from code.utils.size_determinator import SizeDeterminator
 from code.utils.csv_writer import CSVWriter
 from code.utils.resultfunction import ResultFunction
 from code.visualisation.visualise import visualise
-from code.optimizations.hillclimber import HillClimber
+from code.algorithms.hillclimber import HillClimber
 from code.utils.solution_reader import SolutionToChip
 
 from random import randrange
@@ -24,15 +24,12 @@ def main(args):
     gd = GreedySimultaneous(chip, 7)
 
     test = gd.run()
-
-    results = ResultFunction(chip)
-
-    print(chip.solution)
-
-    print(results.costs)
-
     if test:
+        results = ResultFunction(chip)
+        print(chip.solution)
+        print(results.costs)
         visualise(chip)
+        csvwriter = CSVWriter(chip.solution, "greedy_simultaneous", 2, 9, results.costs)
 
     return
 

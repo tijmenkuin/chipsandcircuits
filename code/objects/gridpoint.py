@@ -99,15 +99,8 @@ class GridPoint():
     def moveTo(self, direction):
         if self.checkMoveUsed(direction) == False:
             self.grid_segments[direction].used = True
-            newPoint = None
-
             if self.grid_segments[direction].connections[0] == self:
-                newPoint = self.grid_segments[direction].connections[1]
-            else:
-                newPoint = self.grid_segments[direction].connections[0]
-            
-            newPoint.last_move.insert(0, direction)
-
-            return newPoint
+                return self.grid_segments[direction].connections[1]
+            return self.grid_segments[direction].connections[0]
         else:
             return False
