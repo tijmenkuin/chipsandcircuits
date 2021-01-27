@@ -48,8 +48,7 @@ class GridPoint():
     def deIntersect(self):
         self.intersected -= 1
 
-    #??
-    def isIntersected2(self):
+    def givesIntersection(self):
         return self.intersected > 0 
 
     # code for GreedySimultenous
