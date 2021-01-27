@@ -39,14 +39,6 @@ Bij dit  A*-search algoritme worden net voor net de goedkoopste paden tussen twe
 
 Naast het A*-search algoritme wordt er ook gebruik gemaakt van een Hill Climber. De Hill Climber werkt als volgt: Er wordt bij elke iteratie gefocust op de x-aantal duurste wires, daarvan worden vervolgens een willekeurig y-tal wires geselecteerd. Deze y-tal wires worden uit de chip verwijderd en vervolgens aan de hand van het A*-algoritme weer teruggeplaatst. Voor dit terugplaatsen is er gebruik gemaakt van de hierboven genoemde heuristieken. Ook zijn er meerdere parameterwaarden voor x en y geprobeerd om potentieel goedkopere oplossingen te genereren. De Hill Climber is toegepast om de A*-search verworven oplossingen te verbeteren, of om zijn eigen gevonden oplossingen te verbeteren.
 
-
-```
-python main.py [timer]
-
-python main.py [chip_id] [netlist_id] [algoritme] ([hillclimber] [oude oplossing])
-```
-
-
 ## Reproductie van resultaten
 
 Door het uitvoeren van de onderstaande commands, is het mogelijk de algoritmes te runnen.
