@@ -102,4 +102,4 @@ Indien nodig kan er met de command:
 ```python
 / python main.py help
 ```
-, wordt de code informatie ook in de terminal gegeven. Ook is het mogelijk in de runHillClimber-functie in main.py om de hierboven beschreven x en y anders in te stellen. Verder kan in de runAlgorithm-functie ook de depth search van het Greedy Simultanious algoritme aangepast worden.
+De code informatie ook in de terminal gegeven. Ook is het mogelijk in de runHillClimber-functie in main.py om de hierboven beschreven x en y anders in te stellen. Verder kan in de runAlgorithm-functie ook de depth search van het Greedy Simultanious algoritme aangepast worden.
