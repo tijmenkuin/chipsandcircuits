@@ -1,7 +1,7 @@
-<img src="Chipsandcircuits2.jpg" align="right"/>
+ # Chips and circuits
+> Programmeer Theorie: Minor Programmeren, Universiteit van Amsterdam.
 
-# Chips and circuits
-> Programmeer Theorie: Minor Programmeren,Universiteit van Amsterdam.
+<img src="Chipsandcircuits2.jpg" align="right"/>
 
 
 ## Korte omschrijving
@@ -10,7 +10,7 @@ In deze opdracht worden chips bestudeerd. Een chip kun je voorstellen als een 3D
 ### Constraints
 Bij het verbinden van de nets zijn er twee situaties verboden:
 Ten eerste mag een grid segment van het rooster niet meer dan één keer gebruikt worden door een wire. In het geval dat dit wel gebeurt noemen we dit een collision en is de oplossing niet geldig. 
-Ten tweede is het niet toegestaan dat een wire een gate van een andere net bevat. 
+Ten tweede is het niet toegestaan dat een wire een gate, die niet in zijn net zit, bevat. 
 
 ### Intersection
 Elke gridpoint die door meer dan een wire bewandelt wordt, wordt een intersectie genoemd. _Deze intersecties zijn toegestaan alleen, worden hier wel flinke kosten aan verbonden._
