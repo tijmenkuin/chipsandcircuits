@@ -22,38 +22,51 @@ class CopyChip():
             dummy_chip = chip_to_write_in
 
         for net, wire in self.chip.solution.items():
-            # copies nets
-            point1 = net.target[0]
-            point2 = net.target[1]
-            dummy_gate1 = dummy_chip.getGridPoint(point1.x, point1.y, point1.z)
-            dummy_gate2 = dummy_chip.getGridPoint(point2.x, point2.y, point2.z)
-            dummy_net = Net(dummy_gate1, dummy_gate2)
+            dummy_net = self.copyNet(net, dummy_chip)
             dummy_chip.netlist.append(dummy_net)
-            # chip_to_write_in.netlist.append(dummy_net)
 
-            # copies wires
-            new_wire = Wire()
-            for point in wire.path:
-                dummy_point = dummy_chip.getGridPoint(point.x, point.y, point.z)
-                # dummy_point = chip_to_write_in.getGridPoint(point.x, point.y, point.z)
-                new_wire.addPoint(dummy_point)
-
-                # copies passed gridpoints
-                if not dummy_point.isGate():
-                    dummy_point.intersect()
-
-            dummy_chip.solution[dummy_net] = new_wire
-
-            for point, neighbour in zip(wire.path, wire.path[1:]):
-                dummy_point = dummy_chip.getGridPoint(point.x, point.y, point.z)
-                dummy_neighbour = dummy_chip.getGridPoint(neighbour.x, neighbour.y, neighbour.z)
-
-                # copies used gridsegments
-                for move, relative in dummy_point.relatives.items():
-                    if dummy_neighbour == relative:
-                        dummy_point.grid_segments[move].used = True
-                        break
+            self.copyWiresAndUsedPoints(wire, dummy_chip, dummy_net)
+            self.copyUsedGridsegments(wire, dummy_chip)
             
         dummy_chip.giveDefaultGScores()
         return dummy_chip
 
+    def copyNet(self, net, dummy_chip):
+        """
+        Writes dummy net
+        """
+        point1 = net.target[0]
+        point2 = net.target[1]
+        dummy_gate1 = dummy_chip.getGridPoint(point1.x, point1.y, point1.z)
+        dummy_gate2 = dummy_chip.getGridPoint(point2.x, point2.y, point2.z)
+        dummy_net = Net(dummy_gate1, dummy_gate2)
+        return dummy_net
+    
+    def copyWiresAndUsedPoints(self, wire, dummy_chip, dummy_net):
+        """
+        Copies wires and used points
+        """
+        new_wire = Wire()
+        for point in wire.path:
+            dummy_point = dummy_chip.getGridPoint(point.x, point.y, point.z)
+            new_wire.addPoint(dummy_point)
+
+            # copies passed gridpoints
+            if not dummy_point.isGate():
+                dummy_point.intersect()
+
+        dummy_chip.solution[dummy_net] = new_wire
+
+    def copyUsedGridsegments(self, wire, dummy_chip):
+        """
+        Copies  used gridsegments
+        """
+        for point, neighbour in zip(wire.path, wire.path[1:]):
+            dummy_point = dummy_chip.getGridPoint(point.x, point.y, point.z)
+            dummy_neighbour = dummy_chip.getGridPoint(neighbour.x, neighbour.y, neighbour.z)
+
+            # copies used gridsegments
+            for move, relative in dummy_point.relatives.items():
+                if dummy_neighbour == relative:
+                    dummy_point.grid_segments[move].used = True
+                    break
