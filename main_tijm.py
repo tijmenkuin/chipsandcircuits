@@ -177,17 +177,18 @@ if __name__ == "__main__":
     #     visualise(chip)
 
     chip = Chip(0,3)
+    chip.netlistRandomizer()
 
     asearch = ASearch(chip)
     asearch.run()
-    # visualise(chip)
+    visualise(chip)
     result_a = ResultFunction(chip)
     print(result_a.costs)
 
     hillclimber = HillClimber(chip)
-    hillclimber.run(10,8,1000)
+    hillclimber.run(10,8,110)
 
     # visualise(hillclimber.best_chip)
     result_b = ResultFunction(hillclimber.best_chip)
     print(result_b.costs)
-    visualise(hillclimber.best_chip)
+    # visualise(hillclimber.best_chip)
