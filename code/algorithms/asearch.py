@@ -59,7 +59,7 @@ class ASearch():
 
             # Add relatives to queue and update gscore if necessary
             for relative in current.reachableRelatives(end_point):
-                tentative_gScore = current.gscore + 1 + 300 * relative.isIntersected2()
+                tentative_gScore = current.gscore + 1 + 300 * relative.givesIntersection()
                 
                 if tentative_gScore < relative.gscore:
                     self.came_from[relative] = current
