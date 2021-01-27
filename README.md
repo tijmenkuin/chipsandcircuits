@@ -1,7 +1,7 @@
- # Chips and circuits
-> Programmeer Theorie: Minor Programmeren,Universiteit van Amsterdam.
-
 <img src="Chipsandcircuits2.jpg" align="right"/>
+
+# Chips and circuits
+> Programmeer Theorie: Minor Programmeren,Universiteit van Amsterdam.
 
 
 ## Korte omschrijving
