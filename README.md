@@ -1,7 +1,7 @@
- # Chips and circuits
-> Dit is Chip and circuits opdracht voor de vak programmeren theorie als deel van minor programmeren in de Universiteit van Amsterdam.
-
 <img src="Chipsandcircuits2.jpg" align="right"/>
+
+# Chips and circuits
+> Dit is Chip and circuits opdracht voor de vak programmeren theorie als deel van minor programmeren in de Universiteit van Amsterdam.
 
 
 ## Korte omschrijving
@@ -29,7 +29,7 @@ Dit proces herhaalt zich punt voor punt tot de wires uiteindelijk opgebouwd zijn
 
 ## A*-search algoritme
 
-Bij dit  A*-search algoritme worden net voor net de goedkoopste paden tussen twee gates neergelegd. De netlist wordt initiëel in een willekeurige volgorde gezet, om meer willekeur toe te laten. Het A*-search algoritme kiest bij gelijke waarden, onder de punten met de beste f-waarden, een willekeurig nieuw punt uit. Verder is er gebruik gemaakt van verschillende heuristieken, namelijk: **Manhattan Distance**, **Euclidische afstand** en **Ties**. 
+Bij dit  A*-search algoritme worden net voor net de goedkoopste paden tussen twee gates neergelegd. De netlist wordt initiëel in een willekeurige volgorde gezet, om meer willekeur toe te laten. Het A*-search algoritme kiest bij gelijke waarden, onder de punten met de beste f-waarden, een willekeurig nieuw punt uit. Verder is er gebruik gemaakt van verschillende heuristieken, namelijk: **Manhattan afstand**, **Euclidische afstand** en **Ties**. 
 
 ## Hill Climber
 
