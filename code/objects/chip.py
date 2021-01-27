@@ -1,22 +1,30 @@
 from .gridpoint import GridPoint
 from .gridsegment import GridSegment
+from ..utils.size_determinator import SizeDeterminator
 from .net import Net
 from .wire import Wire
 
 import csv
+import math
+import random
 
 class Chip():
-    def __init__(self, width, height):
-        self.width = width
-        self.height = height
+    def __init__(self, chip_id, netlist_id):
+        self.chip_id = chip_id
+        self.netlist_id = netlist_id
+        sd = SizeDeterminator(chip_id)
+        self.width = sd.getWidth()
+        self.height = sd.getHeight()
         self.depth = 8
-        self.cost = 0
         self.grid = {}
-        # self.wires = self.createWires()
         self.netlist = []
         self.gates = {}
+
         self.initializeGrid()
-        self.outputdict = {}
+        self.initializeGates(chip_id)
+        self.initializeNetlist(chip_id, netlist_id)
+
+        self.solution = {}
     
     def initializeGrid(self):
         #Initialize GridPoints
@@ -43,16 +51,14 @@ class Chip():
                     self.addGridSegmentAndRelatives(current_gridpoint, self.getGridPoint(x, y, z - 1), 'down', 'up')
                     self.addGridSegmentAndRelatives(current_gridpoint, self.getGridPoint(x, y, z + 1), 'up', 'down')
 
-
     def addGridSegmentAndRelatives(self, gridpoint1, gridpoint2, direction1, direction2):
         if gridpoint2 is not None:
+            gridpoint1.relatives[direction1] = gridpoint2
+
             if direction2 not in gridpoint2.grid_segments:
                 gridsegment = GridSegment(gridpoint1, gridpoint2)
                 gridpoint1.grid_segments[direction1] = gridsegment
                 gridpoint2.grid_segments[direction2] = gridsegment
-                gridpoint1.relatives[direction1] = gridpoint2
-                gridpoint2.relatives[direction2] = gridpoint1
-
 
     def getGridPoint(self, x, y, z):
         if x < 0 or y < 0 or z < 0:
@@ -62,9 +68,8 @@ class Chip():
         except:
             return None
 
-    
-    def initializeGates(self, chip):
-        with open(f"data/realdata/gates_netlists/chip_{chip}/print_{chip}.csv", "r") as inp:
+    def initializeGates(self, chip_id):
+        with open(f"data/realdata/gates_netlists/chip_{chip_id}/print_{chip_id}.csv", "r") as inp:
             next(inp)
             for line in inp:
                 location = list(map(int,line.rstrip("\n").split(",")))
@@ -73,45 +78,73 @@ class Chip():
                 gate.gate_id = location[0]
                 self.gates[gate.gate_id] = gate
 
-
-
-    def initializeNetlist(self, chip, netlist):
-        with open(f"data/realdata/gates_netlists/chip_{chip}/netlist_{netlist}.csv", "r") as inp:
+    def initializeNetlist(self, chip_id, netlist_id):
+        with open(f"data/realdata/gates_netlists/chip_{chip_id}/netlist_{netlist_id}.csv", "r") as inp:
             next(inp)
             for line in inp:
                 gate_ids = list(map(int,line.rstrip("\n").split(",")))
                 net = Net(self.gates[gate_ids[0]], self.gates[gate_ids[1]])
                 self.netlist.append(net)
-            
 
 
-    def giveResults(self):
-        with open("testfile.csv", "w", newline="") as f:
-            thewriter = csv.writer(f)
-            thewriter.writerow(['net', 'wire'])
 
-            for key in self.outputdict:
-                thewriter.writerow([str(key), str(self.outputdict[key])])
-            return thewriter
+#### A SEARCH
+
+    def giveTiesHeuristicValues(self, start_point, target_point):
+        for z in range(self.depth):
+            for y in range(self.height):
+                for x in range(self.width):
+                    this_gridpoint = self.getGridPoint(x,y,z)
+                    dx1 = this_gridpoint.x - target_point.x
+                    dy1 = this_gridpoint.y - target_point.y
+                    dx2 = start_point.x - target_point.x
+                    dy2 = start_point.y - target_point.y
+                    cross = abs(dx1*dy2 - dx2*dy1)
+                    this_gridpoint.heuristic_value = int(cross)
+
+    def giveEuclidesHeuristicValues(self, target_point):
+        for z in range(self.depth):
+            for y in range(self.height):
+                for x in range(self.width):
+                    this_gridpoint = self.getGridPoint(x,y,z)
+                    dx = abs(this_gridpoint.x - target_point.x)
+                    dy = abs(this_gridpoint.y - target_point.y)
+                    dz = abs(this_gridpoint.z - target_point.z)
+                    this_gridpoint.heuristic_value = (math.pow(dx, 2) + math.pow(dy, 2)+ math.pow(dz, 2))
+
+
+    def giveManhattanHeuristicValues(self, target_point):
+        for z in range(self.depth):
+            for y in range(self.height):
+                for x in range(self.width):
+                    this_gridpoint = self.getGridPoint(x,y,z)
+                    this_gridpoint.heuristic_value = this_gridpoint.manhattanDistanceTo(target_point)
+
+    def giveDefaultGScores(self):
+        for z in range(self.depth):
+            for y in range(self.height):
+                for x in range(self.width):
+                    this_gridpoint = self.getGridPoint(x,y,z)
+                    this_gridpoint.gscore = math.inf
+
+
+    def netlistRandomizer(self):
+        random.shuffle(self.netlist)
+
+    def clear(self):
+        self.netlist = []
+        self.solution = {}
+        for z in range(self.depth):
+            for y in range(self.height):
+                for x in range(self.width):
+                    point = self.getGridPoint(x,y,z)
+                    for grid_segment in point.grid_segments.values():
+                        grid_segment.used = False
+                    point.intersected = 0
     
-    def createWires(self):
-        """
-        For time being hard coded
-        """
-        wire1 = Wire([[1,5,0],[2,5,0],[3,5,0],[4,5,0],[5,5,0],[6,5,0]])
-        wire2 = Wire([[1,5,0],[1,4,0],[2,4,0],[3,4,0],[4,4,0]])
-        wire3 = Wire([[4,4,0],[4,3,0],[3,3,0],[2,3,0],[1,3,0],[0,3,0],[0,2,0],[0,1,0],[0,0,0],[1,0,0],[2,0,0],[3,0,0],[3,1,0]])
-        wire4 = Wire([[6,2,0],[5,2,0],[5,3,0],[5,4,0],[6,4,0],[6,5,0]])
-        wire5 = Wire([[3,1,0],[4,1,0],[5,1,0],[6,1,0],[7,1,0],[7,2,0],[6,2,0]])
-
-        return [wire1, wire2, wire3, wire4, wire5]
-
-    def makeDict(self):
-        wires = self.createWires()
-        if len(wires) == len(self.netlist):
-            iterations = len(wires)
-            for i in range(iterations):
-                self.outputdict[self.netlist[i]] = wires[i].wire_path
-    
-
-    # def getGateById(gate_id):
+    def setCheckedFalse(self):
+        for z in range(self.depth):
+            for y in range(self.height):
+                for x in range(self.width):
+                    point = self.getGridPoint(x,y,z)
+                    point.checked = False
