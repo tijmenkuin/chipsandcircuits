@@ -19,7 +19,7 @@ class GridPoint():
         self.intersected = 0
         self.checked = False
         
-        # Asearch and Hill Climber attributes
+        # Asearch attributes
         self.heuristic_value = None
         self.gscore = None
         self.fscore = None
