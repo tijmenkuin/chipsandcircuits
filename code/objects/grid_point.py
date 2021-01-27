@@ -91,7 +91,3 @@ class GridPoint():
             return False
         grid_segment.used = True
         return self.relatives[direction]
-
-        #         if grid_segment.connections[0] == self:
-        #     return grid_segment.connections[1]
-        # return grid_segment.connections[0]
