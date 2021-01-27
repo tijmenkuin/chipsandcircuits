@@ -40,22 +40,9 @@ class HillClimber():
 
         counter = 0
         while counter != loop_amount:
-            # Figure out which wires to delete
             worst_nets = self.selectWorstNets(worst_x)
-            
-            investigations = []
-            if worst_x == y_reorganizations:
-                investigations = worst_nets
-            else:
-                while len(investigations) != y_reorganizations:
-                    net = random.choice(worst_nets)
-                    investigations.append(net)
-                    worst_nets.remove(net)
-           
-            # Delete wires from chip
-            for net in investigations:
-                self.clear(net)
-                del self.chip.solution[net]
+            investigations = self.selectRandomNets(worst_x, y_reorganizations, worst_nets)
+            self.clearNets(investigations)
 
             # Make place deleted wires again using Asearch
             asearch = ASearch(self.chip)
@@ -106,3 +93,25 @@ class HillClimber():
             del valued_wires[worst_net]
 
         return worst_nets
+    
+    def selectRandomNets(self, worst_x, y_reorganizations, worst_nets):
+        """
+        Select random y nets, returns list containing them
+        """
+        investigations = []
+        if worst_x == y_reorganizations:
+            investigations = worst_nets
+        else:
+            while len(investigations) != y_reorganizations:
+                net = random.choice(worst_nets)
+                investigations.append(net)
+                worst_nets.remove(net)
+        return investigations
+        
+    def clearNets(self, investigations):
+        """
+        Clear the wires of given netlist
+        """
+        for net in investigations:
+            self.clear(net)
+            del self.chip.solution[net]

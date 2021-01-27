@@ -11,7 +11,7 @@ class ASearch():
 
     def run(self):
         """
-        Loops over netlist, and finds paths. After found one resets the necessary in chip.
+        Loops over netlist, and finds paths. After found one resets the necessary in the chip.
         Returns True if solution is found, else False
         """
         for net in self.chip.netlist:
@@ -21,10 +21,7 @@ class ASearch():
                 if new_wire == None:
                     return False
                 
-                # Make wire and add to solution
-                wire = Wire()
-                for point in new_wire:
-                    wire.addPoint(point)
+                wire = self.makeWire(new_wire)
                 self.chip.solution[net] = wire
                 
                 # Make chip ready for finding next wire
@@ -32,6 +29,16 @@ class ASearch():
                 self.queue = dict()
                 self.came_from = dict()
         return True
+    
+    def makeWire(self, new_wire):
+        """
+        Makes wire out of a list of points
+        """
+        wire = Wire()
+        for point in new_wire:
+            wire.addPoint(point)
+        return wire
+
 
     def findPath(self, net):
         """
@@ -57,18 +64,23 @@ class ASearch():
             
             del self.queue[current]
 
-            # Add relatives to queue and update gscore if necessary
-            for relative in current.reachableRelatives(end_point):
-                tentative_gScore = current.gscore + 1 + 300 * relative.givesIntersection()
+            self.addNeighboursToQueue(current, end_point)
+    
+    def addNeighboursToQueue(self, point, end_point):
+        """
+        Adds relatives of point to queue and updates gscore if necessary
+        """
+        for relative in point.reachableRelatives(end_point):
+            tentative_gScore = point.gscore + 1 + 300 * relative.givesIntersection()
+            
+            if tentative_gScore < relative.gscore:
+                self.came_from[relative] = point
+                relative.gscore = tentative_gScore
+                relative.fscore = relative.gscore + relative.heuristic_value
                 
-                if tentative_gScore < relative.gscore:
-                    self.came_from[relative] = current
-                    relative.gscore = tentative_gScore
-                    relative.fscore = relative.gscore + relative.heuristic_value
-                    
-                    if relative not in self.queue.keys():
-                        self.queue[relative] = relative.fscore
-
+                if relative not in self.queue.keys():
+                    self.queue[relative] = relative.fscore
+    
     def reconstructPath(self, point):
         """
         Builds the path given the parents parents of final point

@@ -25,10 +25,7 @@ class GridPoint():
     def manhattanDistanceTo(self, point):
         return abs(self.x - point.x) + abs(self.y - point.y) + abs(self.z - point.z)
 
-    
-    
-
-    # code for A search
+    # Methods for A search
 
     def reachableRelatives(self, end_gate):
         """
@@ -51,7 +48,7 @@ class GridPoint():
     def givesIntersection(self):
         return self.intersected > 0 
 
-    # code for GreedySimultenous
+    # Methods for GreedySimultenous
 
     def isIntersected(self):
         if self.gate_id is not None:
