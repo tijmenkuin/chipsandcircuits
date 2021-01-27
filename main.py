@@ -70,7 +70,7 @@ def runHillClimber(algorithm, chip_id, netlist_id, score, amount_solutions):
 
     hillclimber.run(x, y, amount_solutions)
     result = ResultFunction(hillclimber.best_chip)
-    printResult(chip, result, algorithm)
+    printResult(hillclimber.best_chip, result, algorithm)
 
 
 def printResult(chip, result, algorithm):
