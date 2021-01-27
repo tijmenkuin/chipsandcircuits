@@ -34,6 +34,7 @@ def visualise(chip):
     Y_intersection  = []
     Z_intersection  = []
 
+    # Reads the solution into lists
     for wire in chip.solution.values():
         x_wire = []
         y_wire = []

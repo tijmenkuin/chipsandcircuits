@@ -106,13 +106,9 @@ class Chip():
                 net = Net(self.gates[gate_ids[0]], self.gates[gate_ids[1]])
                 self.netlist.append(net)
 
-
-
-#### A SEARCH
-
     def giveTiesHeuristicValues(self, start_point, target_point):
         """
-        Heuristic based on Ties
+        Heuristic based on Ties, more info on: http://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html
         """
         for z in range(self.depth):
             for y in range(self.height):
@@ -126,6 +122,9 @@ class Chip():
                     this_gridpoint.heuristic_value = int(cross)
 
     def giveEuclidesHeuristicValues(self, target_point):
+        """
+        Heuristic based on Euclides, more info on: http://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html
+        """
         for z in range(self.depth):
             for y in range(self.height):
                 for x in range(self.width):
@@ -137,6 +136,9 @@ class Chip():
 
 
     def giveManhattanHeuristicValues(self, target_point):
+        """
+        Heuristic based on Manhattan Distance, represents the true distance between points in this grid-type
+        """
         for z in range(self.depth):
             for y in range(self.height):
                 for x in range(self.width):
@@ -144,6 +146,9 @@ class Chip():
                     this_gridpoint.heuristic_value = this_gridpoint.manhattanDistanceTo(target_point)
 
     def giveDefaultGScores(self):
+        """
+        Appends G Score to the GridPoint object
+        """
         for z in range(self.depth):
             for y in range(self.height):
                 for x in range(self.width):
@@ -151,11 +156,15 @@ class Chip():
                     this_gridpoint.gscore = math.inf
 
     def netlistRandomizer(self):
+        """
+        Shuffles the netlist
+        """
         random.shuffle(self.netlist)
-
-    # Hill Climber
     
     def clear(self):
+        """
+        Clears grid-data
+        """
         self.netlist = []
         self.solution = {}
         for z in range(self.depth):
@@ -166,9 +175,10 @@ class Chip():
                         grid_segment.used = False
                     point.intersected = 0
     
-    
-    # Resultfunction
     def setCheckedFalse(self):
+        """
+        Checks GridPoints for the ResultFunction
+        """
         for z in range(self.depth):
             for y in range(self.height):
                 for x in range(self.width):
