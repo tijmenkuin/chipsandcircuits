@@ -83,6 +83,7 @@ def visualise(chip):
             marker=dict(size=8, color='red'),
             textposition="middle center")
 
+
     # Create netlist on 3D grid
     net_lists = []
     for i,_ in enumerate(x_wires):
