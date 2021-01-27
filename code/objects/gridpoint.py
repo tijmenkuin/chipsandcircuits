@@ -11,7 +11,7 @@ class GridPoint():
         self.intersected = 0
         self.checked = False
         
-        #asearch
+        # Asearch and Hill Climber attributes
         self.heuristic_value = None
         self.gscore = None
         self.fscore = None
@@ -25,10 +25,8 @@ class GridPoint():
     def manhattanDistanceTo(self, point):
         return abs(self.x - point.x) + abs(self.y - point.y) + abs(self.z - point.z)
 
-    
-    
 
-    # code for A search
+    # Asearch and Hill Climber functions
 
     def reachableRelatives(self, end_gate):
         """
@@ -48,46 +46,27 @@ class GridPoint():
     def deIntersect(self):
         self.intersected -= 1
 
-    #??
-    def isIntersected2(self):
+    def givesIntersection(self):
         return self.intersected > 0 
 
-    # code for GreedySimultenous
+    # Greedy Simultaneous functions
 
-    def isIntersected(self):
-        if self.gate_id is not None:
+    def amountOfIntersections(self):
+        used = len([True for direction in self.relatives.keys() if self.grid_segments[direction].used])
+        if used < 3:
             return 0
-        used = len([True for k in ('left', 'right', 'forwards', 'backwards', 'up','down') if self.isMovePossible(k)])
-        if used == 4 or used == 3:
-            return 1
-        if used == 5 or used == 6:
-            return 2
-        return 0
+        return 1 if used == 3 or used == 4 else 2
 
     def getMoveScore(self):
-        if self.gate_id is not None:
-            return 0
-        return len([True for k in ('left', 'right', 'forwards', 'backwards', 'up','down') if self.checkMoveUsed(k) == False])
-
-    def isMovePossible(self, direction):
-        if direction not in self.grid_segments:
-            return False
-        if  self.grid_segments[direction] is not None:
-            return self.grid_segments[direction].used
-        return False
-
-    def checkMoveUsed(self, direction):
-        if direction not in self.grid_segments:
-            return None
-        if  self.grid_segments[direction] is not None:
-            return self.grid_segments[direction].used
-        return None
+        return len([True for direction in self.relatives.keys() if not self.grid_segments[direction].used])
 
     def moveTo(self, direction):
-        if self.checkMoveUsed(direction) == False:
-            self.grid_segments[direction].used = True
-            if self.grid_segments[direction].connections[0] == self:
-                return self.grid_segments[direction].connections[1]
-            return self.grid_segments[direction].connections[0]
-        else:
+        if direction not in self.relatives:
             return False
+        grid_segment = self.grid_segments[direction]
+        if grid_segment.used:
+            return False
+        grid_segment.used = True
+        if grid_segment.connections[0] == self:
+            return grid_segment.connections[1]
+        return grid_segment.connections[0]

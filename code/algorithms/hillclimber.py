@@ -147,42 +147,42 @@ class HillClimber():
         return chip1
 
         def writeDummyChip(self, chip):
-        """
-        Writes a complete new dummy chip, by copying the given chip
-        """
-        dummy_chip = Chip(chip.chip_id, chip.netlist_id)
-        dummy_chip.netlist = []
+            """
+            Writes a complete new dummy chip, by copying the given chip
+            """
+            dummy_chip = Chip(chip.chip_id, chip.netlist_id)
+            dummy_chip.netlist = []
 
-        for net, wire in chip.solution.items():
-            # copies nets
-            point1 = net.target[0]
-            point2 = net.target[1]
-            dummy_gate1 = dummy_chip.getGridPoint(point1.x, point1.y, point1.z)
-            dummy_gate2 = dummy_chip.getGridPoint(point2.x, point2.y, point2.z)
-            dummy_net = Net(dummy_gate1, dummy_gate2)
-            dummy_chip.netlist.append(dummy_net)
+            for net, wire in chip.solution.items():
+                # copies nets
+                point1 = net.target[0]
+                point2 = net.target[1]
+                dummy_gate1 = dummy_chip.getGridPoint(point1.x, point1.y, point1.z)
+                dummy_gate2 = dummy_chip.getGridPoint(point2.x, point2.y, point2.z)
+                dummy_net = Net(dummy_gate1, dummy_gate2)
+                dummy_chip.netlist.append(dummy_net)
 
-            # copies wires
-            new_wire = Wire()
-            for point in wire.path:
-                dummy_point = dummy_chip.getGridPoint(point.x, point.y, point.z)
-                new_wire.addPoint(dummy_point)
+                # copies wires
+                new_wire = Wire()
+                for point in wire.path:
+                    dummy_point = dummy_chip.getGridPoint(point.x, point.y, point.z)
+                    new_wire.addPoint(dummy_point)
 
-                # copies passed gridpoints
-                if not dummy_point.isGate():
-                    dummy_point.intersect()
+                    # copies passed gridpoints
+                    if not dummy_point.isGate():
+                        dummy_point.intersect()
 
-            dummy_chip.solution[dummy_net] = new_wire
+                dummy_chip.solution[dummy_net] = new_wire
 
-            for point, neighbour in zip(wire.path, wire.path[1:]):
-                dummy_point = dummy_chip.getGridPoint(point.x, point.y, point.z)
-                dummy_neighbour = dummy_chip.getGridPoint(neighbour.x, neighbour.y, neighbour.z)
+                for point, neighbour in zip(wire.path, wire.path[1:]):
+                    dummy_point = dummy_chip.getGridPoint(point.x, point.y, point.z)
+                    dummy_neighbour = dummy_chip.getGridPoint(neighbour.x, neighbour.y, neighbour.z)
 
-                # copies used gridsegments
-                for move, relative in dummy_point.relatives.items():
-                    if dummy_neighbour == relative:
-                        dummy_point.grid_segments[move].used = True
-                        break
-        
-        dummy_chip.giveDefaultGScores()
-        return dummy_chip
+                    # copies used gridsegments
+                    for move, relative in dummy_point.relatives.items():
+                        if dummy_neighbour == relative:
+                            dummy_point.grid_segments[move].used = True
+                            break
+            
+            dummy_chip.giveDefaultGScores()
+            return dummy_chip

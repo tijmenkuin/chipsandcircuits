@@ -1,4 +1,5 @@
 from ..objects.wire import Wire
+from ..objects.greedy_simultaneous.gridpoint import GridPointGreedy
 from random import choice, random
 
 class GreedySimultaneous:
@@ -19,9 +20,9 @@ class GreedySimultaneous:
         """
         intersection_penalty = 300
 
-        intersection =  intersection_penalty * new_point.isIntersected() if new_point.isIntersected() > 0 and (not new_point.isGate()) else 0
+        intersection =  intersection_penalty if not new_point.isGate() and new_point.amountOfIntersections() > 1 else 0
         distance = new_point.manhattanDistanceTo(self.destination_point)
-        movescore = 1 + new_point.getMoveScore()
+        movescore = (new_point.getMoveScore() if not new_point.isGate() else 0) + 1
 
         # Magic numbers?
         return (distance + intersection**4) / (movescore**2) 
@@ -95,7 +96,7 @@ class GreedySimultaneous:
         """
         Generates a list of all the possible moves, returns none if empty
         """
-        moves = [self.moveChecker(point, direction) for direction in ("left", "right", "forwards", "backwards" ,"up", "down")]
+        moves = [self.moveChecker(point, direction) for direction in point.relatives.keys()]
         moves = list(filter(None, moves))
         if len(moves) == 0:
             return None
@@ -158,12 +159,14 @@ class GreedySimultaneous:
                     print("Solution found!")
 
                     # Count intersections, for the ResultFunction
+
                     for z in range(self.chip.depth):
                         for y in range(self.chip.height):
                             for x in range(self.chip.width):
                                 point = self.chip.getGridPoint(x,y,z)
-                                intersections = point.isIntersected()
-                                point.intersected = intersections + 1
+                                if not point.isGate():
+                                    intersections = point.amountOfIntersections()
+                                    point.intersected = intersections + 1
 
                     return True
             

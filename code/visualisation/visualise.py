@@ -6,10 +6,14 @@ import random
 
 
 def visualise(chip):
-    X = []
-    Y = []
-    Z = []
-    Id = []
+    """
+    Uses the plotly library to generate a visualisation
+    """
+
+    X_gates = []
+    Y_gates = []
+    Z_gates = []
+    Id_gates = []
 
     net = []
 
@@ -34,16 +38,16 @@ def visualise(chip):
         z_wires.append(z_wire)
 
     for gate_id in chip.gates:
-        Y.append(chip.gates[gate_id].y)
-        X.append(chip.gates[gate_id].x)
-        Z.append(chip.gates[gate_id].z)
-        Id.append(gate_id)
+        Y_gates.append(chip.gates[gate_id].y)
+        X_gates.append(chip.gates[gate_id].x)
+        Z_gates.append(chip.gates[gate_id].z)
+        Id_gates.append(gate_id)
     
     for z in range(chip.depth):
         for y in range(chip.height):
             for x in range(chip.width):
                 point = chip.getGridPoint(x,y,z)
-                if (point.isIntersected()):
+                if point.amountOfIntersections():
                     X_intersection.append(x)
                     Y_intersection.append(y)
                     Z_intersection.append(z)
@@ -58,12 +62,12 @@ def visualise(chip):
             marker=dict(size=3, color='blue'))
 
     gates = go.Scatter3d(
-            x=X,
-            y=Y,
-            z=Z,
+            x=X_gates,
+            y=Y_gates,
+            z=Z_gates,
             marker_symbol='square',
             mode='markers+text',
-            text= Id,
+            text= Id_gates,
             name='gates',
             marker=dict(size=8, color='red'),
             textposition="middle center")
