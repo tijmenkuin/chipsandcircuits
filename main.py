@@ -148,18 +148,19 @@ def main(args):
                 return
         else:
             wrongUsageMessage()
-    elif len(args) == 4 and args[0] == "view":
-        if args[0] == "greedy_simultaneous" or args[0] == "gs":
+    elif len(args) == 5 and args[0] == "view":
+        if args[1] == "greedy_simultaneous" or args[1] == "gs":
             try:
-                chip = SolutionToChip("greedy_simultaneous", int(args[1]), int(args[2]), int(args[3])).readResults()
-                visualise(chip.solution)
+                print(int(args[2]), int(args[3]), int(args[4]))
+                chip = SolutionToChip("greedy_simultaneous", int(args[2]), int(args[3]), int(args[4])).readResults()
+                visualise(chip)
             except:
                 print("Could not visualise this solution!")
                 return
-        if args[0] == "asearch" or args[0] == "as":
+        if args[1] == "asearch" or args[1] == "as":
             try:
-                chip = SolutionToChip("asearch", int(args[1]), int(args[2]), int(args[3])).readResults()
-                visualise(chip.solution)
+                chip = SolutionToChip("asearch", int(args[2]), int(args[3]), int(args[4])).readResults()
+                visualise(chip)
             except:
                 print("Could not visualise this solution!")
                 return
@@ -169,17 +170,20 @@ def main(args):
         if args[1] == "greedy_simultaneous" or args[1] == "gs":
             try:
                 chip = SolutionToChip("greedy_simultaneous", int(args[2]), int(args[3]), int(args[4])).readResults()
-                result = ResultFunction(chip)
-                print("kosten", result.costs)
-
+                
                 hillclimber = HillClimber(chip)
+                
                 print("Now running hill climber")
+                
                 hillclimber.run(len(chip.netlist),5,int(args[5]))
+                
                 result = ResultFunction(hillclimber.best_chip)
+                
                 print("--------------------------")
                 print(f"Chip: '{int(args[2])}' Netlist: '{int(args[3])}'")
                 print("Beste resultaat kosten:", result.costs)
-                CSVWriter(chip.solution, "greedy_simultaneous", int(args[2]), int(args[3]), result.costs)
+                
+                CSVWriter(hillclimber.best_chip.solution, "greedy_simultaneous", int(args[2]), int(args[3]), result.costs)
 
             except:
                 print("Can not use hill climber on this solution!")
@@ -187,16 +191,20 @@ def main(args):
         if args[1] == "asearch" or args[1] == "as":
             try:
                 chip = SolutionToChip("asearch", int(args[2]), int(args[3]), int(args[4])).readResults()
-
-
+                
                 hillclimber = HillClimber(chip)
+                
                 print("Now running hill climber")
+                
                 hillclimber.run(len(chip.netlist),5,int(args[5]))
+                
                 result = ResultFunction(hillclimber.best_chip)
+                
                 print("--------------------------")
                 print(f"Chip: '{int(args[2])}' Netlist: '{int(args[3])}'")
                 print("Beste resultaat kosten:", result.costs)
-                CSVWriter(chip.solution, "asearch", int(args[2]), int(args[3]), result.costs)
+                
+                CSVWriter(hillclimber.best_chip.solution, "asearch", int(args[2]), int(args[3]), result.costs)
             except:
                 print("Can not use hill climber on this solution!")
                 return
