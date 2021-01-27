@@ -1,3 +1,11 @@
+"""
+Tim Alessie, Hanan Almoustafa, Tijmen Kuin
+
+a_search.py
+
+Chips and Circuits 2021
+"""
+
 from ..objects.chip import Wire
 
 class ASearch():

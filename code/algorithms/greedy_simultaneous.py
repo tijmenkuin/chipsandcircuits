@@ -1,5 +1,12 @@
+"""
+Tim Alessie, Hanan Almoustafa, Tijmen Kuin
+
+greedy_simultaneous.py
+
+Chips and Circuits 2021
+"""
+
 from ..objects.wire import Wire
-from ..objects.greedy_simultaneous.gridpoint import GridPointGreedy
 from random import choice, random
 
 class GreedySimultaneous:
@@ -19,13 +26,14 @@ class GreedySimultaneous:
         Gives a Heuristic value to a possible move by taking the possible moves left, intersections and Manhattan Distance into consideration
         """
         intersection_penalty = 300
+        exponential_intersection = 4
+        exponential_movescore = 2
 
         intersection =  intersection_penalty if not new_point.isGate() and new_point.amountOfIntersections() > 1 else 0
         distance = new_point.manhattanDistanceTo(self.destination_point)
         movescore = (new_point.getMoveScore() if not new_point.isGate() else 0) + 1
 
-        # Magic numbers?
-        return (distance + intersection**4) / (movescore**2) 
+        return (distance + intersection**exponential_intersection) / (movescore**exponential_movescore) 
 
     def pathFinder(self):
         """
@@ -75,21 +83,21 @@ class GreedySimultaneous:
         """
         Checks if a move in a certain direction can be made, and returns moveScore, the new point and the same direction
         """
-        if direction in point.grid_segments:
-            if not point.grid_segments[direction].used:
-                if direction in point.relatives:
+        if direction in point.relatives:
 
-                    new_point = point.relatives[direction]
+            if point.grid_segments[direction].used:
+                return None
 
-                    if new_point.isGate():
-                        if new_point is not self.destination_point:
-                            return None
+            new_point = point.relatives[direction]
 
-                    point.grid_segments[direction].used = True
-                    score = self.moveHeuristicScore(new_point)
-                    point.grid_segments[direction].used = False
+            if new_point.isGate() and new_point is not self.destination_point:
+                return None
 
-                    return (score, new_point, direction)
+            point.grid_segments[direction].used = True
+            score = self.moveHeuristicScore(new_point)
+            point.grid_segments[direction].used = False
+
+            return (score, new_point, direction)
         return None
                     
     def createMoveList(self, point):
@@ -122,6 +130,18 @@ class GreedySimultaneous:
         else:
             self.targets[target][0].append(self.current_point)
 
+    def makeResultFunctionCompatible(self):
+        """
+        Counts intersections and assigns them to the correct points
+        """
+        for z in range(self.chip.depth):
+            for y in range(self.chip.height):
+                for x in range(self.chip.width):
+                    point = self.chip.getGridPoint(x,y,z)
+                    if not point.isGate():
+                        intersections = point.amountOfIntersections()
+                        point.intersected = intersections + 1
+
     def run(self):
         """
         Runs the greedy algorithm, slowly builds up the wires and makes greedy selections based on the Heuristic score
@@ -144,8 +164,8 @@ class GreedySimultaneous:
             self.current_point = self.current_point.moveTo(path[0][1][0])
             self.addToWire(target, rdm)
 
-            # Checks if newly assigned point is equal to the destination point
-            if (self.current_point.manhattanDistanceTo(self.destination_point) == 0):
+            # Checks if newly assigned point is the destination point
+            if self.current_point.manhattanDistanceTo(self.destination_point) == 0:
                 
                 wire = Wire()
                 wire.path = self.targets[target][0] + self.targets[target][1][::-1][1:]
@@ -157,16 +177,7 @@ class GreedySimultaneous:
                 # No more targets to wire, algorithm has been finished
                 if len(self.targets) == 0:
                     print("Solution found!")
-
-                    # Count intersections, for the ResultFunction
-
-                    for z in range(self.chip.depth):
-                        for y in range(self.chip.height):
-                            for x in range(self.chip.width):
-                                point = self.chip.getGridPoint(x,y,z)
-                                if not point.isGate():
-                                    intersections = point.amountOfIntersections()
-                                    point.intersected = intersections + 1
+                    self.makeResultFunctionCompatible()
 
                     return True
             

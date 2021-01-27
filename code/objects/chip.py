@@ -1,5 +1,13 @@
-from .gridpoint import GridPoint
-from .gridsegment import GridSegment
+"""
+Tim Alessie, Hanan Almoustafa, Tijmen Kuin
+
+chip.py
+
+Chips and Circuits 2021
+"""
+
+from .grid_point import GridPoint
+from .grid_segment import GridSegment
 from ..utils.size_determinator import SizeDeterminator
 from .net import Net
 from .wire import Wire

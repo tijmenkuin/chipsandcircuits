@@ -1,3 +1,11 @@
+"""
+Tim Alessie, Hanan Almoustafa, Tijmen Kuin
+
+wire.py
+
+Chips and Circuits 2021
+"""
+
 class Wire():
     def __init__(self):
         self.path = []

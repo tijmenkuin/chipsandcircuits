@@ -1,9 +1,17 @@
+"""
+Tim Alessie, Hanan Almoustafa, Tijmen Kuin
+
+hill_climber.py
+
+Chips and Circuits 2021
+"""
+
 from ..utils.copy_chip import CopyChip
-from ..utils.resultfunction import ResultFunction
+from ..utils.result_function import ResultFunction
 from ..objects.chip import Chip
 from ..objects.net import Net
 from ..objects.wire import Wire
-from ..algorithms.asearch import ASearch
+from ..algorithms.a_search import ASearch
 from ..visualisation.visualise import visualise
 
 import random

@@ -1,3 +1,11 @@
+"""
+Tim Alessie, Hanan Almoustafa, Tijmen Kuin
+
+result_function.py
+
+Chips and Circuits 2021
+"""
+
 class ResultFunction():
     """
     Calculates, given a solution, the costs of this solution, the calculation has two parts:

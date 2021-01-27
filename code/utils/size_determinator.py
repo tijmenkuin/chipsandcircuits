@@ -1,3 +1,11 @@
+"""
+Tim Alessie, Hanan Almoustafa, Tijmen Kuin
+
+size_determinator.py
+
+Chips and Circuits 2021
+"""
+
 class SizeDeterminator():
     """
     Determines given a csv-file with gate coördinates, the width and height of the matching chip

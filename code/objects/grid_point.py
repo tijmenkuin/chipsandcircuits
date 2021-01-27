@@ -1,3 +1,11 @@
+"""
+Tim Alessie, Hanan Almoustafa, Tijmen Kuin
+
+grid_point.py
+
+Chips and Circuits 2021
+"""
+
 import random
 
 class GridPoint():

@@ -1,13 +1,13 @@
 from code.objects.chip import Chip
 #from code.algorithms.greedy_ext import greedy_ext
 from code.algorithms.greedy_simultaneous import GreedySimultaneous
-from code.algorithms.asearch import ASearch
+from code.algorithms.a_search import ASearch
 from code.utils.checker import Checker
 from code.utils.size_determinator import SizeDeterminator
 from code.utils.csv_writer import CSVWriter
-from code.utils.resultfunction import ResultFunction
+from code.utils.result_function import ResultFunction
 from code.visualisation.visualise import visualise
-from code.algorithms.hillclimber import HillClimber
+from code.algorithms.hill_climber import HillClimber
 from code.utils.solution_reader import SolutionToChip
 
 from random import randrange

@@ -1,3 +1,11 @@
+"""
+Tim Alessie, Hanan Almoustafa, Tijmen Kuin
+
+visualise.py
+
+Chips and Circuits 2021
+"""
+
 import plotly.express as px
 import plotly.graph_objects as go
 import plotly
@@ -8,6 +16,7 @@ import random
 def visualise(chip):
     """
     Uses the plotly library to generate a visualisation
+    For more info on plotly check-out: https://plotly.com/python/
     """
 
     X_gates = []
@@ -52,6 +61,7 @@ def visualise(chip):
                     Y_intersection.append(y)
                     Z_intersection.append(z)
 
+    # Create points on 3D grid
     intersections = go.Scatter3d(
             x=X_intersection,
             y=Y_intersection,
@@ -72,7 +82,7 @@ def visualise(chip):
             marker=dict(size=8, color='red'),
             textposition="middle center")
 
-
+    # Create netlist on 3D grid
     net_lists = []
     for i,_ in enumerate(x_wires):
         red = random.randint(0, 255)
@@ -101,5 +111,7 @@ def visualise(chip):
 
     fig = go.Figure(data=data)
     
+    # Show figure
+
     fig.update_layout(height=900,width=1400)
     fig.show()

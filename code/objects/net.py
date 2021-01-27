@@ -1,3 +1,11 @@
+"""
+Tim Alessie, Hanan Almoustafa, Tijmen Kuin
+
+net.py
+
+Chips and Circuits 2021
+"""
+
 class Net():
     def __init__(self, gate1, gate2):
         self.target = [gate1,gate2]

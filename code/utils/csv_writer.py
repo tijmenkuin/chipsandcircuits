@@ -1,3 +1,11 @@
+"""
+Tim Alessie, Hanan Almoustafa, Tijmen Kuin
+
+csv_writer.py
+
+Chips and Circuits 2021
+"""
+
 import csv
 
 class CSVWriter():
