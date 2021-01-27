@@ -35,7 +35,9 @@ class Chip():
         self.solution = {}
     
     def initializeGrid(self):
-        #Initialize GridPoints
+        """
+        Initializes GridPoints and GridSegments objects and puts them in the grid dictionary
+        """
         for z in range(self.depth):
             for y in range(self.height):
                 for x in range(self.width):
@@ -46,8 +48,6 @@ class Chip():
                             self.grid[z][y].append(GridPoint(x,y,z))
                     else:
                         self.grid[z] = [[GridPoint(x,y,z)]]
-
-        #Initialize GridSegments
         for z in range(self.depth):
             for y in range(self.height):
                 for x in range(self.width):
@@ -60,6 +60,9 @@ class Chip():
                     self.addGridSegmentAndRelatives(current_gridpoint, self.getGridPoint(x, y, z + 1), 'up', 'down')
 
     def addGridSegmentAndRelatives(self, gridpoint1, gridpoint2, direction1, direction2):
+        """
+        Connects the GridSegments with the GridPoints and connects relative GridPoints to the iterating GridPoint
+        """
         if gridpoint2 is not None:
             gridpoint1.relatives[direction1] = gridpoint2
 
@@ -69,6 +72,9 @@ class Chip():
                 gridpoint2.grid_segments[direction2] = gridsegment
 
     def getGridPoint(self, x, y, z):
+        """
+        Returns the GridPoint at a certain x,y,z value and returns None if it does not exist
+        """
         if x < 0 or y < 0 or z < 0:
             return None
         try:
@@ -77,6 +83,9 @@ class Chip():
             return None
 
     def initializeGates(self, chip_id):
+        """
+        Adds a gate_id to the correct GridPoint and stores gate in dictionary
+        """
         with open(f"data/chip_{chip_id}/print_{chip_id}.csv", "r") as inp:
             next(inp)
             for line in inp:
@@ -87,6 +96,9 @@ class Chip():
                 self.gates[gate.gate_id] = gate
 
     def initializeNetlist(self, chip_id, netlist_id):
+        """
+        Initilizes all Net objects with the corresponding gates
+        """
         with open(f"data/chip_{chip_id}/netlist_{netlist_id}.csv", "r") as inp:
             next(inp)
             for line in inp:
@@ -99,6 +111,9 @@ class Chip():
 #### A SEARCH
 
     def giveTiesHeuristicValues(self, start_point, target_point):
+        """
+        Heuristic based on Ties
+        """
         for z in range(self.depth):
             for y in range(self.height):
                 for x in range(self.width):

@@ -20,20 +20,32 @@ import time
 
 def main(args):
 
-    a = False
+    chip_id = 2
 
-    while not a:
-        chip = Chip(2,9)
-        gd = GreedySimultaneous(chip, 7)
+    net_id = 9
+    n = 100
 
-        test = gd.run()
-        if test:
-            results = ResultFunction(chip)
-            print(chip.solution)
-            print(results.costs)
-            visualise(chip)
-            csvwriter = CSVWriter(chip.solution, "greedy_simultaneous", 2, 9, results.costs)
-            a = True
+    solutions = []
+    for _ in range(n):
+
+
+        a = False
+        while not a:
+            chip = Chip(chip_id,net_id)
+            gd = GreedySimultaneous(chip, 7)
+
+            test = gd.run()
+            if test:
+                results = ResultFunction(chip)
+                #print(chip.solution)
+                print(results.costs)
+                #visualise(chip)
+                a = True
+                solutions.append((results.costs, chip))
+
+    solutions.sort(key=lambda x: x[0])    
+
+    CSVWriter(solutions[0][1].solution, "greedy_simultaneous", chip_id, net_id, solutions[0][0])
 
     return
 

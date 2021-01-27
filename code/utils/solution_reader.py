@@ -32,7 +32,7 @@ class SolutionToChip():
             for row in csv_file:
                 if (len(row.split('","')) == 2):
 
-                    # Convert text into Wire objects and Net objects
+                    # Convert text into readable strings and integers for Wire objects and Net objects
                     net = row.split('","')[0].replace('"(', '').replace(')', '')
                     wire_temp = row.split('","')[1].replace('"', '').replace('[', '').replace(']', '').rstrip().split('),(')
                     wire_temp = [wire_piece.replace(')', '').replace('(', '') for wire_piece in wire_temp]

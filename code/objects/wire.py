@@ -15,5 +15,8 @@ class Wire():
         return f"{self.path}"
     
     def addPoint(self, point):
+        """
+        Adds point to wire path
+        """
         self.path.append(point)
 
