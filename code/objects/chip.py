@@ -10,7 +10,6 @@ from .grid_point import GridPoint
 from .grid_segment import GridSegment
 from ..utils.size_determinator import SizeDeterminator
 from .net import Net
-from .wire import Wire
 
 import csv
 import math

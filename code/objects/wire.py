@@ -9,7 +9,6 @@ Chips and Circuits 2021
 class Wire():
     def __init__(self):
         self.path = []
-        self.connected = False
 
     def __repr__(self):
         return f"{self.path}"
