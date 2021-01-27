@@ -1,3 +1,11 @@
+"""
+Tim Alessie, Hanan Almoustafa, Tijmen Kuin
+
+solution_reader.py
+
+Chips and Circuits 2021
+"""
+
 import csv
 from ..objects.chip import Chip
 from ..objects.wire import Wire
@@ -14,7 +22,9 @@ class SolutionToChip():
 
     def readResults(self):
         """
-        Opens
+        Reads a csv-file for a given solution, takes 4 extra arguments for orderly inventory
+
+        NOTE : Before usage make sure the directories in writeResults-method exist !!
         """
         chip = Chip(self.chip, self.netlist)
 
@@ -22,6 +32,7 @@ class SolutionToChip():
             for row in csv_file:
                 if (len(row.split('","')) == 2):
 
+                    # Convert text into readable strings and integers for Wire objects and Net objects
                     net = row.split('","')[0].replace('"(', '').replace(')', '')
                     wire_temp = row.split('","')[1].replace('"', '').replace('[', '').replace(']', '').rstrip().split('),(')
                     wire_temp = [wire_piece.replace(')', '').replace('(', '') for wire_piece in wire_temp]

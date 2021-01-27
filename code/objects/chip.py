@@ -1,5 +1,13 @@
-from .gridpoint import GridPoint
-from .gridsegment import GridSegment
+"""
+Tim Alessie, Hanan Almoustafa, Tijmen Kuin
+
+chip.py
+
+Chips and Circuits 2021
+"""
+
+from .grid_point import GridPoint
+from .grid_segment import GridSegment
 from ..utils.size_determinator import SizeDeterminator
 from .net import Net
 from .wire import Wire
@@ -27,7 +35,9 @@ class Chip():
         self.solution = {}
     
     def initializeGrid(self):
-        #Initialize GridPoints
+        """
+        Initializes GridPoints and GridSegments objects and puts them in the grid dictionary
+        """
         for z in range(self.depth):
             for y in range(self.height):
                 for x in range(self.width):
@@ -38,8 +48,6 @@ class Chip():
                             self.grid[z][y].append(GridPoint(x,y,z))
                     else:
                         self.grid[z] = [[GridPoint(x,y,z)]]
-
-        #Initialize GridSegments
         for z in range(self.depth):
             for y in range(self.height):
                 for x in range(self.width):
@@ -52,6 +60,9 @@ class Chip():
                     self.addGridSegmentAndRelatives(current_gridpoint, self.getGridPoint(x, y, z + 1), 'up', 'down')
 
     def addGridSegmentAndRelatives(self, gridpoint1, gridpoint2, direction1, direction2):
+        """
+        Connects the GridSegments with the GridPoints and connects relative GridPoints to the iterating GridPoint
+        """
         if gridpoint2 is not None:
             gridpoint1.relatives[direction1] = gridpoint2
 
@@ -61,6 +72,9 @@ class Chip():
                 gridpoint2.grid_segments[direction2] = gridsegment
 
     def getGridPoint(self, x, y, z):
+        """
+        Returns the GridPoint at a certain x,y,z value and returns None if it does not exist
+        """
         if x < 0 or y < 0 or z < 0:
             return None
         try:
@@ -69,6 +83,9 @@ class Chip():
             return None
 
     def initializeGates(self, chip_id):
+        """
+        Adds a gate_id to the correct GridPoint and stores gate in dictionary
+        """
         with open(f"data/chip_{chip_id}/print_{chip_id}.csv", "r") as inp:
             next(inp)
             for line in inp:
@@ -79,6 +96,9 @@ class Chip():
                 self.gates[gate.gate_id] = gate
 
     def initializeNetlist(self, chip_id, netlist_id):
+        """
+        Initilizes all Net objects with the corresponding gates
+        """
         with open(f"data/chip_{chip_id}/netlist_{netlist_id}.csv", "r") as inp:
             next(inp)
             for line in inp:
@@ -86,11 +106,10 @@ class Chip():
                 net = Net(self.gates[gate_ids[0]], self.gates[gate_ids[1]])
                 self.netlist.append(net)
 
-
-
-#### A SEARCH
-
     def giveTiesHeuristicValues(self, start_point, target_point):
+        """
+        Heuristic based on Ties, more info on: http://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html
+        """
         for z in range(self.depth):
             for y in range(self.height):
                 for x in range(self.width):
@@ -103,6 +122,9 @@ class Chip():
                     this_gridpoint.heuristic_value = int(cross)
 
     def giveEuclidesHeuristicValues(self, target_point):
+        """
+        Heuristic based on Euclides, more info on: http://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html
+        """
         for z in range(self.depth):
             for y in range(self.height):
                 for x in range(self.width):
@@ -114,6 +136,9 @@ class Chip():
 
 
     def giveManhattanHeuristicValues(self, target_point):
+        """
+        Heuristic based on Manhattan Distance, represents the true distance between points in this grid-type
+        """
         for z in range(self.depth):
             for y in range(self.height):
                 for x in range(self.width):
@@ -121,6 +146,9 @@ class Chip():
                     this_gridpoint.heuristic_value = this_gridpoint.manhattanDistanceTo(target_point)
 
     def giveDefaultGScores(self):
+        """
+        Appends G Score to the GridPoint object
+        """
         for z in range(self.depth):
             for y in range(self.height):
                 for x in range(self.width):
@@ -128,11 +156,15 @@ class Chip():
                     this_gridpoint.gscore = math.inf
 
     def netlistRandomizer(self):
+        """
+        Shuffles the netlist
+        """
         random.shuffle(self.netlist)
-
-    # Hill Climber
     
     def clear(self):
+        """
+        Clears grid-data
+        """
         self.netlist = []
         self.solution = {}
         for z in range(self.depth):
@@ -143,9 +175,10 @@ class Chip():
                         grid_segment.used = False
                     point.intersected = 0
     
-    
-    # Resultfunction
     def setCheckedFalse(self):
+        """
+        Checks GridPoints for the ResultFunction
+        """
         for z in range(self.depth):
             for y in range(self.height):
                 for x in range(self.width):

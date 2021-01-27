@@ -1,3 +1,11 @@
+"""
+Tim Alessie, Hanan Almoustafa, Tijmen Kuin
+
+checker.py
+
+Chips and Circuits 2021
+"""
+
 from ..objects.chip import Chip
 
 class Checker():

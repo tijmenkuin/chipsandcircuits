@@ -1,3 +1,11 @@
+"""
+Tim Alessie, Hanan Almoustafa, Tijmen Kuin
+
+grid_point.py
+
+Chips and Circuits 2021
+"""
+
 import random
 
 class GridPoint():
@@ -20,9 +28,15 @@ class GridPoint():
         return f"({self.x},{self.y},{self.z})"
 
     def isGate(self):
+        """
+        Returns true if GridPoint is a gate
+        """
         return self.gate_id is not None
 
     def manhattanDistanceTo(self, point):
+        """
+        Returns the Manhattan Distance to a different GridPoint
+        """
         return abs(self.x - point.x) + abs(self.y - point.y) + abs(self.z - point.z)
 
 
@@ -52,21 +66,28 @@ class GridPoint():
     # Greedy Simultaneous functions
 
     def amountOfIntersections(self):
+        """
+        Returns the amount of intersections
+        """
         used = len([True for direction in self.relatives.keys() if self.grid_segments[direction].used])
         if used < 3:
             return 0
         return 1 if used == 3 or used == 4 else 2
 
     def getMoveScore(self):
+        """
+        Returns the amount of grid sections that have not been used
+        """
         return len([True for direction in self.relatives.keys() if not self.grid_segments[direction].used])
 
     def moveTo(self, direction):
+        """
+        Returns False if move is not possible, else returns the point in the given direction
+        """
         if direction not in self.relatives:
             return False
         grid_segment = self.grid_segments[direction]
         if grid_segment.used:
             return False
         grid_segment.used = True
-        if grid_segment.connections[0] == self:
-            return grid_segment.connections[1]
-        return grid_segment.connections[0]
+        return self.relatives[direction]

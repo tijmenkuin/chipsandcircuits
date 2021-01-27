@@ -56,3 +56,4 @@ class CopyChip():
             
         dummy_chip.giveDefaultGScores()
         return dummy_chip
+
