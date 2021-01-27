@@ -4,9 +4,6 @@
 # Chips and circuits
 > Programmeer Theorie: Minor Programmeren, Universiteit van Amsterdam.
 
-# Chips and circuits
-> Dit is Chip and circuits opdracht voor de vak programmeren theorie als deel van minor programmeren in de Universiteit van Amsterdam.
-
 
 ## Korte omschrijving
 In deze opdracht worden chips bestudeerd. Een chip kun je voorstellen als een 3D-rooster. Een 3D-rooster bestaat uit punten, de **grid points** genaamd, en lijnstukken die deze grid points met elkaar verbinden, de **grid segments** genaamd. Van de onderste laag van het 3D-rooster kunnen sommige grid points een **gate** zijn, deze hebben elk een eigen nummer. De opdracht is om verschillende gates door middel van een pad over grid segments en langs grid points met elkaar te verbinden. Welke gates met elkaar verbonden moeten worden, wordt gegeven door een net. Een **net** is niet meer dan een tupeltje van twee gates die met elkaar verbonden moeten worden. In de opdracht hebben we voor verschillende chips verschillende lijsten met nets gekregen, zo’n lijst wordt een **netlist** genoemd. Een pad dat een net, ofwel twee gates, met elkaar verbindt, wordt een **wire** genoemd. Een wire kan gezien worden als een verzameling van op een volgende *(of naast elkaar liggende)* grid points, waarvan de eerste en de laatste grid points de te verbinden gates zijn. De bedoeling van de opdracht is om alle wires van een netlist in de chip, of 3D-rooster, te krijgen. Hier zijn echter wel wat regels aan verbonden.
@@ -39,47 +36,70 @@ Bij dit  A*-search algoritme worden net voor net de goedkoopste paden tussen twe
 
 Naast het A*-search algoritme wordt er ook gebruik gemaakt van een Hill Climber. De Hill Climber werkt als volgt: Er wordt bij elke iteratie gefocust op de x-aantal duurste wires, daarvan worden vervolgens een willekeurig y-tal wires geselecteerd. Deze y-tal wires worden uit de chip verwijderd en vervolgens aan de hand van het A*-algoritme weer teruggeplaatst. Voor dit terugplaatsen is er gebruik gemaakt van de hierboven genoemde heuristieken. Ook zijn er meerdere parameterwaarden voor x en y geprobeerd om potentieel goedkopere oplossingen te genereren. De Hill Climber is toegepast om de A*-search verworven oplossingen te verbeteren, of om zijn eigen gevonden oplossingen te verbeteren.
 
+
+```python
+python main.py [timer]
+
+python main.py [chip_id] [netlist_id] [algoritme] ([hillclimber] [oude oplossing])
+```
+
+
 ## Reproductie van resultaten
 
 Door het uitvoeren van de onderstaande commands, is het mogelijk de algoritmes te runnen.
 
-```python main.py [algorithm] [iterations]```
-
->**example:** ``` python main.py gs 10
+``` python 
+/ python main.py [algorithm] [iterations]
 ```
->**example:** ``` python main.py asearch 50
+
+**example:** 
+```python 
+/ python main.py gs 10
+```
+
+**example:** 
+```python 
+/ python main.py asearch 50
 ```
 
 Maakt het mogelijk om ofwel Greedy Simultanious ofwel A*-search te runnen. De functie schrijft voor elke netlist een csv-bestand in de map solutions een goedkoopste oplossing uit [iterations]-aantal oplossingen.
 
+```python
+/ python main.py [algorithm] [chip_id] [net_id] [iterations]
 ```
-python main.py [algorithm] [chip_id] [net_id] [iterations]
-```
->**example:** ```
-python main.py as 2 9 100
+
+**example:** 
+```python
+/ python main.py as 2 9 100
 ```
 
 Maakt het mogelijk om de goedkoopste oplossing over [iterations]-aantal oplossingen voor een specifieke netlist op te schrijven als een csv-bestand. 
 
-```python main.py hc [algorithm] [chip_id] [net_id] [solution_score] [iterations]
-python main.py hillclimber [algorithm] [chip_id] [net_id] [solution_score] [iterations]```
-
->**example:**
+```python 
+/ python main.py hc [algorithm] [chip_id] [net_id] [solution_score] [iterations]
+/ python main.py hillclimber [algorithm] [chip_id] [net_id] [solution_score] [iterations]
 ```
-python main.py hc greedy_simultaneous 2 9 51123 100
+
+**example:**
+```python
+/ python main.py hc greedy_simultaneous 2 9 51123 100
 ```
 
 Maakt het mogelijk om een specifieke opgeslagen oplossing in de [algorithm]-map [iterations]-aantal keer te verbeteren aan de hand van het hillclimber algoritme.
 
-```
-python main.py view [algorithm] [chip_id] [netlist_id] [solution_score]
+```python
+/ python main.py view [algorithm] [chip_id] [netlist_id] [solution_score]
 ```
 
->**example:**
-```
- python main.py view asearch 2 9 32514
+**example:**
+```python
+/ python main.py view asearch 2 9 32514
 ```
 
 Maakt het mogelijk om een oplossing in de [algorithm]-map te visualiseren
 
-Indien nodig kan er met de command: ```python main.py help```, wordt de code informatie ook in de terminal gegeven. Ook is het mogelijk in de runHillClimber-functie in main.py om de hierboven beschreven x en y anders in te stellen. Verder kan in de runAlgorithm-functie ook de depth search van het Greedy Simultanious algoritme aangepast worden.
+Indien nodig kan er met de command: 
+```python
+/ python main.py help
+```
+, wordt de code informatie ook in de terminal gegeven. Ook is het mogelijk in de runHillClimber-functie in main.py om de hierboven beschreven x en y anders in te stellen. Verder kan in de runAlgorithm-functie ook de depth search van het Greedy Simultanious algoritme aangepast worden.
