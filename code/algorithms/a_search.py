@@ -6,7 +6,7 @@ a_search.py
 Chips and Circuits 2021
 """
 
-from ..objects.chip import Wire
+from ..objects.wire import Wire
 
 class ASearch():
     """

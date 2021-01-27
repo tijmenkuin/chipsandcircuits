@@ -157,7 +157,6 @@ class GreedySimultaneous:
             path = self.pathFinder()
 
             if path is None:
-                print("No solution found!")
                 self.chip.solution = dict()
                 return False
 
@@ -176,7 +175,6 @@ class GreedySimultaneous:
 
                 # No more targets to wire, algorithm has been finished
                 if len(self.targets) == 0:
-                    print("Solution found!")
                     self.makeResultFunctionCompatible()
 
                     return True
