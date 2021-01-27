@@ -69,7 +69,7 @@ class GridPoint():
         """
         Returns the amount of intersections
         """
-        used = len([True for direction in self.relatives.keys() if self.grid_segments[direction].used])
+        used = len([True for direction in self.relatives.keys() if self.grid_segments[direction].used and not self.isGate()])
         if used < 3:
             return 0
         return 1 if used == 3 or used == 4 else 2
@@ -78,7 +78,7 @@ class GridPoint():
         """
         Returns the amount of grid sections that have not been used
         """
-        return len([True for direction in self.relatives.keys() if not self.grid_segments[direction].used])
+        return len([True for direction in self.relatives.keys() if not self.grid_segments[direction].used and not self.isGate()])
 
     def moveTo(self, direction):
         """

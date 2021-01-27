@@ -64,6 +64,7 @@ class HillClimber():
 
             # In case found valid new better solution, update best_chip, else start over from best result found so far
             if new_results.costs <= self.best_score and found_solution:
+                print(self.best_score)
                 self.best_score = new_results.costs
 
                 copy = CopyChip(self.chip)
